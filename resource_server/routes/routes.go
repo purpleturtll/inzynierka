@@ -3,9 +3,9 @@ package routes
 import (
 	"inzynierka/routes/animal"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-func Routes(g *echo.Group) {
+func Init(g *echo.Group) {
 	animal.Router{}.Init(g.Group("/animal"))
 }

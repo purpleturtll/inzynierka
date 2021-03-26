@@ -1,12 +1,18 @@
 package animal
 
-import "github.com/labstack/echo"
+import (
+	"fmt"
+
+	"github.com/labstack/echo/v4"
+)
 
 func Create(c echo.Context) error {
+	fmt.Println("ADD")
 	return nil
 }
 
 func Read(c echo.Context) error {
+	fmt.Println("READ")
 	return nil
 }
 
