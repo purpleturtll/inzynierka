@@ -1,4 +1,4 @@
-package animal
+package animal_type
 
 import (
 	"encoding/json"
@@ -13,25 +13,25 @@ import (
 )
 
 func Create(c echo.Context) error {
-	animal := new(models.Animal)
-	if err := c.Bind(animal); err != nil {
+	at := new(models.AnimalType)
+	if err := c.Bind(at); err != nil {
 		return err
 	}
-	b, _ := json.MarshalIndent(animal, "", "\t")
+	b, _ := json.MarshalIndent(at, "", "\t")
 	fmt.Printf("%v\n", string(b))
-	db.Connection().Create(animal)
+	db.Connection().Create(at)
 	return c.String(http.StatusCreated, "Created")
 }
 
 func Read(c echo.Context) error {
 	id := c.QueryParam("id")
 	id_int, _ := strconv.Atoi(id)
-	animal := &models.Animal{}
-	result := db.Connection().First(&animal, id_int)
+	at := &models.AnimalType{}
+	result := db.Connection().First(&at, id_int)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
-	return c.JSON(http.StatusOK, animal)
+	return c.JSON(http.StatusOK, at)
 }
 
 func Update(c echo.Context) error {

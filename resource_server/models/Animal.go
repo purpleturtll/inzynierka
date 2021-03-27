@@ -8,18 +8,17 @@ import (
 
 type Animal struct {
 	gorm.Model
-	Users         []User     `gorm:"many2many:fav_animal"`
-	AnimalType    AnimalType `json:"animal_type"`
-	Breed         string     `json:"breed"`
-	Name          string     `json:"name"`
-	ShelterID     uint       `json:"shelter_id"`
-	Shelter       *Shelter   `json:",omitempty"`
-	Adoptable     bool       `json:"adoptable"`
-	Description   string     `json:"description"`
-	Age           uint       `json:"age"`
-	AdmissionDate time.Time  `json:"admission_date"`
-	ChipNumber    string     `json:"chip_number"`
-	RecentlyFound bool       `json:"recently_found"`
-	IsSterilized  bool       `json:"is_sterilized"`
-	IsVaccinated  bool       `json:"is_vaccinated"`
+	Users         []User    `gorm:"many2many:fav_animal"`
+	AnimalTypeID  uint      `json:"animal_type"`
+	Breed         string    `json:"breed"`
+	Name          string    `json:"name"`
+	ShelterID     uint      `json:"shelter_id"`
+	Adoptable     bool      `json:"adoptable"`
+	Description   string    `json:"description"`
+	Age           uint      `json:"age"`
+	AdmissionDate time.Time `json:"admission_date"`
+	ChipNumber    string    `json:"chip_number"`
+	RecentlyFound bool      `json:"recently_found"`
+	IsSterilized  bool      `json:"is_sterilized"`
+	IsVaccinated  bool      `json:"is_vaccinated"`
 }

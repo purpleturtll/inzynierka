@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"inzynierka/models"
 
 	"gorm.io/driver/sqlite"
@@ -18,7 +19,7 @@ func Init() {
 }
 
 func Migrate() {
-	db.AutoMigrate(
+	err := db.AutoMigrate(
 		&models.Animal{},
 		&models.AnimalType{},
 		&models.Chat{},
@@ -26,6 +27,7 @@ func Migrate() {
 		&models.Shelter{},
 		&models.User{},
 	)
+	fmt.Println(err)
 }
 
 func Connection() *gorm.DB {

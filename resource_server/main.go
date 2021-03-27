@@ -1,15 +1,18 @@
 package main
 
 import (
+	"inzynierka/db"
 	"inzynierka/routes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-var err error
+//var err error
 
 func main() {
+	db.Init()
+	db.Migrate()
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
