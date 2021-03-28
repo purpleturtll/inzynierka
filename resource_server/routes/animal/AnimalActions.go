@@ -13,25 +13,25 @@ import (
 )
 
 func Create(c echo.Context) error {
-	animal := new(models.Animal)
-	if err := c.Bind(animal); err != nil {
+	obj := new(models.Animal)
+	if err := c.Bind(obj); err != nil {
 		return err
 	}
-	b, _ := json.MarshalIndent(animal, "", "\t")
+	b, _ := json.MarshalIndent(obj, "", "\t")
 	fmt.Printf("%v\n", string(b))
-	db.Connection().Create(animal)
+	db.Connection().Create(obj)
 	return c.String(http.StatusCreated, "Created")
 }
 
 func Read(c echo.Context) error {
 	id := c.QueryParam("id")
 	id_int, _ := strconv.Atoi(id)
-	animal := &models.Animal{}
-	result := db.Connection().First(&animal, id_int)
+	obj := &models.Animal{}
+	result := db.Connection().First(&obj, id_int)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
-	return c.JSON(http.StatusOK, animal)
+	return c.JSON(http.StatusOK, obj)
 }
 
 func Update(c echo.Context) error {
