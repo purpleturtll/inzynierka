@@ -3,10 +3,13 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"inzynierka/config"
 	"inzynierka/db"
 	"inzynierka/models"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -21,9 +24,27 @@ func Login(c echo.Context) error {
 	found := new(models.User)
 	result := db.Connection().First(&found, "email = ? AND password = ?", obj.Email, obj.Password)
 	if result.Error == gorm.ErrRecordNotFound {
-		return c.String(http.StatusNotFound, "Not Found")
+		return echo.ErrUnauthorized
 	}
-	return c.JSON(http.StatusAccepted, found)
+
+	claims := &config.Claims{
+		Email: found.Email,
+		Admin: true,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Minute * 10).Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	t, err := token.SignedString(config.Secret)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"token": t,
+	})
 }
 
 func Register(c echo.Context) error {
