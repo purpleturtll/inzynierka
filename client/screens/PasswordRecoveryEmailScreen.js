@@ -11,7 +11,7 @@ const DoneRegistrationScreen = ({ navigation }) => {
         tintColor="#362893"
       />
       <Text style={styles.title}>Zrobione!</Text>
-      <Text style={styles.subtitle}>Potwierdź swój adres e-mail, {"\n"} żeby się zalogować</Text>
+      <Text style={styles.subtitle}>Sprawdź swoją skrzynkę {"\n"} pocztową e-mail.</Text>
       <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('SignInScreen')}>
         <Text style={{ color: '#fff', fontSize: 17 }}>Powrót</Text>
       </TouchableOpacity>

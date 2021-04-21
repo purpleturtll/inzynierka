@@ -25,7 +25,7 @@ const SignInScreen = ({ navigation }) => {
           autoCapitalize="none"
         />
         <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('RegistrationScreen')}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('PasswordRecoveryEmailScreen')}>
         <Text style={{color:'#fff', fontWeight: '900', fontSize: 18 }}>Wyślij</Text>
         </TouchableOpacity>
       </View>

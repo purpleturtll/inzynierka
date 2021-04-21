@@ -8,6 +8,10 @@ import SignInScreen from './screens/SignInScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import DoneRegistrationScreen from './screens/DoneRegistrationScreen';
 import PasswordRecoveryScreen from './screens/PasswordRecoveryScreen';
+import PasswordRecoveryEmailScreen from './screens/PasswordRecoveryEmailScreen';
+import ShelterRegistrationScreen from './screens/ShelterRegistrationScreen';
+import ChooseAccountTypeScreen from './screens/ChooseAccountTypeScreen';
+
 
 const Stack = createStackNavigator();
 
@@ -18,20 +22,37 @@ const MyStack = () => {
       >
         <Stack.Screen name="TempScreen" component={TempScreen} />
         <Stack.Screen
-          name = "SignInScreen"
+          name="SignInScreen"
           component={SignInScreen}
           options={{
-            title:' '
-          }}       
+            title: ' '
+          }}
         />
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
-         options={{
-          title: ''}} />
+          options={{
+            title: ''
+          }} />
         <Stack.Screen name="DoneRegistrationScreen" component={DoneRegistrationScreen}
-        options={{headerShown:false}} />
+          options={{ headerShown: false }} />
         <Stack.Screen name="PasswordRecoveryScreen" component={PasswordRecoveryScreen}
-          options={{title: ' '
+          options={{
+            title: ' '
           }}
+        />
+        <Stack.Screen name="PasswordRecoveryEmailScreen" component={PasswordRecoveryEmailScreen}
+          options={{
+            title: ' '
+          }}
+        />
+        <Stack.Screen name="ShelterRegistrationScreen" component={ShelterRegistrationScreen}
+          options={{
+            title: ' '
+          }}
+        />
+        <Stack.Screen name="ChooseAccountTypeScreen" component={ChooseAccountTypeScreen}
+          options={{
+          title: ' '
+        }}
         />
       </Stack.Navigator>
     </NavigationContainer>

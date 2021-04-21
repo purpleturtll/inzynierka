@@ -164,8 +164,8 @@ export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    marginLeft: '5%'
+    width: '85%',
+    marginLeft: '7.5%'
   },
 
   title: {
