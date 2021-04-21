@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TempScreen from './screens/TempScreen';
 import SignInScreen from './screens/SignInScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
+import DoneRegistrationScreen from './screens/DoneRegistrationScreen';
+import PasswordRecoveryScreen from './screens/PasswordRecoveryScreen';
 
 const Stack = createStackNavigator();
 
@@ -25,9 +27,16 @@ const MyStack = () => {
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
          options={{
           title: ''}} />
+        <Stack.Screen name="DoneRegistrationScreen" component={DoneRegistrationScreen}
+        options={{headerShown:false}} />
+        <Stack.Screen name="PasswordRecoveryScreen" component={PasswordRecoveryScreen}
+          options={{title: ' '
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default MyStack;
+
