@@ -149,7 +149,7 @@ const RegistrationScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-      <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('TempScreen')}>
+      <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('DoneRegistrationScreen')}>
         <Text style={{color: '#fff'}}>Utwórz konto</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
@@ -164,8 +164,8 @@ export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    marginLeft: '5%'
+    width: '85%',
+    marginLeft: '7.5%'
   },
 
   title: {

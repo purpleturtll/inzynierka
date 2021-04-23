@@ -95,10 +95,10 @@ const SignInScreen = ({ navigation }) => {
         <Text style={{color:'#fff', fontWeight: '900' }}>Zaloguj się</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={{color:'#000', fontWeight: '900' }} onPress={() => navigation.navigate('RegistrationScreen')}>Zapomniałeś hasła?</Text>
+          <Text style={{color:'#000', fontWeight: '900' }} onPress={() => navigation.navigate('PasswordRecoveryScreen')}>Zapomniałeś hasła?</Text>
         </TouchableOpacity>
         <Text style={{color: '#000', marginVertical: 20}}>lub</Text>
-        <TouchableOpacity style={styles.registerButton}  onPress={() => navigation.navigate('RegistrationScreen')}>
+        <TouchableOpacity style={styles.registerButton}  onPress={() => navigation.navigate('ChooseAccountTypeScreen')}>
         <Text style={{color:'#fff', fontWeight: '900' }}>Utwórz konto</Text>
         </TouchableOpacity>
       </View>
