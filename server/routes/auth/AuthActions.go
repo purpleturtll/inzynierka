@@ -17,7 +17,7 @@ import (
 func Login(c echo.Context) error {
 	obj := new(models.User)
 	if err := c.Bind(obj); err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
 	b, _ := json.MarshalIndent(obj, "", "\t")
 	fmt.Printf("%v\n", string(b))
@@ -39,7 +39,7 @@ func Login(c echo.Context) error {
 
 	t, err := token.SignedString(config.Secret)
 	if err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
@@ -52,8 +52,7 @@ func Register(c echo.Context) error {
 	if err := c.Bind(obj); err != nil {
 		return err
 	}
-	b, _ := json.MarshalIndent(obj, "", "\t")
-	fmt.Printf("%v\n", string(b))
+	c.Logger().Info("User registered:", obj.Email)
 	db.Connection().Create(obj)
-	return c.String(http.StatusCreated, "Created")
+	return c.NoContent(http.StatusCreated)
 }
