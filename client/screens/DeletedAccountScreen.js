@@ -1,119 +1,48 @@
 import React, { useState } from 'react';
 import {
-  View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity
+  View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Image
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+
+const marginLeftText = '5%';
+const marginBottomText = 5;
+
 const RegistrationScreen = ({ navigation }) => {
-
-  const marginLeftText = '5%';
-  const marginBottomText = 5;
-  const [data, setData] = useState({
-    firstname: '',
-    surname: '',
-    email: '',
-    password: '',
-    check_textInputChange: false,
-    passwordEye: true,
-    passwordConfirmationEye: true
-  });
-
-  const textInputChange = (val) => {
-    if (val.length != 0) {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: true
-      });
-    } else {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: false
-      });
-    }
-  }
-
-  const handleFirstnameChange = (val) => {
-    setData({
-      ...data,
-      firstname: val
-    });
-  }
-
-  const handleSurnameChange = (val) => {
-    setData({
-      ...data,
-      surname: val
-    });
-  }
-
-  const handleEmailChange = (val) => {
-    setData({
-      ...data,
-      email: val
-    });
-  }
-
-  const handlePasswordChange = (val) => {
-    setData({
-      ...data,
-      password: val
-    });
-  }
-
-  const updatePasswordEye = () => {
-    setData({
-      ...data,
-      passwordEye: !data.passwordEye
-    })
-  }
-
-  const updatePasswordConfirmationEye = () => {
-    setData({
-      ...data,
-      passwordConfirmationEye: !data.passwordConfirmationEye
-    })
-  }
-
-  const onRegisterPress = () => {
-
-    const res = fetch('http://10.0.2.2:8080/auth/register', {
-      body: {
-        firstname: data.firstname,
-        surname: data.surname,
-        email: data.email,
-        password: data.password
-      }, method:'POST'
-    }).then((response)=>{
-      if(response.status==201){
-        navigation.navigate('DoneRegistrationScreen')
-      }
-      else{
-        navigation.navigate('RegistrationScreen')
-      }
-    })
-  }
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Rejestracja</Text>
-        <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Imię</Text>
+      <View style={styles.header}>
+        <Image
+          source={require('../assets/settings.png')}
+          style={styles.logo}
+        />
+      </View>
+        <Text style={styles.title}>Rejestracja schroniska</Text>
+        <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Nazwa schroniska</Text>
         <TextInput
           placeholderTextColor="#000"
           placeholderStyle={{}}
           style={styles.textInput}
-          onChangeText={(val) => handleFirstnameChange(val)}
         />
 
         <View>
-          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Nazwisko</Text>
+          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>NIP</Text>
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
             style={styles.textInput}
-            onChangeText={(val) => handleSurnameChange(val)}
+          />
+        </View>
+
+        <View>
+          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Numer telefonu</Text>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={styles.textInput}
+            autoCapitalize="none"
           />
         </View>
 
@@ -124,7 +53,33 @@ const RegistrationScreen = ({ navigation }) => {
             placeholderStyle={{}}
             style={styles.textInput}
             autoCapitalize="none"
-            onChangeText={(val) => handleEmailChange(val)}
+          />
+        </View>
+        <View>
+          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Nazwa ulicy i numer budynku</Text>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={styles.textInput}
+            autoCapitalize="none"
+          />
+        </View>
+        <View>
+          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Kod pocztowy</Text>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={styles.textInput}
+            autoCapitalize="none"
+          />
+        </View>
+        <View>
+          <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Miejscowość</Text>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={styles.textInput}
+            autoCapitalize="none"
           />
         </View>
         <View>
@@ -146,6 +101,7 @@ const RegistrationScreen = ({ navigation }) => {
                   color="grey"
                   size={20}
                   style={{ marginTop: 3 }}
+
                 />
                 :
                 <Feather
@@ -153,6 +109,7 @@ const RegistrationScreen = ({ navigation }) => {
                   color="grey"
                   size={20}
                   style={{ marginTop: 3 }}
+
                 />
               }
             </TouchableOpacity>
@@ -190,11 +147,11 @@ const RegistrationScreen = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={onRegisterPress}>
+          <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('DoneRegistrationScreen')}>
             <Text style={{ color: '#fff' }}>Utwórz konto</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
-            <Text style={{ color: '#69667C', fontWeight: '900', marginTop: 10 }}>Masz już konto?</Text>
+            <Text style={{ color: '#69667C', fontWeight: 'bold', marginVertical: 20 }}>Masz już konto?</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -208,13 +165,15 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: '7.5%'
   },
-
+  header: {
+    flex: 2
+  },
   title: {
     fontSize: 30,
-    fontWeight: '900',
+    fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 30
   },
 
   textInput: {

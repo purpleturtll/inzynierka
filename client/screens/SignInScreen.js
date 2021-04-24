@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, ScrollView
 } from 'react-native';
 import {Feather} from '@expo/vector-icons';
+import AppContext from '../components/AppContext'
 
 
 const SignInScreen = ({ navigation }) => {
 
+  const myContext = useContext(AppContext);
+  
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -30,6 +33,13 @@ const SignInScreen = ({ navigation }) => {
     }
   }
 
+  const handleEmailChange = (val) => {
+    setData({
+      ...data,
+      email: val
+    });
+  }
+
   const handlePasswordChange = (val) => {
     setData({
       ...data,
@@ -44,6 +54,22 @@ const SignInScreen = ({ navigation }) => {
     })
   }
 
+  const onSignInPress = () => {
+
+    const res = fetch('http://10.0.2.2:8080/auth/login', {
+      body: {
+        email: data.email,
+        password: data.password
+      }, method:'POST'
+    }).then((response)=>{
+      if(response.status==200){
+        navigation.navigate('AccountScreen')
+      }
+      else{
+        navigation.navigate('RegistrationScreen')
+      }
+    })
+  }
   return(
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -59,6 +85,7 @@ const SignInScreen = ({ navigation }) => {
           placeholderStyle={{}}
           style={styles.textInput}
           autoCapitalize="none"
+          onChangeText={(val) => handleEmailChange(val)}
         />
         </View>
       <View style={styles.passwordContainer}>
@@ -91,7 +118,7 @@ const SignInScreen = ({ navigation }) => {
       </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('RegistrationScreen')}>
+        <TouchableOpacity style={styles.loginButton} onPress={onSignInPress}>
         <Text style={{color:'#fff', fontWeight: '900' }}>Zaloguj się</Text>
         </TouchableOpacity>
         <TouchableOpacity>
@@ -117,22 +144,17 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: '#fff'
   },
-
-  
   header: {
     flex:2,
     justifyContent:'center',
     alignItems:'center'
   },
-  
   body: {
     flex: 3,
   },
- 
   buttonContainer: {
     alignItems: 'center',
   },
-
   loginButton: {
     flexDirection: 'row',
     height: 50,
@@ -145,7 +167,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-
   registerButton: {
     flexDirection: 'row',
     height: 50,
