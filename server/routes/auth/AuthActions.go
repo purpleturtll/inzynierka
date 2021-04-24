@@ -17,7 +17,7 @@ import (
 func Login(c echo.Context) error {
 	obj := new(models.User)
 	if err := c.Bind(obj); err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
 	b, _ := json.MarshalIndent(obj, "", "\t")
 	fmt.Printf("%v\n", string(b))
@@ -39,7 +39,7 @@ func Login(c echo.Context) error {
 
 	t, err := token.SignedString(config.Secret)
 	if err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
@@ -50,10 +50,16 @@ func Login(c echo.Context) error {
 func Register(c echo.Context) error {
 	obj := new(models.User)
 	if err := c.Bind(obj); err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
-	b, _ := json.MarshalIndent(obj, "", "\t")
-	fmt.Printf("%v\n", string(b))
+
+	found := new(models.User)
+	result := db.Connection().First(&found, "email = ?", obj.Email)
+	if result.Error != gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusForbidden)
+	}
+
 	db.Connection().Create(obj)
-	return c.String(http.StatusCreated, "Created")
+	c.Logger().Info("User registered:", obj.Email)
+	return c.NoContent(http.StatusCreated)
 }
