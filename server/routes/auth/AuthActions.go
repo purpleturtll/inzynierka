@@ -50,9 +50,16 @@ func Login(c echo.Context) error {
 func Register(c echo.Context) error {
 	obj := new(models.User)
 	if err := c.Bind(obj); err != nil {
-		return err
+		return echo.ErrInternalServerError
 	}
-	c.Logger().Info("User registered:", obj.Email)
+
+	found := new(models.User)
+	result := db.Connection().First(&found, "email = ?", obj.Email)
+	if result.Error != gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusForbidden)
+	}
+
 	db.Connection().Create(obj)
+	c.Logger().Info("User registered:", obj.Email)
 	return c.NoContent(http.StatusCreated)
 }
