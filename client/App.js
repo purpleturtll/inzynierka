@@ -1,23 +1,51 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useState } from 'react';
 
-import TempScreen from './screens/TempScreen';
-import SignInScreen from './screens/SignInScreen';
-import RegistrationScreen from './screens/RegistrationScreen';
-import DoneRegistrationScreen from './screens/DoneRegistrationScreen';
-import PasswordRecoveryScreen from './screens/PasswordRecoveryScreen';
-import PasswordRecoveryEmailScreen from './screens/PasswordRecoveryEmailScreen';
-import ShelterRegistrationScreen from './screens/ShelterRegistrationScreen';
-import ChooseAccountTypeScreen from './screens/ChooseAccountTypeScreen';
-import HomeScreen from './screens/HomeScreen';
-import MessagesScreen from './screens/MessagesScreen';
-import FollowedAnimalsScreen from './screens/FollowedAnimals';
-import AccountScreen from './screens/AccountScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import BottomTabNavigator from "./navigation/TabNavigator";
+import AppContext from './components/AppContext';
 
-const Stack = createStackNavigator();
+const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userToken, setUserToken] = useState('');
+
+  const userSettings = {
+    loggedIn: loggedIn,
+    userToken: userToken,
+    setLoggedIn,
+    setUserToken
+  };
+
+  return (
+    <AppContext.Provider value={userSettings}>
+      {/* All other components are wrapped by the AppContext.Provider */}
+      <NavigationContainer>
+        <BottomTabNavigator />
+      </NavigationContainer>
+    </AppContext.Provider>
+  );
+}
+export default App
+
+
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// import TempScreen from './screens/TempScreen';
+// import SignInScreen from './screens/SignInScreen';
+// import RegistrationScreen from './screens/RegistrationScreen';
+// import DoneRegistrationScreen from './screens/DoneRegistrationScreen';
+// import PasswordRecoveryScreen from './screens/PasswordRecoveryScreen';
+// import PasswordRecoveryEmailScreen from './screens/PasswordRecoveryEmailScreen';
+// import ShelterRegistrationScreen from './screens/ShelterRegistrationScreen';
+// import ChooseAccountTypeScreen from './screens/ChooseAccountTypeScreen';
+// import HomeScreen from './screens/HomeScreen';
+// import MessagesScreen from './screens/MessagesScreen';
+// import FollowedAnimalsScreen from './screens/FollowedAnimals';
+// import AccountScreen from './screens/AccountScreen';
+
+// const Stack = createStackNavigator();
 
 // const MainStackNavigator = () => {
 //   return(
@@ -52,83 +80,91 @@ const Stack = createStackNavigator();
 //   )
 // }
 
-function Account() {
-  return (
-      <Stack.Navigator
-      >
-        <Stack.Screen
-          name="SignInScreen"
-          component={SignInScreen}
-          options={{
-            title: ' '
-          }}
-        />
-        <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
-          options={{
-            title: ''
-          }} />
-        <Stack.Screen name="DoneRegistrationScreen" component={DoneRegistrationScreen}
-          options={{ headerShown: false }} />
-        <Stack.Screen name="PasswordRecoveryScreen" component={PasswordRecoveryScreen}
-          options={{
-            title: ' '
-          }}
-        />
-        <Stack.Screen name="PasswordRecoveryEmailScreen" component={PasswordRecoveryEmailScreen}
-          options={{
-            title: ' '
-          }}
-        />
-        <Stack.Screen name="ShelterRegistrationScreen" component={ShelterRegistrationScreen}
-          options={{
-            title: ' '
-          }}
-        />
-        <Stack.Screen name="ChooseAccountTypeScreen" component={ChooseAccountTypeScreen}
-          options={{
-            title: ' '
-          }}
-        />
-        <Stack.Screen name="HomeScreen" component={HomeScreen}
-          options={{
-            title: ' '
-          }}></Stack.Screen>
+// function Account() {
+//   return (
+//       <Stack.Navigator
+//       >
+//       <Stack.Screen
+//       name="AccountScreen"
+//       component={AccountScreen}
+//       options={{
+//         title: ' '
+//       }}
+//       />
+//         <Stack.Screen
+//           name="SignInScreen"
+//           component={SignInScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
+//         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
+//           options={{
+//             title: ''
+//           }} />
+//         <Stack.Screen name="DoneRegistrationScreen" component={DoneRegistrationScreen}
+//           options={{ headerShown: false }} />
+//         <Stack.Screen name="PasswordRecoveryScreen" component={PasswordRecoveryScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
+//         <Stack.Screen name="PasswordRecoveryEmailScreen" component={PasswordRecoveryEmailScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
+//         <Stack.Screen name="ShelterRegistrationScreen" component={ShelterRegistrationScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
+//         <Stack.Screen name="ChooseAccountTypeScreen" component={ChooseAccountTypeScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
+//         <Stack.Screen name="HomeScreen" component={HomeScreen}
+//           options={{
+//             title: ' '
+//           }}></Stack.Screen>
 
-        <Stack.Screen name="MessagesScreen" component={MessagesScreen}
-          options={{
-            title: ' '
-          }}
-        />
+//         <Stack.Screen name="MessagesScreen" component={MessagesScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
 
-        <Stack.Screen name="FollowedAnimalsScreen" component={FollowedAnimalsScreen}
-          options={{
-            title: ' '
-          }}
-        />
+//         <Stack.Screen name="FollowedAnimalsScreen" component={FollowedAnimalsScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         />
 
-        <Stack.Screen name="AccountScreen" component={AccountScreen}
-          options={{
-            title: ' '
-          }}
-        />
+//         {/* <Stack.Screen name="AccountScreen" component={AccountScreen}
+//           options={{
+//             title: ' '
+//           }}
+//         /> */}
 
-      </Stack.Navigator>
-  );
-};
+//       </Stack.Navigator>
+// //   );
+// // };
 
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
 
-function BottomTabNavigator() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="home" component={Account} />
-        <Tab.Screen name="messages" component={MessagesScreen} />
-        <Tab.Screen name="followed" component={FollowedAnimalsScreen} />
-        <Tab.Screen name="account" component={Account} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  )
-}
+// function BottomTabNavigator() {
+//   return (
+//     <NavigationContainer>
+//       <Tab.Navigator>
+//         <Tab.Screen name="home" component={Account} />
+//         <Tab.Screen name="messages" component={MessagesScreen} />
+//         <Tab.Screen name="followed" component={FollowedAnimalsScreen} />
+//         <Tab.Screen name="account" component={Account} />
+//       </Tab.Navigator>
+//     </NavigationContainer>
+//   )
+// }
 
-export default BottomTabNavigator;
+// export default BottomTabNavigator;
+

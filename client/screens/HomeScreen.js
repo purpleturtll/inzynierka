@@ -1,20 +1,18 @@
 import React from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity
+  View, Text, StyleSheet
 } from 'react-native';
 
-const TempScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
     <View style={styles.header}>
     </View>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignInScreen')}>
         <Text>Home</Text>
-      </TouchableOpacity>
     </View>
   )
 }
-export default TempScreen;
+export default HomeScreen;
 
 //#362893
 
