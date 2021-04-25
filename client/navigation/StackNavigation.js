@@ -52,10 +52,6 @@ const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
       {/* <Stack.Screen name='AccountScreen' component={AccountScreen}></Stack.Screen> */}
-      <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
-        options={{
-          title: ''
-        }} />
       <Stack.Screen
         name="AccountScreen"
         component={AccountScreen}
@@ -63,6 +59,10 @@ const AccountStackNavigator = () => {
           title: ' '
         }}
       />
+      <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
+        options={{
+          title: ''
+        }} />
       <Stack.Screen
         name="SignInScreen"
         component={SignInScreen}

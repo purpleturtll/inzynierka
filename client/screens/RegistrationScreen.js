@@ -79,12 +79,14 @@ const RegistrationScreen = ({ navigation }) => {
   const onRegisterPress = () => {
 
     const res = fetch('http://10.0.2.2:8080/auth/register', {
-      body: {
+      body: JSON.stringify({
         firstname: data.firstname,
         surname: data.surname,
         email: data.email,
         password: data.password
-      }, method:'POST'
+      }),
+      headers: {"Content-Type": "application/json"},
+      method:'POST'
     }).then((response)=>{
       if(response.status==201){
         navigation.navigate('DoneRegistrationScreen')
@@ -194,7 +196,7 @@ const RegistrationScreen = ({ navigation }) => {
             <Text style={{ color: '#fff' }}>Utwórz konto</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
-            <Text style={{ color: '#69667C', fontWeight: '900', marginTop: 10 }}>Masz już konto?</Text>
+            <Text style={{ color: '#69667C', fontWeight: 'bold', marginTop: 10 }}>Masz już konto?</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -208,7 +210,6 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: '7.5%'
   },
-
   title: {
     fontSize: 30,
     fontWeight: '900',
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20
   },
-
   textInput: {
     width: '100%',
     paddingHorizontal: 20,
@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginBottom: 15,
   },
-
   passwordContainer: {
     flexDirection: 'row',
     width: '100%',
@@ -238,12 +237,10 @@ const styles = StyleSheet.create({
   textInputPass: {
     flex: 1,
   },
-
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 20
+    marginTop: 0
   },
-
   registerButton: {
     flexDirection: 'row',
     height: 50,
@@ -254,5 +251,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-
 });
