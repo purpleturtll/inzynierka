@@ -7,7 +7,8 @@ import AppContext from '../components/AppContext'
 
 
 const SignInScreen = ({ navigation }) => {
-
+  const [signInError, setSignInError] = useState();
+  const error = 'Niepoprawny e-mail lub hasło';
   const myContext = useContext(AppContext);
   
   const [data, setData] = useState({
@@ -21,14 +22,14 @@ const SignInScreen = ({ navigation }) => {
     if(val.length != 0) {
       setData({
         ...data,
-        email:val,
-        check_textInputChange:true
+        email: val,
+        check_textInputChange: true
       });
     }else{
       setData({
         ...data,
-        email:val,
-        check_textInputChange:false
+        email: val,
+        check_textInputChange: false
       });
     }
   }
@@ -56,17 +57,31 @@ const SignInScreen = ({ navigation }) => {
 
   const onSignInPress = () => {
 
+    if(data.email == ""){
+      setSignInError('E-mail nie może być pusty')
+      return
+    }
+    else if(data.password == ""){
+      setSignInError('Hasło nie może być puste')
+      return
+    }
+    else if(data.password.length < 8){
+      setSignInError(error)
+      return
+    }
     const res = fetch('http://10.0.2.2:8080/auth/login', {
-      body: {
+      body: JSON.stringify({
         email: data.email,
         password: data.password
-      }, method:'POST'
+      }), 
+      headers: {"Content-Type": "application/json"},
+      method:'POST'
     }).then((response)=>{
       if(response.status==200){
         navigation.navigate('AccountScreen')
       }
-      else{
-        navigation.navigate('RegistrationScreen')
+      else if(response.status==401){
+        setSignInError(error);
       }
     })
   }
@@ -77,6 +92,7 @@ const SignInScreen = ({ navigation }) => {
           source={require('../assets/login.png')}
           style={styles.logo}
         />
+        <Text style={{marginVertical: 18, color: 'red', fontSize: 15 }}>{signInError}</Text>
       </View>
       <View style={styles.body}>
         <TextInput 
@@ -124,7 +140,7 @@ const SignInScreen = ({ navigation }) => {
         <TouchableOpacity>
           <Text style={{color:'#000', fontWeight: '900' }} onPress={() => navigation.navigate('PasswordRecoveryScreen')}>Zapomniałeś hasła?</Text>
         </TouchableOpacity>
-        <Text style={{color: '#000', marginVertical: 20}}>lub</Text>
+        <Text style={{color: '#000', marginVertical: 10}}>lub</Text>
         <TouchableOpacity style={styles.registerButton}  onPress={() => navigation.navigate('ChooseAccountTypeScreen')}>
         <Text style={{color:'#fff', fontWeight: '900' }}>Utwórz konto</Text>
         </TouchableOpacity>
@@ -180,12 +196,12 @@ const styles = StyleSheet.create({
 
   textInput: {
     marginLeft: '10%',
+    marginBottom: 15,
     width: '80%',
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: '#E2E1E1',
     borderRadius: 40,
-    marginBottom: 15,
   },
 
   passwordContainer: {
@@ -205,6 +221,6 @@ const styles = StyleSheet.create({
   logo: {
     width: height_logo,
     height: height_logo,
-    marginVertical:30
+    marginTop:20, 
   }
 });

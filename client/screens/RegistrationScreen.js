@@ -64,12 +64,14 @@ const RegistrationScreen = ({ navigation }) => {
   const onRegisterPress = () => {
 
     const res = fetch('http://10.0.2.2:8080/auth/register', {
-      body: {
+      body: JSON.stringify({
         firstname: data.firstname,
         surname: data.surname,
         email: data.email,
         password: data.password
-      }, method:'POST'
+      }),
+      headers: {"Content-Type": "application/json"},
+      method:'POST'
     }).then((response)=>{
       if(response.status==201){
         navigation.navigate('DoneRegistrationScreen')
@@ -177,7 +179,7 @@ const RegistrationScreen = ({ navigation }) => {
             <Text style={{ color: '#fff' }}>Utwórz konto</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
-            <Text style={{ color: '#69667C', fontWeight: '900', marginTop: 10 }}>Masz już konto?</Text>
+            <Text style={{ color: '#69667C', fontWeight: 'bold', marginTop: 10 }}>Masz już konto?</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -220,7 +222,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 10
+    marginTop: 0
   },
   registerButton: {
     flexDirection: 'row',
