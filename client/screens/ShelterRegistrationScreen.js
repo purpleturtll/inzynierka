@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-
 const marginLeftText = '5%';
 const marginBottomText = 5;
 
@@ -188,7 +187,6 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: '7.5%'
   },
-
   title: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -196,7 +194,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30
   },
-
   textInput: {
     width: '100%',
     paddingHorizontal: 20,
@@ -205,7 +202,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginBottom: 15,
   },
-
   passwordContainer: {
     flexDirection: 'row',
     width: '100%',
@@ -218,12 +214,10 @@ const styles = StyleSheet.create({
   textInputPass: {
     flex: 1,
   },
-
   buttonContainer: {
     alignItems: 'center',
     marginTop: 20
   },
-
   registerButton: {
     flexDirection: 'row',
     height: 50,
@@ -234,5 +228,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-
 });

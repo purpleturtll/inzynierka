@@ -51,11 +51,6 @@ const FollowedStackNavigator = () => {
 const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen name='AccountScreen' component={AccountScreen}></Stack.Screen> */}
-      <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
-        options={{
-          title: ''
-        }} />
       <Stack.Screen
         name="AccountScreen"
         component={AccountScreen}
@@ -63,6 +58,10 @@ const AccountStackNavigator = () => {
           title: ' '
         }}
       />
+      <Stack.Screen name="RegistrationScreen" component={RegistrationScreen}
+        options={{
+          title: ''
+        }} />
       <Stack.Screen
         name="SignInScreen"
         component={SignInScreen}
@@ -177,29 +176,21 @@ const MyStack = () => {
             title: ' '
           }}
         />
-        {/* <Stack.Screen name="HomeScreen" component={HomeScreen} 
-        options={{
-          title: ' '
-        }}></Stack.Screen> */}
-
         <Stack.Screen name="MessagesScreen" component={MessagesScreen}
           options={{
             title: ' '
           }}
         />
-
         <Stack.Screen name="FollowedAnimalsScreen" component={FollowedAnimalsScreen}
           options={{
             title: ' '
           }}
         />
-
         <Stack.Screen name="AccountScreen" component={AccountScreen}
           options={{
             title: ' '
           }}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

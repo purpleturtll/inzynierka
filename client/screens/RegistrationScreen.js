@@ -8,6 +8,7 @@ const RegistrationScreen = ({ navigation }) => {
 
   const marginLeftText = '5%';
   const marginBottomText = 5;
+
   const [data, setData] = useState({
     firstname: '',
     surname: '',
@@ -17,22 +18,6 @@ const RegistrationScreen = ({ navigation }) => {
     passwordEye: true,
     passwordConfirmationEye: true
   });
-
-  const textInputChange = (val) => {
-    if (val.length != 0) {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: true
-      });
-    } else {
-      setData({
-        ...data,
-        email: val,
-        check_textInputChange: false
-      });
-    }
-  }
 
   const handleFirstnameChange = (val) => {
     setData({
@@ -140,7 +125,6 @@ const RegistrationScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={updatePasswordEye}>
               {data.passwordEye ?
-
                 <Feather
                   name="eye-off"
                   color="grey"
@@ -171,7 +155,6 @@ const RegistrationScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={updatePasswordConfirmationEye}>
               {data.passwordConfirmationEye ?
-
                 <Feather
                   name="eye-off"
                   color="grey"
@@ -208,15 +191,13 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: '7.5%'
   },
-
   title: {
     fontSize: 30,
     fontWeight: '900',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 15,
     marginBottom: 20
   },
-
   textInput: {
     width: '100%',
     paddingHorizontal: 20,
@@ -225,7 +206,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginBottom: 15,
   },
-
   passwordContainer: {
     flexDirection: 'row',
     width: '100%',
@@ -238,12 +218,10 @@ const styles = StyleSheet.create({
   textInputPass: {
     flex: 1,
   },
-
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 20
+    marginTop: 10
   },
-
   registerButton: {
     flexDirection: 'row',
     height: 50,
@@ -254,5 +232,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
-
 });
