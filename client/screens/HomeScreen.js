@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {
-  View, Text, StyleSheet, Image
+  View, Text, StyleSheet, Image,
 } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TextInput, TouchableOpacity,} from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 
 const HomeScreen = ({ navigation }) => {
@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
       name: 'Angus',
       type: 'pies',
       race: 'mieszaniec',
-      sex: 'male',
+      sex: 'samiec',
       postDate: '6/3/21',
       favourite: true,
       status: [{adoptable: true}, {urgent: true}],
@@ -22,14 +22,15 @@ const HomeScreen = ({ navigation }) => {
       city: 'Warszawa',
       location: 'Schronisko dla Bezdomnych Zwierząt w Warszawie',
       takeInDate: '20-11-2020',
-      description: 'Opis Angusa'
+      description: 'Opis Angusa',
+      imageUrl: '../assets/cat.png'
     },
     {
       id: 2,
       name: 'Mruczek',
       type: 'kot',
       race: 'europejska',
-      sex: 'male',
+      sex: 'samiec',
       postDate: '2/3/21',
       favourite: false,
       status: [{adoptable: true}],
@@ -38,14 +39,15 @@ const HomeScreen = ({ navigation }) => {
       city: 'Otwock',
       location: 'Schronisko dla Bezdomnych Zwierząt w Otwocku',
       takeInDate: '24-12-2020',
-      description: 'Opis Mruczka'
+      description: 'Opis Mruczka',
+      imageUrl: '../assets/cat.png'
     },
     {
       id: 3,
       name: 'Mia',
       type: 'pies',
       race: 'mieszaniec',
-      sex: 'female',
+      sex: 'samica',
       postDate: '1/3/21',
       favourite: false,
       status: [{urgent: true}],
@@ -54,7 +56,8 @@ const HomeScreen = ({ navigation }) => {
       city: 'Lublin',
       location: 'Schronisko dla Bezdomnych Zwierząt w Lublinie',
       takeInDate: '7-02-2021',
-      description: 'Opis Mii'
+      description: 'Opis Mii',
+      imageUrl: '../assets/cat.png'
     },
   ]);
 
@@ -78,6 +81,7 @@ const onSeeMorePress = () => {
     <View style={styles.container}>
     <View style={styles.header}>
 
+    <ScrollView>
     {/*widok ekranu*/}
     <View style={styles.customContainer}>
       {/*pasek wyszukiwania*/}
@@ -92,6 +96,7 @@ const onSeeMorePress = () => {
       <View>
         <Text style={styles.categoryTitle}>Kogo szukasz?</Text>
         <View style={styles.categoryButtonContainer}>
+
           {/*Psy*/}
           <TouchableOpacity 
             style={styles.categoryButton}
@@ -105,6 +110,7 @@ const onSeeMorePress = () => {
             style={styles.categoryButton}
             onPress={() => onFilterCatsPress() }
           >
+          {/*TODO: Obrazki na przyciskach*/}
           {/*<View>
             <Image source={require('../assets/cat.png')}
             style={styles.categoryButtonImage}
@@ -113,6 +119,7 @@ const onSeeMorePress = () => {
           */}
             <Text style={styles.categoryButtonText}>Koty</Text>
           </TouchableOpacity>
+
           {/*Inne*/}
           <TouchableOpacity 
             style={styles.categoryButton}
@@ -120,7 +127,10 @@ const onSeeMorePress = () => {
           >
             <Text style={styles.categoryButtonText}>Inne</Text>
           </TouchableOpacity>
+
         </View>
+
+        {/*"Ostatnio dodane" i "Zobacz więcej"*/}
         <View style={styles.textContainer}>
           <View style={styles.textElement}>
             <Text style={styles.latestText}>Ostatnio dodane</Text>
@@ -133,11 +143,29 @@ const onSeeMorePress = () => {
           </TouchableOpacity>
           
         </View>
-        
       </View>
+      
+      {/*Lista zwierzaków*/}  
+      <View style={cardStyles.cardContainer}>
+        {animals.map((item) => {
+          return(
+            <View key={item.id}>
+              <AnimalCard animal={item}/>
+            </View>
+          )
+        })}
+      </View>
+      
 
+      {/*<FlatList 
+        contentContainerStyle={cardStyles.cardContainer}
+        data={animals}
+        renderItem={({ item }) => (
+          <AnimalCard animal={item}/>    
+        )}
+        />*/}
     </View>
-
+    </ScrollView>
     </View>   
     </View>
   )
@@ -145,6 +173,35 @@ const onSeeMorePress = () => {
 export default HomeScreen;
 
 //#362893
+
+const AnimalCard = ({animal}) => {
+
+  const onAnimalPress = ({animal}) => {
+
+  }
+
+  return(
+    <View style={cardStyles.card}>
+      <TouchableOpacity onPress={() => onAnimalPress({animal})}>
+        {/*<Image source={require('../assets/cat.png')}/>*/}
+        {/*info*/}
+        <View>
+          {/*blok tekstu*/}
+          <View>
+            {/*tytuł*/}
+            <View style={cardStyles.headline}>
+              <Text style={{fontWeight: 'bold'}}>{animal.name} </Text>
+              <Text>{animal.postDate}</Text>
+            </View>
+            {/*TODO: wyświetlanie wieku*/}
+            <Text>{animal.race}</Text>
+            <Text>{animal.sex}, 3 lata, {animal.weight} kg</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +223,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 2,
     borderColor: '#777',
-    borderRadius: '15px'
+    borderRadius: 15
   },
   input: {
     flex: 1,
@@ -178,7 +235,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 25,
-    paddingVertical: '2%'
+    paddingVertical: '8%'
   },
   categoryButtonContainer: {
     flexDirection: 'row',
@@ -187,16 +244,15 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     backgroundColor: '#362893',
-    width: '100px',
-    height: '100px',
+    width: 80,
+    height: 80,
     margin: 10,
     borderRadius: 15,
-    clipChildren: false
   },
   categoryButtonText: {
     fontSize: 18,
     color: 'white',
-    paddingVertical: '35px',
+    paddingVertical: 28,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
@@ -205,21 +261,43 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   },
   textElement: {
-    flex: 1
+    flex: 1,
+    paddingVertical: 5,
   },
   seeMore: {
-    color: '#777',
     justifyContent: 'flex-end',
-    fontSize: 18
+    paddingTop: 3,
+    fontSize: 15,
+    color: '#777',
   },
   latestText: {
-    flex: 1,
     justifyContent: 'flex-start',
-    fontSize: 20,
-    paddingVertical: '2%',
+    fontSize: 18,
     fontWeight: 'bold'
   },
+});
+
+const cardStyles = StyleSheet.create({
+  cardContainer: {
+    alignItems: 'center',
+  },
+  card: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: 'white',
+    borderRadius: 15,
+    elevation: 3,
+    shadowColor: '#fff',
+    shadowOffset:{width: 10, height: 10},
+    shadowOpacity: 1,
+    shadowRadius: 2
+  },
+  headline: {
+    flexDirection: 'row',
+    paddingVertical: 10
+  }
 });
