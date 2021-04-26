@@ -23,7 +23,7 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Warszawie',
       takeInDate: '20-11-2020',
       description: 'Opis Angusa',
-      imageUrl: '../assets/cat.png'
+      imageUrl: '../assets/dog_homepage.png'
     },
     {
       id: 2,
@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Otwocku',
       takeInDate: '24-12-2020',
       description: 'Opis Mruczka',
-      imageUrl: '../assets/cat.png'
+      imageUrl: '../assets/cat_homepage.png'
     },
     {
       id: 3,
@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Lublinie',
       takeInDate: '7-02-2021',
       description: 'Opis Mii',
-      imageUrl: '../assets/cat.png'
+      imageUrl: '../assets/dog_homepage.png'
     },
   ]);
 
@@ -81,12 +81,12 @@ const onSeeMorePress = () => {
     <View style={styles.container}>
     <View style={styles.header}>
 
-    <ScrollView>
     {/*widok ekranu*/}
+    <ScrollView>
     <View style={styles.customContainer}>
       {/*pasek wyszukiwania*/}
       <View style={styles.searchbar}>
-        <Icon name='search' color='#777'/>
+        <Icon name='search' color='#777' size={30} style={styles.searchIcon}/>
         <TextInput style={styles.input}
         placeholder='Lorem ipsum ...'
         />
@@ -99,34 +99,48 @@ const onSeeMorePress = () => {
 
           {/*Psy*/}
           <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={() => onFilterDogsPress() }
+            style={styles.categoryButtonView}
+            onPress={() => onFilterDogsPress()}
           >
-            <Text style={styles.categoryButtonText}>Psy</Text>
+            <View style={styles.categoryButton}>
+             <Text style={styles.categoryButtonText}>Psy</Text>
+            </View>
+            <Image 
+              source={require('../assets/dog_homepage.png')}
+              style={styles.categoryButtonImage}
+            />
           </TouchableOpacity>
+          
           
           {/*Koty*/}
           <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={() => onFilterCatsPress() }
+            style={styles.categoryButtonView}
+            onPress={() => onFilterCatsPress()}
           >
-          {/*TODO: Obrazki na przyciskach*/}
-          {/*<View>
-            <Image source={require('../assets/cat.png')}
-            style={styles.categoryButtonImage}
+            <View style={styles.categoryButton}>
+              <Text style={styles.categoryButtonText}>Koty</Text>
+            </View>
+            <Image 
+              source={require('../assets/cat_homepage.png')}
+              style={styles.categoryButtonImage}
             />
-          </View>
-          */}
-            <Text style={styles.categoryButtonText}>Koty</Text>
           </TouchableOpacity>
+          
 
           {/*Inne*/}
           <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={() => onFilterOtherPress() }
+            style={styles.categoryButtonView}
+            onPress={() => onFilterOtherPress()}
           >
-            <Text style={styles.categoryButtonText}>Inne</Text>
+            <View style={styles.categoryButton}>
+              <Text style={styles.categoryButtonText}>Inne</Text>
+            </View>
+            <Image 
+              source={require('../assets/hamster_homepage.png')}
+              style={styles.categoryButtonImage}
+            />
           </TouchableOpacity>
+          
 
         </View>
 
@@ -155,15 +169,7 @@ const onSeeMorePress = () => {
           )
         })}
       </View>
-      
-
-      {/*<FlatList 
-        contentContainerStyle={cardStyles.cardContainer}
-        data={animals}
-        renderItem={({ item }) => (
-          <AnimalCard animal={item}/>    
-        )}
-        />*/}
+    
     </View>
     </ScrollView>
     </View>   
@@ -183,7 +189,7 @@ const AnimalCard = ({animal}) => {
   return(
     <View style={cardStyles.card}>
       <TouchableOpacity onPress={() => onAnimalPress({animal})}>
-        {/*<Image source={require('../assets/cat.png')}/>*/}
+        {/*<Image source={animal.imageUrl}/>*/}
         {/*info*/}
         <View>
           {/*blok tekstu*/}
@@ -212,22 +218,25 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     marginVertical: '2%',
   },
-  button:{
-    backgroundColor: '#E2E1E1',
-    padding: 10,
-    alignItems: 'center'
+  searchIcon:{
+    paddingLeft: 8,
+    paddingTop: 6,
+    paddingBottom: 3,
+    fontWeight: 'bold'
   },
   searchbar: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20,
     backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#777',
-    borderRadius: 15
+    borderWidth: 1.7,
+    borderColor: '#555',
+    borderRadius: 20
   },
   input: {
     flex: 1,
-    padding: 15
+    paddingHorizontal: 8,
+    paddingVertical: 8,
   },
   icon: {
     flex: 1,
@@ -242,11 +251,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  categoryButtonView: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '8%'
+  },
   categoryButton: {
     backgroundColor: '#362893',
     width: 80,
     height: 80,
-    margin: 10,
+    marginHorizontal: 10,
+    marginTop: 45,
+    marginBottom: 20,
     borderRadius: 15,
   },
   categoryButtonText: {
@@ -257,7 +274,11 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   categoryButtonImage: {
-    paddingBottom: 5,
+    position: 'absolute',
+    top: 0,
+    width: 60,
+    height: 60,
+    resizeMode: 'cover',
   },
   textContainer: {
     flexDirection: 'row',
