@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import {
   View, Text, StyleSheet, Image,
 } from 'react-native';
-import { FlatList, ScrollView, TextInput, TouchableOpacity,} from 'react-native-gesture-handler';
+import { ScrollView, TextInput, TouchableOpacity,} from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
+import AnimalCard from '../components/AnimalCard'
 
 const HomeScreen = ({ navigation }) => {
 
@@ -23,7 +24,8 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Warszawie',
       takeInDate: '20-11-2020',
       description: 'Opis Angusa',
-      imageUrl: '../assets/dog_homepage.png'
+      imageUrl: '',
+      image: 'dog1'
     },
     {
       id: 2,
@@ -40,13 +42,14 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Otwocku',
       takeInDate: '24-12-2020',
       description: 'Opis Mruczka',
-      imageUrl: '../assets/cat_homepage.png'
+      imageUrl: '',
+      image: 'cat1'
     },
     {
       id: 3,
       name: 'Mia',
       type: 'pies',
-      race: 'mieszaniec',
+      race: 'buldog',
       sex: 'samica',
       postDate: '1/3/21',
       favourite: false,
@@ -57,7 +60,8 @@ const HomeScreen = ({ navigation }) => {
       location: 'Schronisko dla Bezdomnych Zwierząt w Lublinie',
       takeInDate: '7-02-2021',
       description: 'Opis Mii',
-      imageUrl: '../assets/dog_homepage.png'
+      imageUrl: '',
+      image: 'dog2'
     },
   ]);
 
@@ -160,7 +164,7 @@ const onSeeMorePress = () => {
       </View>
       
       {/*Lista zwierzaków*/}  
-      <View style={cardStyles.cardContainer}>
+      <View style={styles.cardContainer}>
         {animals.map((item) => {
           return(
             <View key={item.id}>
@@ -179,35 +183,6 @@ const onSeeMorePress = () => {
 export default HomeScreen;
 
 //#362893
-
-const AnimalCard = ({animal}) => {
-
-  const onAnimalPress = ({animal}) => {
-
-  }
-
-  return(
-    <View style={cardStyles.card}>
-      <TouchableOpacity onPress={() => onAnimalPress({animal})}>
-        {/*<Image source={animal.imageUrl}/>*/}
-        {/*info*/}
-        <View>
-          {/*blok tekstu*/}
-          <View>
-            {/*tytuł*/}
-            <View style={cardStyles.headline}>
-              <Text style={{fontWeight: 'bold'}}>{animal.name} </Text>
-              <Text>{animal.postDate}</Text>
-            </View>
-            {/*TODO: wyświetlanie wieku*/}
-            <Text>{animal.race}</Text>
-            <Text>{animal.sex}, 3 lata, {animal.weight} kg</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -300,25 +275,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
-});
-
-const cardStyles = StyleSheet.create({
   cardContainer: {
     alignItems: 'center',
   },
-  card: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: 'white',
-    borderRadius: 15,
-    elevation: 3,
-    shadowColor: '#fff',
-    shadowOffset:{width: 10, height: 10},
-    shadowOpacity: 1,
-    shadowRadius: 2
-  },
-  headline: {
-    flexDirection: 'row',
-    paddingVertical: 10
-  }
 });
