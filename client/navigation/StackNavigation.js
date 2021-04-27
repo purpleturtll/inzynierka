@@ -43,7 +43,17 @@ const MessageStackNavigator = () => {
 const FollowedStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='FollowedAnimalsScreen' component={FollowedAnimalsScreen}></Stack.Screen>
+      <Stack.Screen 
+        name='FollowedAnimalsScreen' 
+        component={FollowedAnimalsScreen}
+      />
+      <Stack.Screen
+        name="SignInScreen"
+        component={SignInScreen}
+        options={{
+          title: ' '
+        }}
+      />
     </Stack.Navigator>
   )
 }
