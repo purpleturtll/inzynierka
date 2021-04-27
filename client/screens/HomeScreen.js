@@ -65,20 +65,32 @@ const HomeScreen = ({ navigation }) => {
     },
   ]);
 
-const onFilterDogsPress = () => {
+  const handleFavChange = (id) => {
+    animals.map(animal => {
+      if(animal.id==id){
+        setAnimals({
+          ...animals,
+          favourite: !animal.favourite,
+      });
+      }
+      console.log(animal.favourite);
+    })
+  }
 
+const onFilterDogsPress = () => {
+  {/*TODO*/}
 }
 
 const onFilterCatsPress = () => {
-
+  {/*TODO*/}
 }
 
 const onFilterOtherPress = () => {
-
+  {/*TODO*/}
 }
 
 const onSeeMorePress = () => {
-
+  {/*TODO*/}
 }
 
   return(
@@ -168,7 +180,7 @@ const onSeeMorePress = () => {
         {animals.map((item) => {
           return(
             <View key={item.id}>
-              <AnimalCard animal={item}/>
+              <AnimalCard animal={item} onFavChange={() => handleFavChange}/>
             </View>
           )
         })}
