@@ -4,10 +4,20 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+const marginLeftText = '5%';
+const marginBottomText = 5;
 const RegistrationScreen = ({ navigation }) => {
 
-  const marginLeftText = '5%';
-  const marginBottomText = 5;
+  const errorTrue = "Pole nie może być puste";
+
+  const [registrationError, setRegistrationError] = useState({
+
+    invalidFirstname: false,
+    invalidSurname: false,
+    invalidEmail: false,
+    invalidPassword: false,
+    error: false
+  });
 
   const [data, setData] = useState({
     firstname: '',
@@ -63,6 +73,38 @@ const RegistrationScreen = ({ navigation }) => {
 
   const onRegisterPress = () => {
 
+    if(data.firstname == "") {
+      setRegistrationError({
+        ...registrationError,
+        invalidFirstname: true,
+        error: true
+      });
+    }
+    if(data.surname == "") {
+      setRegistrationError({
+        ...registrationError,
+        invalidSurname: true,
+        error: true
+      });
+    }
+    if(data.email == "") {
+      setRegistrationError({
+        ...registrationError,
+        invalidEmail: true,
+        error: true
+      });
+    }
+    if(data.password == "") {
+      setRegistrationError({
+        ...registrationError,
+        invalidPassword: true,
+        error: true
+      });
+    }
+    if(registrationError.error){
+      return
+    }
+    
     const res = fetch('http://10.0.2.2:8080/auth/register', {
       body: JSON.stringify({
         firstname: data.firstname,
@@ -93,6 +135,8 @@ const RegistrationScreen = ({ navigation }) => {
           style={styles.textInput}
           onChangeText={(val) => handleFirstnameChange(val)}
         />
+        {registrationError.invalidFirstname && <Text style={[styles.error]}>{ errorTrue }</Text>}
+
 
         <View>
           <Text style={{ marginLeft: marginLeftText, marginBottom: marginBottomText }}>Nazwisko</Text>
@@ -234,4 +278,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
   },
+  error: {
+    marginLeft: marginLeftText, 
+    marginBottom: 10, 
+    color: 'red', 
+    fontSize: 15,
+  }
 });
