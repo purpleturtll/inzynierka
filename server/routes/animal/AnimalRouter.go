@@ -9,4 +9,5 @@ func (Router) Init(g *echo.Group) {
 	g.GET("/read/:id", Read)
 	g.PATCH("/update", Update)
 	g.DELETE("/delete/:id", Delete)
+	g.POST("/page/:nr", ReadPage)
 }

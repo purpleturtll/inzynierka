@@ -12,6 +12,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const pageSize = 2
+
 func Create(c echo.Context) error {
 	obj := new(models.Animal)
 	if err := c.Bind(obj); err != nil {
@@ -28,6 +30,20 @@ func Read(c echo.Context) error {
 	id_int, _ := strconv.Atoi(id)
 	obj := &models.Animal{}
 	result := db.Connection().First(&obj, id_int)
+	if result.Error == gorm.ErrRecordNotFound {
+		return c.String(http.StatusNotFound, "Not Found")
+	}
+	return c.JSON(http.StatusOK, obj)
+}
+
+func ReadPage(c echo.Context) error {
+	nr := c.QueryParam("nr")
+	nr_int, _ := strconv.Atoi(nr)
+	obj := &models.Animal{}
+	if err := c.Bind(obj); err != nil {
+		return err
+	}
+	result := db.Connection().Offset(pageSize * nr_int).Limit(pageSize).Where(obj)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
