@@ -9,7 +9,7 @@ const marginBottomText = 5;
 const RegistrationScreen = ({ navigation }) => {
 
   const errorTrue = "Pole nie może być puste";
-  const errorPasswordCombine = "Użyj co najmniej ośmiu znaków, w tym jednocześnie liter, cyfr i symboli";
+  const errorPasswordCombine = "min. 8 znaków • wielka litera • mała litera • cyfra • znak specjalny";
   const notEqualPasswordText = "Hasła nie są takie same. Spróbuj ponownie."
   let error = false;
 
@@ -20,6 +20,7 @@ const RegistrationScreen = ({ navigation }) => {
     invalidEmail: false,
     invalidPassword: false,
     invalidPasswordConfirmation: false,
+    isEmail: true,
     EqualPassword: true
   });
 
@@ -63,11 +64,17 @@ const RegistrationScreen = ({ navigation }) => {
       ...data,
       email: val
     });
-    setRegistrationError({
-      ...registrationError,
+    setRegistrationError((prevState) => {
+      return{
+        ...prevState,
       invalidEmail: false,
+      }
     });
     error = false;
+  }
+
+  const validateIsEmail = (email) => {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
   }
 
   const handlePasswordChange = (val) => {
@@ -87,9 +94,13 @@ const RegistrationScreen = ({ navigation }) => {
       ...data,
       passwordConfirmation: val
     });
-    setRegistrationError({
-      ...registrationError,
-      invalidPasswordConfirmation: false,
+    
+    setRegistrationError((prevState) => {
+      return{
+        ...prevState,
+        invalidPasswordConfirmation: false,
+        EqualPassword: true
+      }
     });
     error = false;
   }
@@ -127,7 +138,8 @@ const RegistrationScreen = ({ navigation }) => {
           ...prevState,
           EqualPassword: false,
         }
-      });     
+      });
+      error = true;     
     }
   }
 
@@ -152,7 +164,16 @@ const RegistrationScreen = ({ navigation }) => {
       error = true;
 
     }
-    if (data.email == "") {
+    if(!validateIsEmail(data.email)){
+      setRegistrationError((prevState) => {
+        return {
+          ...prevState,
+          isEmail: false
+        };
+      });
+      error = true;
+    }
+    else if (data.email == "") {
       setRegistrationError((prevState) => {
         return {
           ...prevState,
@@ -160,8 +181,8 @@ const RegistrationScreen = ({ navigation }) => {
         };
       });
       error = true;
-
     }
+
     if (data.password == "") {
       setRegistrationError((prevState) => {
         return {
@@ -252,6 +273,7 @@ const RegistrationScreen = ({ navigation }) => {
             onChangeText={(val) => handleEmailChange(val)}
           />
           {registrationError.invalidEmail && <Text style={[styles.error]}>{errorTrue}</Text>}
+          {!registrationError.isEmail && <Text style={[styles.error]}>Niepoprawny adres e-mail</Text>}
 
         </View>
         <View>
