@@ -37,17 +37,18 @@ func Read(c echo.Context) error {
 }
 
 func ReadPage(c echo.Context) error {
-	nr := c.QueryParam("nr")
+	var animals []models.Animal
+	nr := c.Param("nr")
 	nr_int, _ := strconv.Atoi(nr)
 	obj := &models.Animal{}
 	if err := c.Bind(obj); err != nil {
 		return err
 	}
-	result := db.Connection().Offset(pageSize * nr_int).Limit(pageSize).Where(obj)
+	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Where(&obj).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
-	return c.JSON(http.StatusOK, obj)
+	return c.JSON(http.StatusOK, animals)
 }
 
 func Update(c echo.Context) error {
