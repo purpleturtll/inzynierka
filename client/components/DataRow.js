@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Icon } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,7 +9,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 const DataRow = ({ label, data }) => {
 
     const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
-
 
     if(label == 'Typ' || label == 'W typie rasy') {
         return(
@@ -52,8 +50,7 @@ const DataRow = ({ label, data }) => {
                     <Text>{label}: <B>{data}</B></Text>
                 </View>
             )
-        }
-        
+        }  
     }
     else if(label == 'Waga') {
         return(
@@ -114,6 +111,7 @@ export default DataRow;
 const styles = StyleSheet.create({
     rowView: {
         flexDirection: 'row',
+        alignItems: 'center',
         marginVertical: '2%',
       },
     icon: {

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import DataRow from '../components/DataRow';
+import StatusDataRow from '../components/StatusDataRow'
 
 const AnimalDetailsScreen = ({ route, navigation }) => {
 
@@ -13,7 +14,8 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
       sex,
       postDate,
       favourite,
-      status,
+      adoptable,
+      urgent,
       weight,
       ageMonths,
       city,
@@ -44,7 +46,8 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
       <DataRow label={'Typ'} data={type}/>
       <DataRow label={'W typie rasy'} data={race}/>
       <DataRow label={'Płeć'} data={sex}/>
-      {/*TODO -status*/}
+      {/*TODO - status*/}
+      <StatusDataRow status={{adoptable, urgent}}/>
       <DataRow label={'Waga'} data={weight}/>
       <DataRow label={'Wiek'} data={ageMonths}/>
       <DataRow label={'Lokalizacja'} data={location}/>
@@ -60,9 +63,18 @@ export default AnimalDetailsScreen;
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: '10%',
+
   },
   imageView: {
-    marginVertical: '5%'
+    marginVertical: '5%',
+    paddingBottom: 5,
+    backgroundColor: '#0000',
+    borderRadius: 15,
+    elevation: 6,
+    shadowColor: '#fff',
+    shadowOffset:{width: 5, height: 5},
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
   },
   image: {
     resizeMode: 'cover',
