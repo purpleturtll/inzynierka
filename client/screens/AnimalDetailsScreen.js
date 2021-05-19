@@ -41,7 +41,14 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
         />
       </View>
       
-      <DataRow label={'Typ'} data={type} icon={'baidu'}/>
+      <DataRow label={'Typ'} data={type}/>
+      <DataRow label={'W typie rasy'} data={race}/>
+      <DataRow label={'Płeć'} data={sex}/>
+      {/*TODO -status*/}
+      <DataRow label={'Waga'} data={weight}/>
+      <DataRow label={'Wiek'} data={ageMonths}/>
+      <DataRow label={'Lokalizacja'} data={location}/>
+      <DataRow label={'Data przyjęcia'} data={takeInDate}/>
     </View>
   )
 }
