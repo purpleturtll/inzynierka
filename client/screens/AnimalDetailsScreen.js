@@ -1,7 +1,6 @@
 import React from 'react';
-import {
-  View, Text, StyleSheet, TouchableOpacity
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import DataRow from '../components/DataRow';
 
 const AnimalDetailsScreen = ({ route, navigation }) => {
 
@@ -25,29 +24,43 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
       image
   } = route.params;
 
+  const images = {
+    animalType: {
+      'cat1': require('../assets/cat_1.jpg'),
+      'dog1': require('../assets/dog_1.jpg'),
+      'dog2': require('../assets/dog_2.jpg'),
+    }
+  }
+
   return(
     <View style={styles.container}>
-    <View style={styles.header}>
-    </View>
-      <TouchableOpacity style={styles.button}>
-        <Text>{ name }</Text>
-      </TouchableOpacity>
+      <View style={styles.imageView}>
+        <Image 
+          source={images.animalType[image]}
+          style={styles.image}
+        />
+      </View>
+      
+      <DataRow label={'Typ'} data={type} icon={'baidu'}/>
     </View>
   )
 }
 export default AnimalDetailsScreen;
 
-//#362893
+
+//granatowy - #362893
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor: '#fff'
+    marginHorizontal: '10%',
   },
-
-  button:{
-    backgroundColor: '#E2E1E1',
-    padding: 10,
-    alignItems: 'center'
-  }
+  imageView: {
+    marginVertical: '5%'
+  },
+  image: {
+    resizeMode: 'cover',
+    width: '100%',
+    height: 200,
+    borderRadius: 15,
+  },
 });
