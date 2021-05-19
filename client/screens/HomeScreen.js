@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import {
-  View, Text, StyleSheet, Image,
-} from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity,} from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
 
@@ -67,10 +65,6 @@ const HomeScreen = ({ navigation }) => {
       image: 'dog2'
     },
   ]);
-
-  const navigateToDetails = (item) => {
-    navigation.navigate('AnimalDetailsScreen', item);
-  }
 
   const handleFavChange = (id) => {
     animals.map(animal => {
@@ -173,7 +167,6 @@ const onSeeMorePress = () => {
             >
               <Text style={styles.seeMore}>Zobacz więcej</Text>
             </TouchableOpacity>
-            
           </View>
         </View>
         
@@ -182,7 +175,10 @@ const onSeeMorePress = () => {
           {animals.map((item) => {
             return(
               <View key={item.id}>
-                <AnimalCard animal={item} navigation={navigation} onFavChange={() => handleFavChange}/>
+                <AnimalCard animal={item}
+                  navigation={navigation} 
+                  onFavChange={() => handleFavChange}
+                />
               </View>
             )
           })}

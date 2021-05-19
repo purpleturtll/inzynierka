@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
       paddingRight: 10
     },
     label: {
-      marginHorizontal: 5,
+      marginLeft: 8,
       paddingVertical: 3,
       paddingHorizontal: 12,
       backgroundColor: '#362893',
