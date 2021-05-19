@@ -12,7 +12,7 @@ import ShelterRegistrationScreen from '../screens/ShelterRegistrationScreen';
 import ChooseAccountTypeScreen from '../screens/ChooseAccountTypeScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MessagesScreen from '../screens/MessagesScreen';
-import FollowedAnimalsScreen from '../screens/FollowedAnimals';
+import FollowedAnimalsScreen from '../screens/FollowedAnimalsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import ChangedEmailScreen from '../screens/ChangedEmailScreen';
@@ -56,6 +56,7 @@ const FollowedStackNavigator = () => {
           title: ' '
         }}
       />
+      <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
   )
 }
