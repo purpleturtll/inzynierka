@@ -65,6 +65,10 @@ const HomeScreen = ({ navigation }) => {
     },
   ]);
 
+  const navigateToDetails = (item) => {
+    navigation.navigate('AnimalDetailsScreen', item);
+  }
+
   const handleFavChange = (id) => {
     animals.map(animal => {
       if(animal.id==id){
@@ -180,7 +184,7 @@ const onSeeMorePress = () => {
         {animals.map((item) => {
           return(
             <View key={item.id}>
-              <AnimalCard animal={item} onFavChange={() => handleFavChange}/>
+              <AnimalCard animal={item} navigation={navigation} onFavChange={() => handleFavChange}/>
             </View>
           )
         })}
