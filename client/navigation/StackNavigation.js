@@ -21,6 +21,7 @@ import ChangedPasswordScreen from '../screens/ChangedPasswordScreen';
 import DeleteAccountScreen from '../screens/DeleteAccountScreen';
 import DeletedAccountScreen from '../screens/DeletedAccountScreen';
 import AnimalDetailsScreen from '../screens/AnimalDetailsScreen';
+import CreatedAnimalProfileScreen from '../screens/CreatedAnimalProfileScreen';
 
 
 const Stack = createStackNavigator();
@@ -47,16 +48,16 @@ const MessageStackNavigator = () => {
 const FollowedStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name='Ulubione' 
-        component={FollowedAnimalsScreen}
-      />
-      <Stack.Screen
-        name="SignInScreen"
-        component={SignInScreen}
+    <Stack.Screen 
+        name='Created' 
+        component={CreatedAnimalProfileScreen}
         options={{
           title: ' '
         }}
+      />
+      <Stack.Screen 
+        name='Ulubione' 
+        component={FollowedAnimalsScreen}
       />
       <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
@@ -67,8 +68,8 @@ const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="AccountScreen"
-        component={AccountScreen}
+        name="SignInScreen"
+        component={SignInScreen}
         options={{
           title: ' '
         }}
@@ -78,8 +79,8 @@ const AccountStackNavigator = () => {
           title: ''
         }} />
       <Stack.Screen
-        name="SignInScreen"
-        component={SignInScreen}
+        name="AccountScreen"
+        component={AccountScreen}
         options={{
           title: ' '
         }}
