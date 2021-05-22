@@ -52,7 +52,7 @@ func ReadPage(c echo.Context) error {
 		delete(obj, "nr")
 	}
 
-	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Where(obj).Find(&animals)
+	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
