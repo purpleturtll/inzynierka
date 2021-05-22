@@ -154,6 +154,7 @@ const RegistrationScreen = ({ navigation }) => {
       });
       error = true;
     }
+    
     if (data.surname == "") {
       setRegistrationError((prevState) => {
         return {
@@ -162,13 +163,13 @@ const RegistrationScreen = ({ navigation }) => {
         };
       });
       error = true;
-
     }
-    if(!validateIsEmail(data.email)){
+
+    if(data.email.length>0 && !validateIsEmail(data.email)){
       setRegistrationError((prevState) => {
         return {
           ...prevState,
-          isEmail: false
+          isEmail: false, 
         };
       });
       error = true;
@@ -182,6 +183,16 @@ const RegistrationScreen = ({ navigation }) => {
       });
       error = true;
     }
+    else if(validateIsEmail(data.email)){
+      setRegistrationError((prevState) => {
+        return {
+          ...prevState,
+          isEmail: true, 
+          invalidEmail: false
+        };
+      });
+      error = false;
+    }
 
     if (data.password == "") {
       setRegistrationError((prevState) => {
@@ -192,6 +203,7 @@ const RegistrationScreen = ({ navigation }) => {
       });
       error = true;
     }
+
     if (data.passwordConfirmation == "") {
       setRegistrationError((prevState) => {
         return {
@@ -268,12 +280,12 @@ const RegistrationScreen = ({ navigation }) => {
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
-            style={[styles.textInput, registrationError.invalidEmail ? styles.inputError : null]}
+            style={[styles.textInput, registrationError.invalidEmail || !registrationError.isEmail ? styles.inputError : null]}
             autoCapitalize="none"
             onChangeText={(val) => handleEmailChange(val)}
           />
-          {registrationError.invalidEmail && <Text style={[styles.error]}>{errorTrue}</Text>}
-          {!registrationError.isEmail && <Text style={[styles.error]}>Niepoprawny adres e-mail</Text>}
+          {registrationError.invalidEmail &&<Text style={[styles.error]}>{errorTrue}</Text>}
+          {!registrationError.isEmail &&<Text style={[styles.error]}>Niepoprawny adres e-mail</Text>}
 
         </View>
         <View>
