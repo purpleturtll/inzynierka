@@ -4,6 +4,8 @@ import "gorm.io/gorm"
 
 type Shelter struct {
 	gorm.Model
+	NIP          string `json:"nip"`
+	PhoneNumber  string `json:"phone_number"`
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Email        string `json:"email"`
