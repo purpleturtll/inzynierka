@@ -15,28 +15,28 @@ const BottomTabNavigator = () => {
       }}>
       <Tab.Screen name="HomeScreen" component={MainStackNavigator}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Główna',
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
           ), }}
       />
       <Tab.Screen name="messages" component={MessageStackNavigator}
          options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Rozmowy',
           tabBarIcon: ({ color, size }) => (
             <Feather name="mail" color={color} size={size} />
           ), }}
       />
       <Tab.Screen name="followed" component={FollowedStackNavigator}
          options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Ulubione',
           tabBarIcon: ({ color, size }) => (
             <Feather name="heart" color={color} size={size} />
           ), }}
       />
       <Tab.Screen name="account" component={AccountStackNavigator}
          options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Konto',
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
           ), }}
