@@ -47,7 +47,7 @@ const AccountScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LogOutScreen')}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignInScreen')}>
             <Text style={styles.buttonText}>Wyloguj</Text>
           </TouchableOpacity>
         </View>
