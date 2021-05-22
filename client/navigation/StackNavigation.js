@@ -28,7 +28,9 @@ const Stack = createStackNavigator();
 const MainStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='HomeScreen' component={HomeScreen}></Stack.Screen>
+      <Stack.Screen name='HomeScreen' component={HomeScreen} options={{
+          title: ' '
+        }}></Stack.Screen>
       <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
   )
@@ -37,7 +39,7 @@ const MainStackNavigator = () => {
 const MessageStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='MessagesScreen' component={MessagesScreen}></Stack.Screen>
+      <Stack.Screen name='Wiadomości' component={MessagesScreen}></Stack.Screen>
     </Stack.Navigator>
   )
 }
@@ -46,7 +48,7 @@ const FollowedStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen 
-        name='FollowedAnimalsScreen' 
+        name='Ulubione' 
         component={FollowedAnimalsScreen}
       />
       <Stack.Screen
