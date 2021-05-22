@@ -36,15 +36,23 @@ func Read(c echo.Context) error {
 	return c.JSON(http.StatusOK, obj)
 }
 
+// Zwracanie strony o danym numerze i spełniającej dane warunki, wysłanie w ciele metody POST.
 func ReadPage(c echo.Context) error {
 	var animals []models.Animal
 	nr := c.Param("nr")
 	nr_int, _ := strconv.Atoi(nr)
-	obj := &models.Animal{}
-	if err := c.Bind(obj); err != nil {
+	obj := make(map[string]interface{})
+	if err := c.Bind(&obj); err != nil {
 		return err
 	}
-	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Where(&obj).Find(&animals)
+
+	// Usuwanie "nr" z mapy, potencjalny błąd, jeśli faktycznie istnieje taka kolumna w tabeli
+	_, ok := obj["nr"]
+	if ok {
+		delete(obj, "nr")
+	}
+
+	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Where(obj).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
