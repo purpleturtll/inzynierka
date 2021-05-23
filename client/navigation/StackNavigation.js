@@ -21,6 +21,7 @@ import ChangedPasswordScreen from '../screens/ChangedPasswordScreen';
 import DeleteAccountScreen from '../screens/DeleteAccountScreen';
 import DeletedAccountScreen from '../screens/DeletedAccountScreen';
 import AnimalDetailsScreen from '../screens/AnimalDetailsScreen';
+import SeeMoreScreen from '../screens/SeeMoreScreen';
 
 
 const Stack = createStackNavigator();
@@ -29,6 +30,7 @@ const MainStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name='HomeScreen' component={HomeScreen}></Stack.Screen>
+      <Stack.Screen name='SeeMoreScreen' component={SeeMoreScreen}></Stack.Screen>
       <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
   )
