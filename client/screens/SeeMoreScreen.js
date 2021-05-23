@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Modal} from 'react-native';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
+import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import AnimalCard from '../components/AnimalCard'
 
 const SeeMoreScreen = ({route, navigation}) => {
 
+  const [modalOpen, setModalOpen] = useState(false);
   {/*TODO: dane*/}
   var animalList = route.params;
 
@@ -25,9 +27,12 @@ const SeeMoreScreen = ({route, navigation}) => {
   
           <View style={styles.textContainer}>
             <Text style={styles.textElement}>Znaleziono: {animalList.length}</Text>
-            <TouchableOpacity>
-              <Ionicons name="options" size={30} color="black" />
-            </TouchableOpacity>
+            <Ionicons 
+              name="options"
+              size={30} 
+              color="black"
+              onPress={() => setModalOpen(true)}
+            />
           </View>
           
           {/*Lista zwierzaków*/}  
@@ -46,6 +51,26 @@ const SeeMoreScreen = ({route, navigation}) => {
         
         </View>
       </ScrollView>
+
+      {/*Okno opcji filtrów*/}
+      <Modal visible={modalOpen} style={styles.modal} animationType='slide'>
+        <View style={styles.modalHeader}>
+          <AntDesign
+            name="close"
+            size={20}
+            color="black"
+            onPress={() => setModalOpen(false)}
+            style={styles.closeIcon}
+          />
+          <Text style={styles.modalTitle}>Filtr</Text>
+          <TouchableOpacity onPress={() => {}}>
+            <View>
+              <Text style={styles.clearFilters}>Wyczyść filtry</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -95,4 +120,26 @@ const styles = StyleSheet.create({
   cardContainer: {
     alignItems: 'center',
   },
+  modal: {
+    marginTop:'2%',
+    backgroundColor: 'white'
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#c4c4c4',
+    paddingVertical: 10
+  },
+  closeIcon: {
+    marginLeft: 10
+  },
+  modalTitle: {
+    flex: 1,
+    marginLeft: 30,
+    fontSize: 18
+  },
+  clearFilters: {
+    marginRight: 10,
+    fontWeight: 'bold',
+  }
 });
