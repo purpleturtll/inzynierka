@@ -49,7 +49,7 @@ export default AnimalCard = ({animal, onFavChange, navigation}) => {
           </View>
           {/*TODO: onFavChange nie zmienia stanu/}
           {/*kolor serduszka #ff4242*/}
-          <TouchableOpacity onPress={onFavChange(animal.favourite)}>
+          <TouchableOpacity onPress={onFavChange(animal.id)}>
             <View style={styles.heart}>
               <AntDesign name={hearts.icon[animal.favourite]} size={30} color='black'/> 
             </View>

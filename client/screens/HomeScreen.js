@@ -90,8 +90,9 @@ const onFilterOtherPress = () => {
   {/*TODO*/}
 }
 
-const onSeeMorePress = () => {
+const onSeeMorePress = (navigation, animalList) => {
   {/*TODO*/}
+  navigation.navigate('SeeMoreScreen', animalList);
 }
 
   return(
@@ -163,7 +164,7 @@ const onSeeMorePress = () => {
             </View>
             <TouchableOpacity 
               style={styles.textElement}
-              onPress={() => onSeeMorePress()}
+              onPress={() => onSeeMorePress(navigation, animals)}
             >
               <Text style={styles.seeMore}>Zobacz więcej</Text>
             </TouchableOpacity>
