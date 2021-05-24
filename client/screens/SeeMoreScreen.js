@@ -1,27 +1,108 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, Modal, FlatList} from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Modal, FlatList, TouchableOpacity, Button, LogBox} from 'react-native';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import AnimalCard from '../components/AnimalCard'
 import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react-native';
+import AnimalCard from '../components/AnimalCard'
+
+LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
 const SeeMoreScreen = ({route, navigation}) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [typeArrow, setTypeArrow] = useState('down');
+  const [sexArrow, setSexArrow] = useState('down');
+  const [locationArrow, setLocationArrow] = useState('down');
+  const [raceArrow, setRaceArrow] = useState('down');
+
+  {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
+  const [filters, setFilters] = useState({
+    type: null,
+    sex: null,
+    location: null,
+    age: null,
+    weight: null,
+    race: null
+  });
+
+  function clearFilters() {
+    setFilters(
+      {
+        type: null,
+        sex: null,
+        location: null,
+        age: null,
+        weight: null,
+        race: null
+      }
+    );
+  }
+
+  {/*Typy zwierząt*/}
   const animalTypes = [
-    {id: 1, label: 'Psy'},
-    {id: 2, label: 'Koty'},
-    {id: 3, label: 'Gryzonie'},
-    {id: 4, label: 'Ptaki'},
-    {id: 5, label: 'Gady'},
-    {id: 6, label: 'Króliki'},
-    {id: 7, label: 'Inne'},
+    {id: '1', label: 'Psy'},
+    {id: '2', label: 'Koty'},
+    {id: '3', label: 'Gryzonie'},
+    {id: '4', label: 'Ptaki'},
+    {id: '5', label: 'Gady'},
+    {id: '6', label: 'Króliki'},
+    {id: '7', label: 'Inne'},
   ];
 
-  {/*TODO: dane*/}
+  {/*Płci zwierząt*/}
+  const animalSexes = [
+    {id: '1', label: 'samica'},
+    {id: '2', label: 'samiec'}
+  ];
+
+  {/*TODO: lista schronisk docelowo pobierana z global store*/}
+  const shelters = [
+    {id: '1', label: 'Schronisko 1'},
+    {id: '2', label: 'Schronisko 2'},
+    {id: '3', label: 'Schronisko 3'}
+  ];
+
+  {/*Wiek, wartości potrzebne przy customowych filtrach, zbędne przy predefiniowanych*/}
+  const ageCategories = [
+    {id: '1', label: 'do 1 roku', monthsMin: 0, monthsMax: 11},
+    {id: '2', label: '1 - 4 lata', monthsMin: 12, monthsMax: 59},
+    {id: '3', label: '5 - 9 lata', monthsMin: 60, monthsMax: 119},
+    {id: '4', label: '10+ lat', monthsMin: 120, monthsMax: null},
+  ];
+
+  const weightCategories = [
+    {id: '1', label: 'do 5 kg'},
+    {id: '2', label: '5 - 14 kg'},
+    {id: '3', label: '15 - 24 kg'},
+    {id: '4', label: '25 - 44 kg'},
+    {id: '5', label: '45+ kg'},
+  ];
+
+  const catRaces = [
+    {id: '1', label: 'Europejska'},
+    {id: '2', label: 'Syryjska'},
+  ];
+
+  const dogRaces = [
+    {id: '1', label: 'Amstaff/Pitbull'},
+    {id: '2', label: 'Bernardyn'},
+    {id: '3', label: 'Cocker spaniel'},
+    {id: '4', label: 'Foksterier'},
+    {id: '5', label: 'Husky'},
+    {id: '6', label: 'Jamnik'},
+    {id: '7', label: 'Labrador'},
+    {id: '8', label: 'Mieszaniec'},
+    {id: '9', label: 'Owczarek\nkaukaski'},
+    {id: '10', label: 'Owczarek\nniemiecki'},
+    {id: '11', label: 'Owczarek\npodhalański'},
+    {id: '12', label: 'Sznaucer'},
+    {id: '13', label: 'Terier'},
+    {id: '14', label: 'Inne'},
+  ];
+
+  {/*TODO: dane zwierząt docelowo pobierane z global store*/}
   var animalList = route.params;
 
   return(
@@ -66,6 +147,8 @@ const SeeMoreScreen = ({route, navigation}) => {
 
       {/*Okno opcji filtrów*/}
       <Modal visible={modalOpen} style={styles.modal} animationType='slide'>
+      <ScrollView>
+        {/*Nagłówek*/}
         <View style={styles.modalHeader}>
           <AntDesign
             name="close"
@@ -75,7 +158,7 @@ const SeeMoreScreen = ({route, navigation}) => {
             style={styles.closeIcon}
           />
           <Text style={styles.modalTitle}>Filtr</Text>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => clearFilters()}>
             <View>
               <Text style={styles.clearFilters}>Wyczyść filtry</Text>
             </View>
@@ -86,7 +169,7 @@ const SeeMoreScreen = ({route, navigation}) => {
         <Collapse onToggle={() => {if(typeArrow == 'down') setTypeArrow('up'); else setTypeArrow('down')}}>
           <CollapseHeader style={styles.collapseHeader}>
             <View style={{flex: 1}}>
-              <Text style={styles.collapseHeaderTitle}>Typ</Text>
+              <Text style={styles.headerTitle}>Typ</Text>
             </View>
             <AntDesign name={typeArrow} size={24} />
           </CollapseHeader>
@@ -102,8 +185,116 @@ const SeeMoreScreen = ({route, navigation}) => {
           </CollapseBody>
         </Collapse>
 
-      </Modal>
+        {/*Płeć*/}
+        <Collapse onToggle={() => {if(sexArrow == 'down') setSexArrow('up'); else setSexArrow('down')}}>
+          <CollapseHeader style={styles.collapseHeader}>
+            <View style={{flex: 1}}>
+              <Text style={styles.headerTitle}>Płeć</Text>
+            </View>
+            <AntDesign name={sexArrow} size={24} />
+          </CollapseHeader>
+          <CollapseBody style={styles.collapseBody}>
+            <FlatList 
+              contentContainerStyle={{alignItems: 'center'}}
+              numColumns={2}
+              keyExtractor={(item) => item.id }
+              data={animalSexes}
+              renderItem={({item}) => (
+                <Label name={item.label}/>
+              )}
+            />
+          </CollapseBody>
+        </Collapse>
 
+        {/*Lokalizacja*/}
+        <Collapse onToggle={() => {if(locationArrow == 'down') setLocationArrow('up'); else setLocationArrow('down')}}>
+          <CollapseHeader style={styles.collapseHeader}>
+            <View style={{flex: 1}}>
+              <Text style={styles.headerTitle}>Lokalizacja</Text>
+            </View>
+            <AntDesign name={locationArrow} size={24} />
+          </CollapseHeader>
+          <CollapseBody style={styles.collapseBody}>
+            <FlatList 
+              contentContainerStyle={{alignItems: 'center'}}
+              numColumns={1}
+              keyExtractor={(item) => item.id }
+              data={shelters}
+              renderItem={({item}) => (
+                <Label name={item.label}/>
+              )}
+            />
+          </CollapseBody>
+        </Collapse>
+
+        {/*Wiek*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Wiek</Text>
+          </View>
+          <FlatList 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{paddingHorizontal: 20, marginLeft: 10}}
+            keyExtractor={(item) => item.id }
+            data={ageCategories}
+            renderItem={({item}) => (
+              <Label name={item.label}/>
+            )}
+          />
+        </View>
+
+        {/*Waga*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Waga</Text>
+          </View>
+          <FlatList 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{paddingHorizontal: 20, marginLeft: 10}}
+            keyExtractor={(item) => item.id }
+            data={weightCategories}
+            renderItem={({item}) => (
+              <Label name={item.label}/>
+            )}
+          />
+        </View>
+
+        {/*Rasa*/}
+        <Collapse onToggle={() => {if(raceArrow == 'down') setRaceArrow('up'); else setRaceArrow('down')}}>
+          <CollapseHeader style={styles.collapseHeader}>
+            <View style={{flex: 1}}>
+              <Text style={styles.headerTitle}>W typie rasy</Text>
+            </View>
+            <AntDesign name={raceArrow} size={24} />
+          </CollapseHeader>
+          <CollapseBody style={styles.collapseBody}>
+            <RaceLists cats={catRaces} dogs={dogRaces}/>
+          </CollapseBody>
+        </Collapse>
+
+        {/*Pokaż wyniki*/}
+        <Button
+          onPress={() => {}}
+          title="Pokaż wyniki"
+          color="#362893"
+          accessibilityLabel="Wyświetl wyniki filtrowania"
+          style={{paddingVertical: 40}}
+        />
+
+        {/*Testy stanu*/}
+        <View>
+          <Text style={{fontWeight: 'bold'}}>Debug</Text>
+          <Text>Typ: {filters.type}</Text>
+          <Text>Płeć: {filters.sex}</Text>
+          <Text>Lokalizacja: {filters.location}</Text>
+          <Text>Wiek: {filters.age}</Text>
+          <Text>Waga: {filters.weight}</Text>
+          <Text>Rasa: {filters.race}</Text>
+        </View>
+        </ScrollView>
+      </Modal>
     </View>
   );
 }
@@ -112,11 +303,47 @@ export default SeeMoreScreen;
 
 const Label = ({name}) => {
   return(
-    <TouchableOpacity >
+    <TouchableOpacity>
       <View style={styles.label}>
         <Text style={{textAlign: 'center'}}>{name}</Text>
       </View>
     </TouchableOpacity>
+  );
+}
+
+const AlignedLabel = ({name}) => {
+  return(
+    <TouchableOpacity>
+      <View style={styles.alignedLabel}>
+        <Text style={{textAlign: 'center'}}>{name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+const RaceLists = ({cats, dogs}) => {
+  return(
+    <View style={styles.raceCategoriesContainer}>
+      <Text style={{fontWeight: 'bold'}}>Kot</Text>
+      <FlatList 
+        contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+        numColumns={2}
+        keyExtractor={(item) => item.id }
+        data={cats}
+        renderItem={({item}) => (<AlignedLabel name={item.label}/>)}
+      />
+      <Text style={{fontWeight: 'bold'}}>Pies</Text>
+      <View style={{flex: 1, alignItems: 'center'}}>
+        <FlatList 
+          contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+          numColumns={2}
+          keyExtractor={(item) => item.id }
+          data={dogs}
+          renderItem={({item}) => (<AlignedLabel name={item.label}/>)}
+        />
+      </View>
+      
+    </View>
   );
 }
 
@@ -187,10 +414,17 @@ const styles = StyleSheet.create({
   },
   collapseHeader: {
     flexDirection: 'row',
-    paddingHorizontal: 40,
-    paddingVertical: 30
+    marginHorizontal: 30,
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1.8,
+    borderColor: 'gray',
+    borderStyle: 'solid'
   },
-  collapseHeaderTitle: {
+  headerTitle: {
     fontWeight: 'bold',
     fontSize: 18
   },
@@ -205,5 +439,26 @@ const styles = StyleSheet.create({
   collapseBody: {
     flexDirection: 'row',
     paddingHorizontal: 20
+  },
+  standardHeader: {
+      flexDirection: 'row',
+      marginHorizontal: 30,
+      marginTop: 20,
+      marginBottom: 10,
+      paddingHorizontal: 10,
+      borderRadius: 10
+  },
+  alignedLabel: {
+    flex: 1,
+    width: 100,
+    margin: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: '#c4c4c4',
+    borderRadius: 10,
+    justifyContent: 'center'
+  },
+  raceCategoriesContainer: {
+    marginLeft: 10
   }
 });
