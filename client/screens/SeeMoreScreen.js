@@ -40,6 +40,32 @@ const SeeMoreScreen = ({route, navigation}) => {
     );
   }
 
+  function setFilterValue(fieldName, value) {
+    switch(fieldName)
+    {
+      case 'type':
+        setFilters({...filters, type: value});
+        break;
+      case 'sex':
+        setFilters({...filters, sex: value});
+        break;
+      case 'location':
+        setFilters({...filters, location: value});
+        break;
+      case 'age':
+        setFilters({...filters, age: value});
+        break;
+      case 'weight':
+        setFilters({...filters, weight: value});
+        break;
+      case 'race':
+        setFilters({...filters, race: value});
+        break;
+      default:
+        break;
+    }
+  }
+
   {/*Typy zwierząt*/}
   const animalTypes = [
     {id: '1', label: 'Psy'},
@@ -86,20 +112,20 @@ const SeeMoreScreen = ({route, navigation}) => {
   ];
 
   const dogRaces = [
-    {id: '1', label: 'Amstaff/Pitbull'},
-    {id: '2', label: 'Bernardyn'},
-    {id: '3', label: 'Cocker spaniel'},
-    {id: '4', label: 'Foksterier'},
-    {id: '5', label: 'Husky'},
-    {id: '6', label: 'Jamnik'},
-    {id: '7', label: 'Labrador'},
-    {id: '8', label: 'Mieszaniec'},
-    {id: '9', label: 'Owczarek\nkaukaski'},
-    {id: '10', label: 'Owczarek\nniemiecki'},
-    {id: '11', label: 'Owczarek\npodhalański'},
-    {id: '12', label: 'Sznaucer'},
-    {id: '13', label: 'Terier'},
-    {id: '14', label: 'Inne'},
+    {id: '101', label: 'Amstaff/Pitbull'},
+    {id: '102', label: 'Bernardyn'},
+    {id: '103', label: 'Cocker spaniel'},
+    {id: '104', label: 'Foksterier'},
+    {id: '105', label: 'Husky'},
+    {id: '106', label: 'Jamnik'},
+    {id: '107', label: 'Labrador'},
+    {id: '108', label: 'Mieszaniec'},
+    {id: '109', label: 'Owczarek\nkaukaski'},
+    {id: '110', label: 'Owczarek\nniemiecki'},
+    {id: '111', label: 'Owczarek\npodhalański'},
+    {id: '112', label: 'Sznaucer'},
+    {id: '113', label: 'Terier'},
+    {id: '114', label: 'Inne'},
   ];
 
   {/*TODO: dane zwierząt docelowo pobierane z global store*/}
@@ -179,7 +205,9 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={animalTypes}
               renderItem={({item}) => (
-                <Label name={item.label}/>
+                <TouchableOpacity onPress={() => setFilterValue('type', item.id)}>
+                  <Label name={item.label}/>
+                </TouchableOpacity>
               )}
             />
           </CollapseBody>
@@ -200,7 +228,9 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={animalSexes}
               renderItem={({item}) => (
-                <Label name={item.label}/>
+                <TouchableOpacity onPress={() => setFilterValue('sex', item.id)}>
+                  <Label name={item.label}/>
+                </TouchableOpacity>
               )}
             />
           </CollapseBody>
@@ -221,7 +251,10 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={shelters}
               renderItem={({item}) => (
-                <Label name={item.label}/>
+                <TouchableOpacity onPress={() => setFilterValue('location', item.id)}>
+                  <Label name={item.label}/>
+                </TouchableOpacity>
+                
               )}
             />
           </CollapseBody>
@@ -239,7 +272,9 @@ const SeeMoreScreen = ({route, navigation}) => {
             keyExtractor={(item) => item.id }
             data={ageCategories}
             renderItem={({item}) => (
-              <Label name={item.label}/>
+              <TouchableOpacity onPress={() => setFilterValue('age', item.id)}>
+                <Label name={item.label}/>
+              </TouchableOpacity>
             )}
           />
         </View>
@@ -256,7 +291,9 @@ const SeeMoreScreen = ({route, navigation}) => {
             keyExtractor={(item) => item.id }
             data={weightCategories}
             renderItem={({item}) => (
-              <Label name={item.label}/>
+              <TouchableOpacity onPress={() => setFilterValue('weight', item.id)}>
+                <Label name={item.label}/>
+              </TouchableOpacity>
             )}
           />
         </View>
@@ -270,18 +307,43 @@ const SeeMoreScreen = ({route, navigation}) => {
             <AntDesign name={raceArrow} size={24} />
           </CollapseHeader>
           <CollapseBody style={styles.collapseBody}>
-            <RaceLists cats={catRaces} dogs={dogRaces}/>
+            <View style={styles.raceCategoriesContainer}>
+              <Text style={{fontWeight: 'bold'}}>Kot</Text>
+              <FlatList 
+                contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+                numColumns={2}
+                keyExtractor={(item) => item.id }
+                data={catRaces}
+                renderItem={({item}) => (
+                  <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                    <AlignedLabel name={item.label}/>
+                  </TouchableOpacity>
+                )}
+              />
+              <Text style={{fontWeight: 'bold'}}>Pies</Text>
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <FlatList 
+                  contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+                  numColumns={2}
+                  keyExtractor={(item) => item.id }
+                  data={dogRaces}
+                  renderItem={({item}) => (
+                    <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                      <AlignedLabel name={item.label}/>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+            </View>
           </CollapseBody>
         </Collapse>
 
         {/*Pokaż wyniki*/}
-        <Button
-          onPress={() => {}}
-          title="Pokaż wyniki"
-          color="#362893"
-          accessibilityLabel="Wyświetl wyniki filtrowania"
-          style={{paddingVertical: 40}}
-        />
+        <TouchableOpacity onPress={() => {}}>
+          <View style={styles.showResultsButton}>
+              <Text style={{color: 'white', textAlign: 'center'}}>Pokaż wyniki</Text>
+          </View>
+        </TouchableOpacity>
 
         {/*Testy stanu*/}
         <View>
@@ -303,21 +365,17 @@ export default SeeMoreScreen;
 
 const Label = ({name}) => {
   return(
-    <TouchableOpacity>
-      <View style={styles.label}>
-        <Text style={{textAlign: 'center'}}>{name}</Text>
-      </View>
-    </TouchableOpacity>
+    <View style={styles.label}>
+      <Text style={{textAlign: 'center'}}>{name}</Text>
+    </View>
   );
 }
 
 const AlignedLabel = ({name}) => {
   return(
-    <TouchableOpacity>
       <View style={styles.alignedLabel}>
         <Text style={{textAlign: 'center'}}>{name}</Text>
       </View>
-    </TouchableOpacity>
   );
 }
 
@@ -342,7 +400,6 @@ const RaceLists = ({cats, dogs}) => {
           renderItem={({item}) => (<AlignedLabel name={item.label}/>)}
         />
       </View>
-      
     </View>
   );
 }
@@ -460,5 +517,9 @@ const styles = StyleSheet.create({
   },
   raceCategoriesContainer: {
     marginLeft: 10
+  },
+  showResultsButton: {
+    padding: 30,
+    backgroundColor: '#362893'
   }
 });
