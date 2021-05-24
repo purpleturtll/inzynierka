@@ -36,23 +36,22 @@ func Read(c echo.Context) error {
 	return c.JSON(http.StatusOK, obj)
 }
 
-// Zwracanie strony o danym numerze i spełniającej dane warunki, wysłanie w ciele metody POST.
-func ReadPage(c echo.Context) error {
+// Filtrowanie
+func Filter(c echo.Context) error {
 	var animals []models.Animal
-	nr := c.Param("nr")
-	nr_int, _ := strconv.Atoi(nr)
-	obj := make(map[string]interface{})
-	if err := c.Bind(&obj); err != nil {
-		return err
-	}
+	animalType := c.QueryParam("animal-type")
+	sex := c.QueryParam("sex")
+	city := c.QueryParam("city")
+	ageFrom := c.QueryParam("age-from")
+	ageTo := c.QueryParam("age-to")
+	weightFrom := c.QueryParam("weight-from")
+	weightTo := c.QueryParam("weight-to")
+	breed := c.QueryParam("breed")
+	page := c.QueryParam("page")
+	pageInt, _ := strconv.Atoi(page)
 
-	// Usuwanie "nr" z mapy, potencjalny błąd, jeśli faktycznie istnieje taka kolumna w tabeli
-	_, ok := obj["nr"]
-	if ok {
-		delete(obj, "nr")
-	}
-
-	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Find(&animals)
+	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(
+		Sex(sex), City(city), AgeRange([]string{ageFrom, ageTo}), WeightRange([]string{weightFrom, weightTo}), Breed(breed), AnimalType(animalType)).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
