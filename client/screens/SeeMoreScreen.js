@@ -1,14 +1,26 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, Modal} from 'react-native';
+import { View, Text, StyleSheet, Modal, FlatList} from 'react-native';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import AnimalCard from '../components/AnimalCard'
+import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react-native';
 
 const SeeMoreScreen = ({route, navigation}) => {
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [typeArrow, setTypeArrow] = useState('down');
+  const animalTypes = [
+    {id: 1, label: 'Psy'},
+    {id: 2, label: 'Koty'},
+    {id: 3, label: 'Gryzonie'},
+    {id: 4, label: 'Ptaki'},
+    {id: 5, label: 'Gady'},
+    {id: 6, label: 'Króliki'},
+    {id: 7, label: 'Inne'},
+  ];
+
   {/*TODO: dane*/}
   var animalList = route.params;
 
@@ -69,6 +81,27 @@ const SeeMoreScreen = ({route, navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
+
+        {/*Typ*/}
+        <Collapse onToggle={() => {if(typeArrow == 'down') setTypeArrow('up'); else setTypeArrow('down')}}>
+          <CollapseHeader style={styles.collapseHeader}>
+            <View style={{flex: 1}}>
+              <Text style={styles.collapseHeaderTitle}>Typ</Text>
+            </View>
+            <AntDesign name={typeArrow} size={24} />
+          </CollapseHeader>
+          <CollapseBody style={styles.collapseBody}>
+            <FlatList 
+              numColumns={3}
+              keyExtractor={(item) => item.id }
+              data={animalTypes}
+              renderItem={({item}) => (
+                <Label name={item.label}/>
+              )}
+            />
+          </CollapseBody>
+        </Collapse>
+
       </Modal>
 
     </View>
@@ -76,6 +109,16 @@ const SeeMoreScreen = ({route, navigation}) => {
 }
 
 export default SeeMoreScreen;
+
+const Label = ({name}) => {
+  return(
+    <TouchableOpacity >
+      <View style={styles.label}>
+        <Text style={{textAlign: 'center'}}>{name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -141,5 +184,26 @@ const styles = StyleSheet.create({
   clearFilters: {
     marginRight: 10,
     fontWeight: 'bold',
+  },
+  collapseHeader: {
+    flexDirection: 'row',
+    paddingHorizontal: 40,
+    paddingVertical: 30
+  },
+  collapseHeaderTitle: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  label: {
+    marginLeft: 15,
+    marginVertical: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 15,
+    backgroundColor: '#c4c4c4',
+    borderRadius: 10,
+  },
+  collapseBody: {
+    flexDirection: 'row',
+    paddingHorizontal: 20
   }
 });
