@@ -7,6 +7,8 @@ type Shelter struct {
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Email        string `json:"email"`
+	PhoneNumber  string `json:"phone_number"`
+	NIP          string `json:"nip"`
 	City         string `json:"city"`
 	Street       string `json:"street"`
 	StreetNumber string `json:"street_number"`
