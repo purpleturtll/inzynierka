@@ -66,13 +66,6 @@ const ShelterRegistrationScreen = ({ navigation }) => {
         });
     };
 
-    const handleDescriptionChange = (val) => {
-        setData({
-            ...data,
-            description: val,
-        });
-    };
-
     const handlePasswordChange = (val) => {
         setData({
             ...data,
@@ -105,6 +98,32 @@ const ShelterRegistrationScreen = ({ navigation }) => {
         setData({
             ...data,
             passwordConfirmationEye: !data.passwordConfirmationEye,
+        });
+    };
+
+    //TODO: walidacja
+    const onRegisterPress = () => {
+        const res = fetch("http://10.0.2.2:8080/auth/register_shelter", {
+            body: JSON.stringify({
+                username: data.username,
+                password: data.password,
+                email: data.email,
+                phone_number: data.phone_number,
+                nip: data.NIP,
+                city: data.city,
+                street: data.street,
+                street_number: data.street_number,
+                postal_code: data.postal_code,
+                description: "",
+            }),
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+        }).then((response) => {
+            if (response.status == 201) {
+                navigation.navigate("DoneRegistrationScreen");
+            } else {
+                navigation.navigate("ShelterRegistrationScreen");
+            }
         });
     };
 
@@ -309,9 +328,7 @@ const ShelterRegistrationScreen = ({ navigation }) => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.registerButton}
-                        onPress={() =>
-                            navigation.navigate("DoneRegistrationScreen")
-                        }
+                        onPress={onRegisterPress}
                     >
                         <Text style={{ color: "#fff" }}>Utwórz konto</Text>
                     </TouchableOpacity>
@@ -333,7 +350,7 @@ const ShelterRegistrationScreen = ({ navigation }) => {
         </ScrollView>
     );
 };
-export default RegistrationScreen;
+export default ShelterRegistrationScreen;
 
 const styles = StyleSheet.create({
     container: {
