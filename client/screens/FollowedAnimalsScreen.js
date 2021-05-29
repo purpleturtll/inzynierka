@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View,  StyleSheet, FlatList } from 'react-native';
 import AnimalCard from '../components/AnimalCard'
 
-const TempScreen = ({ navigation }) => {
+const FollowedAnimalsScreen = ({ navigation }) => {
   
   const [animals, setAnimals] = useState([
     {
@@ -67,7 +67,8 @@ const TempScreen = ({ navigation }) => {
         data={animals}
         renderItem={({ item }) => (
           <AnimalCard 
-            animal={item} 
+            animal={item}
+            navigation={navigation} 
             onFavChange={() => handleFavChange}
           />
         )}
@@ -78,7 +79,7 @@ const TempScreen = ({ navigation }) => {
     </View>
   )
 }
-export default TempScreen;
+export default FollowedAnimalsScreen;
 
 //#362893
 

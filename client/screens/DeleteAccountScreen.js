@@ -1,10 +1,7 @@
 import React from 'react';
 import {
-  View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions
+  View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions
 } from 'react-native';
-
-const marginLeftText = '5%';
-const marginBottomText = 5;
 
 const ChangeEmailScreen = ({ navigation }) => {
 
@@ -20,11 +17,13 @@ const ChangeEmailScreen = ({ navigation }) => {
         <View style={styles.body}>
 
           <Text style={styles.title}>Usunięcie konta</Text>
-          <Text style={styles.text}>Usunięcie konta jest cnieodwracalne i spowoduje, {"\n"}że wszystkie Twoje dane {"\n"}zostaną usunięte.</Text>
-          <Text style={styles.text}>Potwierdź decyzję poprzez kliknięcie w link przesłany przez e-mail.</Text>
+          <View style={{alignItems: 'center'}}> 
+            <Text style={styles.text}>Usunięcie konta jest {"\n"}nieodwracalne i spowoduje, {"\n"}że wszystkie Twoje dane {"\n"}zostaną usunięte.</Text>
+            <Text style={styles.text}>Potwierdź decyzję poprzez {"\n"}kliknięcie w link przesłany {"\n"}przez e-mail.</Text>
+          </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('ChangedEmailScreen')}>
-              <Text style={{ color: '#fff', fontSize: 17 }}>Zapisz</Text>
+            <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('DeletedAccountScreen')}>
+              <Text style={{ color: '#fff', fontSize: 17 }}>Wyślij e-mail</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -59,26 +58,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: height * 0.04,
-    marginBottom: height * 0.06
+    marginBottom: height * 0.04
   },
   text: {
     fontSize: 21,
     fontWeight: '900',
-    marginLeft: marginLeftText,
-    marginBottom: marginBottomText,
+    marginBottom: height * 0.03
   },
   buttonContainer: {
     alignItems: 'center',
-    marginTop: height * 0.03
+    marginTop: height * 0.01
   },
   registerButton: {
     flexDirection: 'row',
     height: 50,
-    width: '40%',
+    padding: '6%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#362893',
     borderRadius: 20,
-    padding: 10,
   },
 });

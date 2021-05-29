@@ -12,7 +12,7 @@ import ShelterRegistrationScreen from '../screens/ShelterRegistrationScreen';
 import ChooseAccountTypeScreen from '../screens/ChooseAccountTypeScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MessagesScreen from '../screens/MessagesScreen';
-import FollowedAnimalsScreen from '../screens/FollowedAnimals';
+import FollowedAnimalsScreen from '../screens/FollowedAnimalsScreen';
 import AccountScreen from '../screens/AccountScreen';
 import ChangeEmailScreen from '../screens/ChangeEmailScreen';
 import ChangedEmailScreen from '../screens/ChangedEmailScreen';
@@ -20,6 +20,8 @@ import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 import ChangedPasswordScreen from '../screens/ChangedPasswordScreen';
 import DeleteAccountScreen from '../screens/DeleteAccountScreen';
 import DeletedAccountScreen from '../screens/DeletedAccountScreen';
+import AnimalDetailsScreen from '../screens/AnimalDetailsScreen';
+import SeeMoreScreen from '../screens/SeeMoreScreen';
 
 
 const Stack = createStackNavigator();
@@ -28,6 +30,8 @@ const MainStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name='HomeScreen' component={HomeScreen}></Stack.Screen>
+      <Stack.Screen name='SeeMoreScreen' component={SeeMoreScreen}></Stack.Screen>
+      <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
   )
 }
@@ -54,6 +58,7 @@ const FollowedStackNavigator = () => {
           title: ' '
         }}
       />
+      <Stack.Screen name='AnimalDetailsScreen' component={AnimalDetailsScreen}></Stack.Screen>
     </Stack.Navigator>
   )
 }
@@ -61,7 +66,6 @@ const FollowedStackNavigator = () => {
 const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen name='AccountScreen' component={AccountScreen}></Stack.Screen> */}
       <Stack.Screen
         name="AccountScreen"
         component={AccountScreen}
@@ -187,29 +191,21 @@ const MyStack = () => {
             title: ' '
           }}
         />
-        {/* <Stack.Screen name="HomeScreen" component={HomeScreen} 
-        options={{
-          title: ' '
-        }}></Stack.Screen> */}
-
         <Stack.Screen name="MessagesScreen" component={MessagesScreen}
           options={{
             title: ' '
           }}
         />
-
         <Stack.Screen name="FollowedAnimalsScreen" component={FollowedAnimalsScreen}
           options={{
             title: ' '
           }}
         />
-
         <Stack.Screen name="AccountScreen" component={AccountScreen}
           options={{
             title: ' '
           }}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

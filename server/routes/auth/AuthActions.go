@@ -63,3 +63,20 @@ func Register(c echo.Context) error {
 	c.Logger().Info("User registered:", obj.Email)
 	return c.NoContent(http.StatusCreated)
 }
+
+func RegisterShelter(c echo.Context) error {
+	obj := new(models.Shelter)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	found := new(models.Shelter)
+	result := db.Connection().First(&found, "username = ?", obj.Username)
+	if result.Error != gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusForbidden)
+	}
+
+	db.Connection().Create(obj)
+	c.Logger().Info("Shelter registered:", obj.Username)
+	return c.NoContent(http.StatusCreated)
+}

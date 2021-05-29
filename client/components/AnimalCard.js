@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 
-export default AnimalCard = ({animal, onFavChange}) => {
+export default AnimalCard = ({animal, onFavChange, navigation}) => {
 
-    const onAnimalPress = ({animal}) => {
-        {/*TODO*/}
+    const onAnimalPress = (anim) => {
+        navigation.navigate('AnimalDetailsScreen', anim);
     }
   
     {/*mapowanie obrazów po animal.image (HomeScreen.js, tymczasowe)*/}
@@ -28,7 +28,7 @@ export default AnimalCard = ({animal, onFavChange}) => {
     {/*karta*/}
     return(
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => onAnimalPress({animal})}>
+        <TouchableOpacity onPress={() => onAnimalPress(animal)}>
           <Image 
             source={images.animalType[animal.image]}
             style={styles.image}
@@ -49,7 +49,7 @@ export default AnimalCard = ({animal, onFavChange}) => {
           </View>
           {/*TODO: onFavChange nie zmienia stanu/}
           {/*kolor serduszka #ff4242*/}
-          <TouchableOpacity onPress={onFavChange(animal.favourite)}>
+          <TouchableOpacity onPress={onFavChange(animal.id)}>
             <View style={styles.heart}>
               <AntDesign name={hearts.icon[animal.favourite]} size={30} color='black'/> 
             </View>

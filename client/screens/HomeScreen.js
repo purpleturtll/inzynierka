@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import {
-  View, Text, StyleSheet, Image,
-} from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity,} from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
 
@@ -17,7 +15,8 @@ const HomeScreen = ({ navigation }) => {
       sex: 'samiec',
       postDate: '6/3/21',
       favourite: true,
-      status: [{adoptable: true}, {urgent: true}],
+      adoptable: true,
+      urgent: true,
       weight: 9,
       ageMonths: 156,
       city: 'Warszawa',
@@ -35,7 +34,8 @@ const HomeScreen = ({ navigation }) => {
       sex: 'samiec',
       postDate: '2/3/21',
       favourite: false,
-      status: [{adoptable: true}],
+      adoptable: true,
+      urgent: false,
       weight: 7,
       ageMonths: 60,
       city: 'Otwock',
@@ -53,7 +53,8 @@ const HomeScreen = ({ navigation }) => {
       sex: 'samica',
       postDate: '1/3/21',
       favourite: false,
-      status: [{urgent: true}],
+      adoptable: false,
+      urgent: true,
       weight: 5,
       ageMonths: 10,
       city: 'Lublin',
@@ -89,107 +90,104 @@ const onFilterOtherPress = () => {
   {/*TODO*/}
 }
 
-const onSeeMorePress = () => {
+const onSeeMorePress = (navigation, animalList) => {
   {/*TODO*/}
+  navigation.navigate('SeeMoreScreen', animalList);
 }
 
   return(
-    <View style={styles.container}>
-    <View style={styles.header}>
-
+  <View>
     {/*widok ekranu*/}
     <ScrollView>
-    <View style={styles.customContainer}>
-      {/*pasek wyszukiwania*/}
-      <View style={styles.searchbar}>
-        <Icon name='search' color='#777' size={30} style={styles.searchIcon}/>
-        <TextInput style={styles.input}
-        placeholder='Lorem ipsum ...'
-        />
-      </View>
-
-      {/* kategorie zwierząt*/}
-      <View>
-        <Text style={styles.categoryTitle}>Kogo szukasz?</Text>
-        <View style={styles.categoryButtonContainer}>
-
-          {/*Psy*/}
-          <TouchableOpacity 
-            style={styles.categoryButtonView}
-            onPress={() => onFilterDogsPress()}
-          >
-            <View style={styles.categoryButton}>
-             <Text style={styles.categoryButtonText}>Psy</Text>
-            </View>
-            <Image 
-              source={require('../assets/dog_homepage.png')}
-              style={styles.categoryButtonImage}
-            />
-          </TouchableOpacity>
-          
-          
-          {/*Koty*/}
-          <TouchableOpacity 
-            style={styles.categoryButtonView}
-            onPress={() => onFilterCatsPress()}
-          >
-            <View style={styles.categoryButton}>
-              <Text style={styles.categoryButtonText}>Koty</Text>
-            </View>
-            <Image 
-              source={require('../assets/cat_homepage.png')}
-              style={styles.categoryButtonImage}
-            />
-          </TouchableOpacity>
-          
-
-          {/*Inne*/}
-          <TouchableOpacity 
-            style={styles.categoryButtonView}
-            onPress={() => onFilterOtherPress()}
-          >
-            <View style={styles.categoryButton}>
-              <Text style={styles.categoryButtonText}>Inne</Text>
-            </View>
-            <Image 
-              source={require('../assets/hamster_homepage.png')}
-              style={styles.categoryButtonImage}
-            />
-          </TouchableOpacity>
-          
-
+      <View style={styles.container}>
+        {/*pasek wyszukiwania*/}
+        <View style={styles.searchbar}>
+          <Icon name='search' color='#777' size={30} style={styles.searchIcon}/>
+          <TextInput style={styles.input}
+          placeholder='Lorem ipsum ...'
+          />
         </View>
 
-        {/*"Ostatnio dodane" i "Zobacz więcej"*/}
-        <View style={styles.textContainer}>
-          <View style={styles.textElement}>
-            <Text style={styles.latestText}>Ostatnio dodane</Text>
+        {/* kategorie zwierząt*/}
+        <View>
+          <Text style={styles.categoryTitle}>Kogo szukasz?</Text>
+          <View style={styles.categoryButtonContainer}>
+
+            {/*Psy*/}
+            <TouchableOpacity 
+              style={styles.categoryButtonView}
+              onPress={() => onFilterDogsPress()}
+            >
+              <View style={styles.categoryButton}>
+              <Text style={styles.categoryButtonText}>Psy</Text>
+              </View>
+              <Image 
+                source={require('../assets/dog_homepage.png')}
+                style={styles.categoryButtonImage}
+              />
+            </TouchableOpacity>
+            
+            {/*Koty*/}
+            <TouchableOpacity 
+              style={styles.categoryButtonView}
+              onPress={() => onFilterCatsPress()}
+            >
+              <View style={styles.categoryButton}>
+                <Text style={styles.categoryButtonText}>Koty</Text>
+              </View>
+              <Image 
+                source={require('../assets/cat_homepage.png')}
+                style={styles.categoryButtonImage}
+              />
+            </TouchableOpacity>
+            
+            {/*Inne*/}
+            <TouchableOpacity 
+              style={styles.categoryButtonView}
+              onPress={() => onFilterOtherPress()}
+            >
+              <View style={styles.categoryButton}>
+                <Text style={styles.categoryButtonText}>Inne</Text>
+              </View>
+              <Image 
+                source={require('../assets/hamster_homepage.png')}
+                style={styles.categoryButtonImage}
+              />
+            </TouchableOpacity>
+            
           </View>
-          <TouchableOpacity 
-            style={styles.textElement}
-            onPress={() => onSeeMorePress()}
-          >
-            <Text style={styles.seeMore}>Zobacz więcej</Text>
-          </TouchableOpacity>
-          
-        </View>
-      </View>
-      
-      {/*Lista zwierzaków*/}  
-      <View style={styles.cardContainer}>
-        {animals.map((item) => {
-          return(
-            <View key={item.id}>
-              <AnimalCard animal={item} onFavChange={() => handleFavChange}/>
+
+          {/*"Ostatnio dodane" i "Zobacz więcej"*/}
+          <View style={styles.textContainer}>
+            <View style={styles.textElement}>
+              <Text style={styles.latestText}>Ostatnio dodane</Text>
             </View>
-          )
-        })}
+            <TouchableOpacity 
+              style={styles.textElement}
+              onPress={() => onSeeMorePress(navigation, animals)}
+            >
+              <Text style={styles.seeMore}>Zobacz więcej</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+        {/*Lista zwierzaków*/}  
+        <View style={styles.cardContainer}>
+          {animals.map((item) => {
+            return(
+              <View key={item.id}>
+                <AnimalCard animal={item}
+                  navigation={navigation} 
+                  onFavChange={() => handleFavChange}
+                />
+              </View>
+            )
+          })}
+        </View>
+      
       </View>
-    
-    </View>
     </ScrollView>
-    </View>   
-    </View>
+  </View>
   )
 }
 export default HomeScreen;
@@ -198,10 +196,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    backgroundColor: '#fff'
-  },
-  customContainer: {
     marginHorizontal: '5%',
     marginVertical: '2%',
   },
