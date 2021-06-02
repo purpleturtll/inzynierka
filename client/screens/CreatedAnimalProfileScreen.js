@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View, Image, Text, StyleSheet, TouchableOpacity, Dimensions
 } from 'react-native';
@@ -25,7 +25,6 @@ const CreatedAnimalProfileScreen = ({ navigation }) => {
 
 export default CreatedAnimalProfileScreen;
 const { width, height } = Dimensions.get("window");
-// const { width } = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
