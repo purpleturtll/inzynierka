@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
-  View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity
+  View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, FlatList
 } from 'react-native';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
-import { Thumbnail, List, ListItem, Separator } from 'native-base';
+import { Thumbnail, List, ListItem, Separator, Input } from 'native-base';
 import { Feather } from '@expo/vector-icons';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+
 
 const marginLeftText = '5%';
-const marginBottomText = 5;
+const marginBottomText = 10;
 
 const RegistrationScreen = ({ navigation }) => {
 
@@ -21,9 +23,9 @@ const RegistrationScreen = ({ navigation }) => {
 
     invalidShelterName: false,
     invalidNIP: false,
-    invalidPhoneNumber: false,
+    invalidWeight: false,
     invalidEmail: false,
-    invalidStreet: false,
+    invalidAge: false,
     invalidPostalCode: false,
     invalidTown: false,
     invalidPassword: false,
@@ -32,11 +34,106 @@ const RegistrationScreen = ({ navigation }) => {
     EqualPassword: true
   });
 
+
+  const [filters, setFilters] = useState({
+    type: null,
+    sex: null,
+    status: null,
+    location: null,
+    age: null,
+    weight: null,
+    race: null
+  });
+
+
+  function setFilterValue(fieldName, value) {
+    switch(fieldName)
+    {
+      case 'type':
+        setFilters({...filters, type: value});
+        break;
+      case 'status':
+        setFilters({...filters, status: value});
+      case 'sex':
+        setFilters({...filters, sex: value});
+        break;
+      case 'race':
+        setFilters({...filters, race: value});
+        break;
+      default:
+        break;
+    }
+  }
+
+  {/*Typy zwierząt*/}
+  const animalTypes = [
+    {id: '1', label: 'Psy'},
+    {id: '2', label: 'Koty'},
+    {id: '3', label: 'Gryzonie'},
+    {id: '4', label: 'Ptaki'},
+    {id: '5', label: 'Gady'},
+    {id: '6', label: 'Króliki'},
+    {id: '7', label: 'Inne'},
+  ];
+
+  {/*Statusy zwierząt*/}
+  const animalStatus = [
+    {id: '1', label: 'do adopcji'},
+    {id: '2', label: 'dom tymczasowy'},
+    {id: '3', label: 'pilne'},
+    {id: '4', label: 'kwarantanna'},
+  ];
+
+  {/*Płci zwierząt*/}
+  const animalSexes = [
+    {id: '1', label: 'samica'},
+    {id: '2', label: 'samiec'}
+  ];
+
+  const catRaces = [
+    {id: '1', label: 'Europejska'},
+    {id: '2', label: 'Syryjska'},
+  ];
+
+  const dogRaces = [
+    {id: '101', label: 'Amstaff/Pitbull'},
+    {id: '102', label: 'Bernardyn'},
+    {id: '103', label: 'Cocker spaniel'},
+    {id: '104', label: 'Foksterier'},
+    {id: '105', label: 'Husky'},
+    {id: '106', label: 'Jamnik'},
+    {id: '107', label: 'Labrador'},
+    {id: '108', label: 'Mieszaniec'},
+    {id: '109', label: 'Owczarek\nkaukaski'},
+    {id: '110', label: 'Owczarek\nniemiecki'},
+    {id: '111', label: 'Owczarek\npodhalański'},
+    {id: '112', label: 'Sznaucer'},
+    {id: '113', label: 'Terier'},
+    {id: '114', label: 'Inne'},
+  ];
+
+
+  // radio wiek
+  var radio_age_props = [
+    {label: 'lat', value: 0 },
+    {label: 'mies', value: 1 }
+  ];
+
+  // radio waga
+  var radio_weight_props = [
+    {label: 'g', value: 0 },
+    {label: 'kg', value: 1 }
+  ];
+  
+  const [weight, setWeight] = useState(0);
+  const [age, setAge] = useState(0);
+
+
   const [data, setData] = useState({
     shelterName: '',
     NIP: '',
-    phoneNumber: '',
-    email: '',
+    weight: '',
+    age: '',
     street: '',
     postalCode: '',
     town: '',
@@ -45,6 +142,9 @@ const RegistrationScreen = ({ navigation }) => {
     passwordEye: true,
     passwordConfirmationEye: true
   });
+  // ustawienie ikony strzałki typu
+  const [iconName, setIconName] = useState("chevron-down");
+
 
   const handleShetlerNameChange = (val) => {
     setData({
@@ -70,28 +170,26 @@ const RegistrationScreen = ({ navigation }) => {
     error = false;
   }
 
-  const handlePhoneNumberChange = (val) => {
+  const handleAgeChange = (val) => {
     setData({
       ...data,
-      phoneNumber: val
+      age: val
     });
     setRegistrationError({
       ...registrationError,
-      invalidPhoneNumber: false,
+      invalidAge: false,
     });
     error = false;
   }
 
-  const handleEmailChange = (val) => {
+  const handleWeightChange = (val) => {
     setData({
       ...data,
-      email: val
+      weight: val
     });
-    setRegistrationError((prevState) => {
-      return {
-        ...prevState,
-        invalidEmail: false,
-      }
+    setRegistrationError({
+      ...registrationError,
+      invalidWeight: false,
     });
     error = false;
   }
@@ -323,7 +421,7 @@ const RegistrationScreen = ({ navigation }) => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>Dodaj ogłoszenie</Text>
-        <Text style={styles.inputTitle}>Imię</Text>
+        <Text style={[styles.marginsText, styles.headerTitle]}>Imię</Text>
         <TextInput
           placeholderTextColor="#000"
           placeholderStyle={{}}
@@ -333,7 +431,7 @@ const RegistrationScreen = ({ navigation }) => {
         {registrationError.invalidShelterName && <Text style={[styles.error]}>{errorTrue}</Text>}
 
         <View>
-          <Text style={styles.inputTitle}>Numer chip (opcjonalne)</Text>
+          <Text style={[styles.marginsText, styles.headerTitle]}>Numer chip (opcjonalne)</Text>
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
@@ -344,63 +442,134 @@ const RegistrationScreen = ({ navigation }) => {
         </View>
 
         <View>
-          <Text style={styles.inputTitle}>Data przyjęcia (DD-MM-YYYY)</Text>
+          <Text style={[styles.marginsText, styles.headerTitle]}>Data przyjęcia (DD-MM-YYYY)</Text>
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
             style={[styles.textInput, registrationError.invalidPhoneNumber ? styles.inputError : null]}
             autoCapitalize="none"
-            onChangeText={(val) => handlePhoneNumberChange(val)}
+            onChangeText={(val) => handleWeightChange(val)}
           />
           {registrationError.invalidPhoneNumber && <Text style={[styles.error]}>{errorTrue}</Text>}
         </View>
 
         <View>
-          <Collapse>
+          <Collapse onToggle={()=> {
+            if(iconName == "chevron-down"){
+              setIconName("chevron-up")
+            }
+            if(iconName == "chevron-up"){
+              setIconName("chevron-down")
+            }
+          }}>
             <CollapseHeader>
               <Separator bordered>
                 <View style={styles.collapse}>
-                  <Text>Typ</Text>
+                  <Text style={styles.headerTitle}>Typ</Text>
                   <Feather
-                    name="chevron-down"
+                    name={iconName}
                     color="black"
-                    size={20}
+                    size={22}
                     style={{ marginTop: 3 }}
                   />
                 </View>
               </Separator>
             </CollapseHeader>
             <CollapseBody>
-              <ListItem >
-                <Text>Aaron Bennet</Text>
-              </ListItem>
-              <ListItem>
-                <Text>Claire Barclay</Text>
-              </ListItem>
-              <ListItem last>
-                <Text>Kelso Brittany</Text>
-              </ListItem>
-            </CollapseBody>
-          </Collapse>
-          <Collapse>
-            <CollapseHeader>
-              <Separator bordered>
-                <Text>FORWARD</Text>
-              </Separator>
-            </CollapseHeader>
-            <CollapseBody>
-              <ListItem >
-                <Text>Aaron Bennet</Text>
-              </ListItem>
-              <ListItem>
-                <Text>Claire Barclay</Text>
-              </ListItem>
-              <ListItem last>
-                <Text>Kelso Brittany</Text>
-              </ListItem>
-            </CollapseBody>
-          </Collapse>
+
+        {/*Płeć*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Płeć</Text>
+          </View>
+          <FlatList 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{paddingHorizontal: 20}}
+            keyExtractor={(item) => item.id }
+            data={animalSexes}
+            renderItem={({item}) => (
+              <TouchableOpacity onPress={() => setFilterValue('sex', item.id)}>
+                <Label name={item.label}/>
+              </TouchableOpacity>
+            )}
+          />
         </View>
+
+        {/*Statusy*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Status (wielokrotny wybór)</Text>
+          </View>
+          <FlatList 
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{paddingHorizontal: 20}}
+            keyExtractor={(item) => item.id }
+            data={animalStatus}
+            renderItem={({item}) => (
+              <TouchableOpacity onPress={() => setFilterValue('status', item.id)}>
+                <Label name={item.label}/>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+
+        {/*Wiek*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Wiek</Text>
+          <RadioForm
+            radio_props={radio_age_props}
+            initial={0}
+            formHorizontal={true}
+            buttonColor={'#362893'}
+            selectedButtonColor={'#362893'}
+            borderWidth={1}
+            buttonSize={15}
+            style={{marginLeft: 20}}
+            labelStyle={{marginRight: 15}}
+            onPress={(value) => setAge(value)}
+          />
+          </View>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={[styles.textInput, styles.textInputCollapse, registrationError.invalidAge ? styles.inputError : null]}
+            autoCapitalize="none"
+            onChangeText={(val) => handleAgeChange(val)}
+          />
+        </View>
+
+        {/*Waga*/}
+        <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Waga</Text>
+          <RadioForm
+            radio_props={radio_weight_props}
+            initial={0}
+            formHorizontal={true}
+            buttonColor={'#362893'}
+            selectedButtonColor={'#362893'}
+            borderWidth={1}
+            buttonSize={15}
+            style={{marginLeft: 20}}
+            labelStyle={{marginRight: 15}}
+            onPress={(value) => setWeight(value)}
+          />
+          </View>
+          <TextInput
+            placeholderTextColor="#000"
+            placeholderStyle={{}}
+            style={[styles.textInput, styles.textInputCollapse, registrationError.invalidWeight ? styles.inputError : null]}
+            autoCapitalize="none"
+            onChangeText={(val) => handleWeightChange(val)}
+          />
+        </View>
+
+        </CollapseBody>
+      </Collapse>
+      </View>
 
         <View>
           <Text style={styles.inputTitle}>Adres e-mail</Text>
@@ -528,6 +697,14 @@ const RegistrationScreen = ({ navigation }) => {
 }
 export default RegistrationScreen;
 
+const Label = ({name}) => {
+  return(
+    <View style={styles.label}>
+      <Text style={{textAlign: 'center'}}>{name}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     width: '85%',
@@ -547,6 +724,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#E2E1E1',
     borderRadius: 40,
     marginBottom: 10,
+  },
+  textInputCollapse: {
+    width: '90%',
+    marginLeft: 20,
   },
   inputTitle: {
     marginLeft: marginLeftText,
@@ -601,5 +782,46 @@ const styles = StyleSheet.create({
   },
   collapse: {
     flexDirection: 'row',
-  }
+  },
+
+
+
+  collapseHeader: {
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1.8,
+    borderColor: 'gray',
+    borderStyle: 'solid'
+  },
+  standardHeader: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginRight: 30,
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 10
+  },
+  headerTitle: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  marginsText: {
+    marginLeft: marginLeftText,
+    marginBottom: marginBottomText,
+    marginTop: 10,
+  },
+  label: {
+    marginRight: 15,
+    marginVertical: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 15,
+    backgroundColor: '#c4c4c4',
+    borderRadius: 10,
+  },
 });
