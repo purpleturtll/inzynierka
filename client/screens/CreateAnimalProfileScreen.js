@@ -112,6 +112,7 @@ const RegistrationScreen = ({ navigation }) => {
     {id: '114', label: 'Inne'},
   ];
 
+  const [animalType, setAnimalType] = useState(1);
 
   // radio wiek
   var radio_age_props = [
@@ -142,8 +143,11 @@ const RegistrationScreen = ({ navigation }) => {
     passwordEye: true,
     passwordConfirmationEye: true
   });
+
+
   // ustawienie ikony strzałki typu
   const [iconName, setIconName] = useState("chevron-down");
+  const [breedNameIcon, setBreedNameIcon] = useState("chevron-down");
 
 
   const handleShetlerNameChange = (val) => {
@@ -454,6 +458,7 @@ const RegistrationScreen = ({ navigation }) => {
         </View>
 
         <View>
+        {/* collapse typ */}
           <Collapse onToggle={()=> {
             if(iconName == "chevron-down"){
               setIconName("chevron-up")
@@ -463,7 +468,6 @@ const RegistrationScreen = ({ navigation }) => {
             }
           }}>
             <CollapseHeader>
-              <Separator bordered>
                 <View style={styles.collapse}>
                   <Text style={styles.headerTitle}>Typ</Text>
                   <Feather
@@ -473,9 +477,31 @@ const RegistrationScreen = ({ navigation }) => {
                     style={{ marginTop: 3 }}
                   />
                 </View>
-              </Separator>
             </CollapseHeader>
             <CollapseBody>
+
+ {/*gatunek*/}
+ <View>
+          <View style={styles.standardHeader}>
+            <Text style={styles.headerTitle}>Typ</Text>
+          </View>
+          <FlatList 
+            numColumns={4}
+            contentContainerStyle={
+              {paddingHorizontal: 20}}
+            keyExtractor={(item) => item.id }
+            data={animalTypes}
+            renderItem={({item}) => (
+              <TouchableOpacity onPress={() => {
+                setFilterValue('type', item.id); 
+                setAnimalType(item.id)
+                }}>
+                <Label name={item.label}/>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+
 
         {/*Płeć*/}
         <View>
@@ -529,6 +555,7 @@ const RegistrationScreen = ({ navigation }) => {
             buttonSize={15}
             style={{marginLeft: 20}}
             labelStyle={{marginRight: 15}}
+            animation={true}
             onPress={(value) => setAge(value)}
           />
           </View>
@@ -555,6 +582,7 @@ const RegistrationScreen = ({ navigation }) => {
             buttonSize={15}
             style={{marginLeft: 20}}
             labelStyle={{marginRight: 15}}
+            animation={true}
             onPress={(value) => setWeight(value)}
           />
           </View>
@@ -566,10 +594,72 @@ const RegistrationScreen = ({ navigation }) => {
             onChangeText={(val) => handleWeightChange(val)}
           />
         </View>
+        </CollapseBody>
+        </Collapse>
 
+          {/* collapse rasa */}
+          {(animalType == "1"  || animalType == "2") &&
+
+          <Collapse onToggle={()=> {
+            if(breedNameIcon == "chevron-down"){
+              setBreedNameIcon("chevron-up")
+            }
+            if(breedNameIcon == "chevron-up"){
+              setBreedNameIcon("chevron-down")
+            }
+          }}>
+            <CollapseHeader>
+              <View style={styles.collapse}>
+                <Text style={styles.headerTitle}>W typie rasy</Text>
+                <Feather
+                  name={breedNameIcon}
+                  color="black"
+                  size={22}
+                  style={{ marginTop: 3 }}
+                />
+              </View>
+            </CollapseHeader>
+            <CollapseBody>
+
+            {animalType == "1" &&
+              <View style={styles.raceCategoriesContainer}>
+              <Text style={{fontWeight: 'bold'}}>Pies</Text>
+              <View style={{flex: 1, alignItems: 'center'}}>
+                <FlatList 
+                  contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+                  numColumns={2}
+                  keyExtractor={(item) => item.id }
+                  data={dogRaces}
+                  renderItem={({item}) => (
+                    <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                      <AlignedLabel name={item.label}/>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+            </View>
+          }
+          {animalType == "2" &&
+            <View style={styles.raceCategoriesContainer}>
+              <Text style={{fontWeight: 'bold'}}>Kot</Text>
+              <FlatList 
+                contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
+                numColumns={2}
+                keyExtractor={(item) => item.id }
+                data={catRaces}
+                renderItem={({item}) => (
+                  <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                    <AlignedLabel name={item.label}/>
+                  </TouchableOpacity>
+                )}
+              />
+              </View>
+            }
         </CollapseBody>
       </Collapse>
+          }
       </View>
+          
 
         <View>
           <Text style={styles.inputTitle}>Adres e-mail</Text>
@@ -702,6 +792,14 @@ const Label = ({name}) => {
     <View style={styles.label}>
       <Text style={{textAlign: 'center'}}>{name}</Text>
     </View>
+  );
+}
+
+const AlignedLabel = ({name}) => {
+  return(
+      <View style={styles.alignedLabel}>
+        <Text style={{textAlign: 'center'}}>{name}</Text>
+      </View>
   );
 }
 
