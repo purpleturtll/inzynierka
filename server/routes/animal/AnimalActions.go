@@ -7,6 +7,7 @@ import (
 	"inzynierka/models"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -51,7 +52,9 @@ func Filter(c echo.Context) error {
 	pageInt, _ := strconv.Atoi(page)
 
 	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(
-		Sex(sex), City(city), AgeRange([]string{ageFrom, ageTo}), WeightRange([]string{weightFrom, weightTo}), Breed(breed), AnimalType(animalType)).Find(&animals)
+		Sex(sex), City(strings.Split(city, ",")), AgeRange([][]string{strings.Split(ageFrom, ","), strings.Split(ageTo, ",")}),
+		WeightRange([][]string{strings.Split(weightFrom, ","), strings.Split(weightTo, ",")}), Breed(strings.Split(breed, ",")), AnimalType(strings.Split(animalType, ",")),
+	).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
