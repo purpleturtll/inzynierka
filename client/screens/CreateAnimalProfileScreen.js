@@ -14,19 +14,23 @@ const marginBottomText = 10;
 const CreateAnimalProfileScreen = ({ navigation }) => {
 
   const errorTrue = "Pole nie może być puste";
-  const errorPasswordCombine = "min. 8 znaków • wielka litera • mała litera • cyfra • znak specjalny";
-  const notEqualPasswordText = "Hasła nie są takie same. Spróbuj ponownie."
-  const notEmail = "Niepoprawny adres e-mail";
+  const wrongDateFormat = "Niepoprawna data";
+  const wrongCHIPFormat = "Numer chip powinien zawierać 15 cyfr";
+  const unselected = "Wybierz jedną z opcji";
+  const unselectedStatus = "Wybierz co najmniej jedną z opcji";
   let error = false;
 
   const [createProfileError, setCreateProfileError] = useState({
-
     invalidShelterName: false,
-    invalidNIP: false,
-    invalidWeight: false,
+    invalidCHIP: false,
     invalidDescription: false,
+    unselectedAnimalType: false,
+    unselectedSex: false,
+    unselectedStatus: false,
     invalidAge: false,
-    invalidPostalCode: false,
+    invalidWeight: false,
+    wrongDateFormat: false,
+    wrongCHIPFormat: false,
   });
 
 
@@ -39,6 +43,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     weight: null,
     race: null
   });
+
+  const [animalTypeFilter, setAnimalTypeFilter] = useState(null);
+  const [sexFilter, setSexFilter] = useState(null)
+  const [statusFilter, setStatusFilter] = useState([])
+  const [breedFilter, setBreedFilter] = useState(null)
 
 
   function setFilterValue(fieldName, value) {
@@ -106,7 +115,6 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     { id: '114', label: 'Inne' },
   ];
 
-  const [animalType, setAnimalType] = useState(1);
 
   // radio wiek
   var radio_age_props = [
@@ -125,8 +133,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 
 
   const [data, setData] = useState({
+    animal_type: '',
+    breed: '',
+    name: '',
     shelterName: '',
-    NIP: '',
+    CHIP: '',
     weight: '',
     age: '',
     description: '',
@@ -134,32 +145,43 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     check_textInputChange: false,
   });
 
-
   // ustawienie ikony strzałki typu
   const [iconName, setIconName] = useState("chevron-down");
   const [breedNameIcon, setBreedNameIcon] = useState("chevron-down");
 
 
-  const handleShetlerNameChange = (val) => {
+  const handleNameChange = (val) => {
     setData({
       ...data,
-      shelterName: val
+      name: val
     });
     setCreateProfileError({
       ...createProfileError,
-      invalidShelterName: false,
+      invalidName: false,
     });
     error = false;
   }
 
-  const handleNIPChange = (val) => {
+  const handleCHIPChange = (val) => {
     setData({
       ...data,
-      NIP: val
+      CHIP: val
     });
     setCreateProfileError({
       ...createProfileError,
-      invalidNIP: false,
+      invalidCHIP: false,
+    });
+    error = false;
+  }
+
+  const handleDateChange = (val) => {
+    setData({
+      ...data,
+      date: val
+    });
+    setCreateProfileError({
+      ...createProfileError,
+      invalidDate: false,
     });
     error = false;
   }
@@ -188,6 +210,38 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     error = false;
   }
 
+  const handleAnimalTypeChange = (val) => {
+    setData({
+      ...data,
+      animal_type: val
+    });
+    setCreateProfileError({
+      ...createProfileError,
+      unselectedAnimalType: false,
+    });
+    error = false;
+  }
+
+  const handleSexChange = (val) => {
+    setData({
+      ...data,
+      sex: val
+    });
+    setCreateProfileError({
+      ...createProfileError,
+      unselectedSex: false,
+    });
+    error = false;
+  }
+
+  const handleStatusChange = () => {
+    setCreateProfileError({
+      ...createProfileError,
+      unselectedStatus: false,
+    });
+    error = false;
+  }
+
   const handleDescriptionChange = (val) => {
     setData({
       ...data,
@@ -200,21 +254,19 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     error = false;
   }
 
-  const handlePostalCodeChange = (val) => {
-    setData({
-      ...data,
-      postalCode: val
-    });
-    setCreateProfileError({
-      ...createProfileError,
-      invalidPostalCode: false,
-    });
-    error = false;
+  const selectionMultiple = (id) => {
+    let selectedIds = [...statusFilter];
+
+    if(selectedIds.includes(id))
+      selectedIds = selectedIds.filter(_id => _id !== id)
+    else 
+      selectedIds.push(id)
+
+    setStatusFilter(selectedIds)  
   }
 
   const checkDate = (date) => {
-    let reg = new RegExp("^([0-2][0-9]|(3)[0-1])(\-)(((0)[0-9])|((1)[0-2]))(\-)\d{4}");
-    return reg.test(date);
+    return /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}/.test(date);
   }
 
   const onRegisterPress = () => {
@@ -228,11 +280,112 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       });
       error = true;
     }
-    if (data.NIP == "") {
+
+    if (data.CHIP.length >0 && data.CHIP.length< 15) {
       setCreateProfileError((prevState) => {
         return {
           ...prevState,
-          invalidNIP: true,
+          wrongCHIPFormat: true,
+        };
+      });
+      error = true;
+    }
+    else {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          wrongCHIPFormat: false,
+          invalidCHIP: false
+        };
+      });
+      error = false;
+    }
+    
+    if (data.date.length > 0 && !checkDate(data.date)) {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          wrongDateFormat: true,
+        };
+      });
+      error = true;
+    }
+    else if (data.date == "") {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          invalidDate: true,
+          wrongDateFormat: false,
+        };
+      });
+      error = true;
+    }
+    else {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          wrongDateFormat: false,
+          invalidDate: false
+        };
+      });
+      error = false;
+    }
+
+    if(animalTypeFilter == null){
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          unselectedAnimalType: true,
+        };
+      });
+      error = true;
+    }
+
+    if(statusFilter == []){
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          unselectedStatus: true,
+        };
+      });
+      error = true;
+    }
+
+    if(sexFilter == null){
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          unselectedSex: true,
+        };
+      });
+      error = true;
+    }
+
+    if(statusFilter.length == 0){
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          unselectedStatus: true,
+        };
+      });
+      error = true;
+    }
+
+    if (data.age == "") {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          invalidAge: true,
+        };
+      });
+      error = true;
+    }
+
+    if (data.weight == "") {
+      setCreateProfileError((prevState) => {
+        return {
+          ...prevState,
+          invalidWeight: true,
         };
       });
       error = true;
@@ -248,27 +401,37 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       error = true;
     }
 
-    if (checkDate(data.date)) {
-      setCreateProfileError((prevState) => {
-        return {
-          ...prevState,
-          invalidDate: false,
-        };
-      });
-    } else {
-      setCreateProfileError((prevState) => {
-        return {
-          ...prevState,
-          invalidPassword: true,
-          invalidPasswordConfirmation: true,
-        };
-      });
-      error = true;
-    }
-
     if (error) {
       return
     }
+
+    const res = fetch('http://10.0.2.2:8080/animal/create', {
+      body: JSON.stringify({
+        animal_type: data.animal_type,
+        breed: data.breed,
+        name: data.name,
+        shelter_id: 1,
+        adoptable: true,
+        admission_date: data.date,
+        description: data.description,
+        age: data.age,
+        chip_number: data.CHIP,
+        recently_found: true,
+        is_sterilized: true,
+        is_vaccinated: true
+      }),
+      headers: { "Content-Type": "application/json" },
+      method: 'POST'
+    }).then((response) => {
+      if (response.status == 201) {
+        navigation.navigate('CreatedAnimalProfileScreen')
+      }
+      else {
+        navigation.navigate('CreateAnimalProfileScreen')
+      }
+    })
+
+
   }
 
   return (
@@ -279,32 +442,34 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
         <TextInput
           placeholderTextColor="#000"
           placeholderStyle={{}}
-          style={[styles.textInput, createProfileError.invalidShelterName ? styles.inputError : null]}
-          onChangeText={(val) => handleShetlerNameChange(val)}
+          style={[styles.textInput, createProfileError.invalidName ? styles.inputError : null]}
+          onChangeText={(val) => handleNameChange(val)}
         />
-        {createProfileError.invalidShelterName && <Text style={[styles.error]}>{errorTrue}</Text>}
+        {createProfileError.invalidName && <Text style={[styles.error]}>{errorTrue}</Text>}
 
         <View>
           <Text style={[styles.marginsText, styles.headerTitle]}>Numer chip (opcjonalne)</Text>
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
-            style={[styles.textInput, createProfileError.invalidNIP ? styles.inputError : null]}
-            onChangeText={(val) => handleNIPChange(val)}
+            style={[styles.textInput, createProfileError.invalidCHIP ? styles.inputError : null]}
+            onChangeText={(val) => handleCHIPChange(val)}
           />
-          {createProfileError.invalidNIP && <Text style={[styles.error]}>{errorTrue}</Text>}
+          {createProfileError.invalidCHIP && <Text style={[styles.error]}>{errorTrue}</Text>}
+          {createProfileError.wrongCHIPFormat && <Text style={[styles.error]}>{wrongCHIPFormat}</Text>}
         </View>
 
         <View>
-          <Text style={[styles.marginsText, styles.headerTitle]}>Data przyjęcia (DD-MM-YYYY)</Text>
+          <Text style={[styles.marginsText, styles.headerTitle]}>Data przyjęcia (DD/MM/YYYY)</Text>
           <TextInput
             placeholderTextColor="#000"
             placeholderStyle={{}}
-            style={[styles.textInput, createProfileError.invalidPhoneNumber ? styles.inputError : null]}
+            style={[styles.textInput, (createProfileError.invalidDate || createProfileError.wrongDateFormat) ? styles.inputError : null]}
             autoCapitalize="none"
-            onChangeText={(val) => handleWeightChange(val)}
+            onChangeText={(val) => handleDateChange(val)}
           />
-          {createProfileError.invalidPhoneNumber && <Text style={[styles.error]}>{errorTrue}</Text>}
+          {createProfileError.invalidDate && <Text style={[styles.error]}>{errorTrue}</Text>}
+          {createProfileError.wrongDateFormat && <Text style={[styles.error]}>{wrongDateFormat}</Text>}
         </View>
 
         <View>
@@ -344,14 +509,16 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => {
                       setFilterValue('type', item.id);
-                      setAnimalType(item.id)
+                      setAnimalTypeFilter(item.id);
+                      setBreedFilter(undefined);
+                      handleAnimalTypeChange(item.id);
                     }}>
-                      <Label name={item.label} />
+                      <Label item={item} selected={animalTypeFilter} />
                     </TouchableOpacity>
                   )}
                 />
+                {createProfileError.unselectedAnimalType && <Text style={[styles.error]}>{unselected}</Text>}
               </View>
-
 
               {/*Płeć*/}
               <View>
@@ -365,11 +532,12 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   keyExtractor={(item) => item.id}
                   data={animalSexes}
                   renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => setFilterValue('sex', item.id)}>
-                      <Label name={item.label} />
+                    <TouchableOpacity onPress={() => {setFilterValue('sex', item.id); setSexFilter(item.id); handleSexChange()}}>
+                      <Label item={item} selected={sexFilter} />
                     </TouchableOpacity>
                   )}
                 />
+                {createProfileError.unselectedSex && <Text style={[styles.error]}>{unselected}</Text>}
               </View>
 
               {/*Statusy*/}
@@ -384,11 +552,12 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   keyExtractor={(item) => item.id}
                   data={animalStatus}
                   renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => setFilterValue('status', item.id)}>
-                      <Label name={item.label} />
+                    <TouchableOpacity onPress={() => {setFilterValue('status', item.id); selectionMultiple(item.id); handleStatusChange() }}>
+                      <LabelStatus item={item} selected={statusFilter} />
                     </TouchableOpacity>
                   )}
                 />
+                {createProfileError.unselectedStatus && <Text style={[styles.error]}>{unselectedStatus}</Text>}
               </View>
 
               {/*Wiek*/}
@@ -415,6 +584,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   autoCapitalize="none"
                   onChangeText={(val) => handleAgeChange(val)}
                 />
+                {createProfileError.invalidAge && <Text style={[styles.error]}>{errorTrue}</Text>}
               </View>
 
               {/*Waga*/}
@@ -442,12 +612,13 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   autoCapitalize="none"
                   onChangeText={(val) => handleWeightChange(val)}
                 />
+                {createProfileError.invalidWeight && <Text style={[styles.error]}>{errorTrue}</Text>}
               </View>
             </CollapseBody>
           </Collapse>
 
           {/* collapse rasa */}
-          {(animalType == "1" || animalType == "2") &&
+          {(animalTypeFilter == null || animalTypeFilter == "1" || animalTypeFilter == "2") &&
 
             <Collapse onToggle={() => {
               if (breedNameIcon == "chevron-down") {
@@ -470,7 +641,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
               </CollapseHeader>
               <CollapseBody>
 
-                {animalType == "1" &&
+                {(animalTypeFilter == "1" || animalTypeFilter == null) &&
                   <View style={[styles.marginsText, styles.raceCategoriesContainer]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Pies</Text>
                     <View style={{ flex: 1, alignItems: 'center' }}>
@@ -480,8 +651,12 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         keyExtractor={(item) => item.id}
                         data={dogRaces}
                         renderItem={({ item }) => (
-                          <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
-                            <AlignedLabel name={item.label} />
+                          <TouchableOpacity onPress={() => {
+                            setFilterValue('race', item.id);
+                            setBreedFilter(item.id)
+                          }}>                  
+                            <AlignedLabel item={item} selected={breedFilter}
+                            />
                           </TouchableOpacity>
                         )}
                       />
@@ -489,7 +664,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   </View>
                 }
 
-                {animalType == "2" &&
+                {animalTypeFilter == "2" &&
                   <View style={[styles.marginsText, styles.raceCategoriesContainer]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Kot</Text>
                     <FlatList
@@ -498,8 +673,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                       keyExtractor={(item) => item.id}
                       data={catRaces}
                       renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
-                          <AlignedLabel name={item.label} />
+                        <TouchableOpacity onPress={() => {
+                          setFilterValue('race', item.id);
+                          setBreedFilter(item.id)
+                        }}>
+                          <AlignedLabel item={item} selected = {breedFilter}/>
                         </TouchableOpacity>
                       )}
                     />
@@ -523,12 +701,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.registerButton} onPress={onRegisterPress}>
-            {/* //() => navigation.navigate('DoneRegistrationScreen') */}
-            <Text style={{ color: '#fff' }}>Utwórz konto</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
-            <Text style={{ color: '#69667C', fontWeight: 'bold', marginVertical: 20 }}>Masz już konto?</Text>
+          <TouchableOpacity style={styles.addButton} onPress={onRegisterPress}>
+            <Text style={{ color: '#fff' }}>Dodaj</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -537,18 +711,26 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 }
 export default CreateAnimalProfileScreen;
 
-const Label = ({ name }) => {
+const Label = ({ item, selected }) => {
   return (
-    <View style={styles.label}>
-      <Text style={{ textAlign: 'center' }}>{name}</Text>
+    <View style={[styles.label, selected === item.id ? styles.selected : null]}>
+      <Text style={{ textAlign: 'center' }}>{item.label}</Text>
     </View>
   );
 }
 
-const AlignedLabel = ({ name }) => {
+const LabelStatus = ({ item, selected }) => {
   return (
-    <View style={styles.alignedLabel}>
-      <Text style={{ textAlign: 'center' }}>{name}</Text>
+    <View style={[styles.label, selected.includes(item.id) ? styles.selected : null]}>
+      <Text style={{ textAlign: 'center' }}>{item.label}</Text>
+    </View>
+  );
+}
+
+const AlignedLabel = ({ item, selected }) => {
+  return (
+    <View style={[styles.alignedLabel, selected === item.id ? styles.selected : null]}>
+      <Text style={{ textAlign: 'center' }}>{item.label}</Text>
     </View>
   );
 }
@@ -594,38 +776,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 25
   },
-  passwordContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#E2E1E1',
-    borderRadius: 40,
-    marginBottom: 15
-  },
-  textInputPass: {
-    flex: 1,
-  },
   buttonContainer: {
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20
   },
-  registerButton: {
+  addButton: {
     flexDirection: 'row',
     height: 50,
+    marginTop: 20,
+    marginBottom: 10,
     width: '50%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#362893',
     borderRadius: 20,
     padding: 10,
-  },
-  descriptionPassword: {
-    marginLeft: marginLeftText,
-    color: 'black',
-    fontSize: 15,
-    marginBottom: 10
   },
   error: {
     marginLeft: marginLeftText,
@@ -636,8 +802,6 @@ const styles = StyleSheet.create({
   collapse: {
     flexDirection: 'row',
   },
-
-
 
   collapseHeader: {
     flexDirection: 'row',
@@ -688,4 +852,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center'
   },
+  selected: {
+    backgroundColor: '#fff'
+  }
 });

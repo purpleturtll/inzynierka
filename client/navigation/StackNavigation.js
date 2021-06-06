@@ -50,11 +50,11 @@ const FollowedStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name='Dodaj ogłoszenie'
+        name='CreateAnimalProfileScreen'
         component={CreateAnimalProfileScreen}
       />
       <Stack.Screen
-        name='Created'
+        name='CreatedAnimalProfileScreen'
         component={CreatedAnimalProfileScreen}
         options={{
           title: ' '

@@ -191,7 +191,7 @@ const RegistrationScreen = ({ navigation }) => {
           invalidEmail: false
         };
       });
-      error = false;
+      error = true;
     }
 
     if (data.password == "") {
