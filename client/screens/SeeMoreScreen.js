@@ -49,16 +49,16 @@ const SeeMoreScreen = ({route, navigation}) => {
     switch(id)
     {
       case '1':
-        if(filters.urgent === 'false' || filters.urgent == null)
-          setFilters({...filters, urgent: 'true'});
+        if(filters.urgent === false || filters.urgent == null)
+          setFilters({...filters, urgent: true});
         else 
-          setFilters({...filters, urgent: 'false'});
+          setFilters({...filters, urgent: false});
         break;
       case '2':
         if(filters.adoptable === false || filters.adoptable == null)
-          setFilters({...filters, adoptable: id});
+          setFilters({...filters, urgent: true});
         else
-          setFilters({...filters, adoptable: id});
+          setFilters({...filters, urgent: false});
         break;
       default: break;
     }
@@ -409,6 +409,7 @@ const SeeMoreScreen = ({route, navigation}) => {
           <Text>Wiek: {filters.age}</Text>
           <Text>Waga: {filters.weight}</Text>
           <Text>Rasa: {filters.race}</Text>
+          {/*wartości typu boolean nie są renderowane*/}
           <Text>Status pilne: {filters.urgent}</Text>
           <Text>Status do adopcji: {filters.adoptable}</Text>
         </View>
