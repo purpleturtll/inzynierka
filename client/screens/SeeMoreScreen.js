@@ -16,6 +16,7 @@ const SeeMoreScreen = ({route, navigation}) => {
   const [sexArrow, setSexArrow] = useState('down');
   const [locationArrow, setLocationArrow] = useState('down');
   const [raceArrow, setRaceArrow] = useState('down');
+  const [statusArrow, setStatusArrow] = useState('down');
 
   {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
   const [filters, setFilters] = useState({
@@ -24,7 +25,9 @@ const SeeMoreScreen = ({route, navigation}) => {
     location: null,
     age: null,
     weight: null,
-    race: null
+    race: null,
+    adoptable: null,
+    urgent: null
   });
 
   function clearFilters() {
@@ -35,9 +38,30 @@ const SeeMoreScreen = ({route, navigation}) => {
         location: null,
         age: null,
         weight: null,
-        race: null
+        race: null,
+        adoptable: null,
+        urgent: null
       }
     );
+  }
+
+  function setStatus(id) {
+    switch(id)
+    {
+      case '1':
+        if(filters.urgent === 'false' || filters.urgent == null)
+          setFilters({...filters, urgent: 'true'});
+        else 
+          setFilters({...filters, urgent: 'false'});
+        break;
+      case '2':
+        if(filters.adoptable === false || filters.adoptable == null)
+          setFilters({...filters, adoptable: id});
+        else
+          setFilters({...filters, adoptable: id});
+        break;
+      default: break;
+    }
   }
 
   function setFilterValue(fieldName, value) {
@@ -51,6 +75,9 @@ const SeeMoreScreen = ({route, navigation}) => {
         break;
       case 'location':
         setFilters({...filters, location: value});
+        break;
+      case 'status':
+        setStatus(value);
         break;
       case 'age':
         setFilters({...filters, age: value});
@@ -126,6 +153,11 @@ const SeeMoreScreen = ({route, navigation}) => {
     {id: '112', label: 'Sznaucer'},
     {id: '113', label: 'Terier'},
     {id: '114', label: 'Inne'},
+  ];
+
+  const statuses = [
+    {id: '1', label: 'pilne'},
+    {id: '2', label: 'do adopcji'},
   ];
 
   {/*TODO: dane zwierząt docelowo pobierane z global store*/}
@@ -260,6 +292,29 @@ const SeeMoreScreen = ({route, navigation}) => {
           </CollapseBody>
         </Collapse>
 
+        {/*Status*/}
+        <Collapse onToggle={() => {if(statusArrow == 'down') setStatusArrow('up'); else setStatusArrow('down')}}>
+          <CollapseHeader style={styles.collapseHeader}>
+            <View style={{flex: 1}}>
+              <Text style={styles.headerTitle}>Status</Text>
+            </View>
+            <AntDesign name={statusArrow} size={24} />
+          </CollapseHeader>
+          <CollapseBody style={styles.collapseBody}>
+            <FlatList 
+              contentContainerStyle={{alignItems: 'center'}}
+              numColumns={2}
+              keyExtractor={(item) => item.id }
+              data={statuses}
+              renderItem={({item}) => (
+                <TouchableOpacity onPress={() => setFilterValue('status', item.id)}>
+                  <Label name={item.label}/>
+                </TouchableOpacity>
+              )}
+            />
+          </CollapseBody>
+        </Collapse>
+
         {/*Wiek*/}
         <View>
           <View style={styles.standardHeader}>
@@ -354,6 +409,8 @@ const SeeMoreScreen = ({route, navigation}) => {
           <Text>Wiek: {filters.age}</Text>
           <Text>Waga: {filters.weight}</Text>
           <Text>Rasa: {filters.race}</Text>
+          <Text>Status pilne: {filters.urgent}</Text>
+          <Text>Status do adopcji: {filters.adoptable}</Text>
         </View>
         </ScrollView>
       </Modal>
