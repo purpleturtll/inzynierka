@@ -16,6 +16,8 @@ type Animal struct {
 	Adoptable     bool      `json:"adoptable"`
 	Description   string    `json:"description"`
 	Age           uint      `json:"age"`
+	Weight        float32   `json:"weight"`
+	Sex           string    `json:"sex"`
 	AdmissionDate time.Time `json:"admission_date"`
 	ChipNumber    string    `json:"chip_number"`
 	RecentlyFound bool      `json:"recently_found"`

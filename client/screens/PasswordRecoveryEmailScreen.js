@@ -25,10 +25,9 @@ const { height } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginBottom: 10,
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: height * 0.14
+    marginBottom: height * 0.09
   },
   check: {
     width: 230,

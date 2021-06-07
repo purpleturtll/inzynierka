@@ -7,6 +7,7 @@ import (
 	"inzynierka/models"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -36,15 +37,24 @@ func Read(c echo.Context) error {
 	return c.JSON(http.StatusOK, obj)
 }
 
-func ReadPage(c echo.Context) error {
+// Filtrowanie
+func Filter(c echo.Context) error {
 	var animals []models.Animal
-	nr := c.Param("nr")
-	nr_int, _ := strconv.Atoi(nr)
-	obj := &models.Animal{}
-	if err := c.Bind(obj); err != nil {
-		return err
-	}
-	result := db.Connection().Limit(pageSize).Offset(pageSize * nr_int).Where(&obj).Find(&animals)
+	animalType := c.QueryParam("animal-type")
+	sex := c.QueryParam("sex")
+	city := c.QueryParam("city")
+	ageFrom := c.QueryParam("age-from")
+	ageTo := c.QueryParam("age-to")
+	weightFrom := c.QueryParam("weight-from")
+	weightTo := c.QueryParam("weight-to")
+	breed := c.QueryParam("breed")
+	page := c.QueryParam("page")
+	pageInt, _ := strconv.Atoi(page)
+
+	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(
+		Sex(sex), City(strings.Split(city, ",")), AgeRange([][]string{strings.Split(ageFrom, ","), strings.Split(ageTo, ",")}),
+		WeightRange([][]string{strings.Split(weightFrom, ","), strings.Split(weightTo, ",")}), Breed(strings.Split(breed, ",")), AnimalType(strings.Split(animalType, ",")),
+	).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}

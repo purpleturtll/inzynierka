@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"inzynierka/models"
 
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
@@ -12,7 +12,8 @@ var db *gorm.DB
 var err error
 
 func Init() {
-	db, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	dsn := "sqlserver://admin1:admin1@localhost:1433?database=INZ_DB"
+	db, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return
 	}
