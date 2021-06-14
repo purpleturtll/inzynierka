@@ -4,6 +4,12 @@ import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-ha
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
 
+{/*REFACTOR: dane nie powinny być przekazywane przez propsy*/}
+export const onSeeMorePress = (navigation, animalList) => {
+  if(navigation != undefined)
+    navigation.navigate('SeeMoreScreen', animalList);
+}
+
 const HomeScreen = ({ navigation }) => {
 
   const [animals, setAnimals] = useState([
@@ -90,11 +96,6 @@ const onFilterOtherPress = () => {
   {/*TODO*/}
 }
 
-const onSeeMorePress = (navigation, animalList) => {
-  {/*TODO*/}
-  navigation.navigate('SeeMoreScreen', animalList);
-}
-
   return(
   <View>
     {/*widok ekranu*/}
@@ -162,7 +163,8 @@ const onSeeMorePress = (navigation, animalList) => {
             <View style={styles.textElement}>
               <Text style={styles.latestText}>Ostatnio dodane</Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
+              testID={"SeeMoreButton"} 
               style={styles.textElement}
               onPress={() => onSeeMorePress(navigation, animals)}
             >
