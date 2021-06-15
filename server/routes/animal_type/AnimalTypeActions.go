@@ -27,6 +27,7 @@ func Read(c echo.Context) error {
 	id := c.QueryParam("id")
 	id_int, _ := strconv.Atoi(id)
 	obj := &models.AnimalType{}
+	fmt.Println(id_int, id)
 	result := db.Connection().First(&obj, id_int)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
