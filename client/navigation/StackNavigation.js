@@ -52,14 +52,17 @@ const FollowedStackNavigator = () => {
       <Stack.Screen
         name='CreateAnimalProfileScreen'
         component={CreateAnimalProfileScreen}
+        options={{
+          title: ' '
+        }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name='CreatedAnimalProfileScreen'
         component={CreatedAnimalProfileScreen}
         options={{
           title: ' '
         }}
-      />
+      /> */}
       <Stack.Screen
         name='Ulubione'
         component={FollowedAnimalsScreen}
@@ -72,6 +75,17 @@ const FollowedStackNavigator = () => {
 const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
+       <Stack.Screen
+        name='CreatedAnimalProfileScreen'
+        component={CreatedAnimalProfileScreen}
+        options={{
+          title: ' '
+        }}
+      />
+      <Stack.Screen
+        name='CreateAnimalProfileScreen'
+        component={CreateAnimalProfileScreen}
+      />
       <Stack.Screen
         name="SignInScreen"
         component={SignInScreen}

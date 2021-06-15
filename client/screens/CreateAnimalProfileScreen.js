@@ -21,7 +21,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
   let error = false;
 
   const [createProfileError, setCreateProfileError] = useState({
-    invalidShelterName: false,
+    invalidName: false,
     invalidCHIP: false,
     invalidDescription: false,
     unselectedAnimalType: false,
@@ -271,11 +271,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 
   const onRegisterPress = () => {
 
-    if (data.shelterName == "") {
+    if (data.name == "") {
       setCreateProfileError((prevState) => {
         return {
           ...prevState,
-          invalidShelterName: true,
+          invalidName: true,
         };
       });
       error = true;

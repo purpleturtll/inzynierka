@@ -10,7 +10,7 @@ const CreatedAnimalProfileScreen = ({ navigation }) => {
         source={require('../assets/animal-shelter.png')}
       />
       <Text style={styles.title}>Ogłoszenie zostało dodane!</Text>
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('SignInScreen')}>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('CreateAnimalProfileScreen')}>
         <Image style={styles.addIcon}
           source={require('../assets/add.png')}
           tintColor="#fff"/>
