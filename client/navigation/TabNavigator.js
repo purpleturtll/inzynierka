@@ -1,27 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import SplashScreen from '../screens/SplashScreen'
 import {MainStackNavigator, MessageStackNavigator, FollowedStackNavigator, AccountStackNavigator} from './StackNavigation';
 import {Feather} from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(()=>{
-    // Tutaj sprawdzanie czy jest token (czy jesteśmy zalogowani)
-    // na razie timeout
-    setTimeout(()=>{
-      setIsLoading(false)
-    }, 2000)
-  })
-
-  if(isLoading){
-    return <SplashScreen/>
-  }
-
   return(
     <Tab.Navigator
           initialRouteName="HomeScreen"

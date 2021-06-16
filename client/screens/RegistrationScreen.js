@@ -148,34 +148,6 @@ const RegistrationScreen = ({ navigation }) => {
             error = true;
         }
     };
-    if(data.email.length>0 && !validateIsEmail(data.email)){
-      setRegistrationError((prevState) => {
-        return {
-          ...prevState,
-          isEmail: false, 
-        };
-      });
-      error = true;
-    }
-    else if (data.email == "") {
-      setRegistrationError((prevState) => {
-        return {
-          ...prevState,
-          invalidEmail: true,
-        };
-      });
-      error = true;
-    }
-    else if(validateIsEmail(data.email)){
-      setRegistrationError((prevState) => {
-        return {
-          ...prevState,
-          isEmail: true, 
-          invalidEmail: false
-        };
-      });
-      error = true;
-    }
 
     const onRegisterPress = () => {
         if (data.firstname == "") {
