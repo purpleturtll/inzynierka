@@ -27,10 +27,21 @@ func Create(c echo.Context) error {
 }
 
 func Read(c echo.Context) error {
-	id := c.QueryParam("id")
+	id := c.Param("id")
 	id_int, _ := strconv.Atoi(id)
 	obj := &models.Animal{}
 	result := db.Connection().First(&obj, id_int)
+	if result.Error == gorm.ErrRecordNotFound {
+		return c.String(http.StatusNotFound, "Not Found")
+	}
+	return c.JSON(http.StatusOK, obj)
+}
+
+// Szukanie według id chipa
+func ReadChip(c echo.Context) error {
+	cid := c.Param("cid")
+	obj := &models.Animal{}
+	result := db.Connection().Where("chip_number", cid).First(&obj)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
