@@ -59,11 +59,12 @@ func Filter(c echo.Context) error {
 	weightFrom := c.QueryParam("weight-from")
 	weightTo := c.QueryParam("weight-to")
 	breed := c.QueryParam("breed")
+	favourite := c.QueryParam("favourite")
 	page := c.QueryParam("page")
 	pageInt, _ := strconv.Atoi(page)
 
 	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(
-		Sex(sex), City(strings.Split(city, ",")), AgeRange([][]string{strings.Split(ageFrom, ","), strings.Split(ageTo, ",")}),
+		Sex(sex), City(strings.Split(city, ",")), AgeRange([][]string{strings.Split(ageFrom, ","), strings.Split(ageTo, ",")}), Favourite(favourite),
 		WeightRange([][]string{strings.Split(weightFrom, ","), strings.Split(weightTo, ",")}), Breed(strings.Split(breed, ",")), AnimalType(strings.Split(animalType, ",")),
 	).Find(&animals)
 	if result.Error == gorm.ErrRecordNotFound {

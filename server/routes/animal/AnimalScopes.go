@@ -135,3 +135,16 @@ func WeightRange(weightRange [][]string) func(db *gorm.DB) *gorm.DB {
 		return db
 	}
 }
+
+func Favourite(fav string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if fav == "" {
+			return db
+		}
+
+		db.Joins("left join fav_animal on fav_animal.animal_id = animals.id")
+		db.Where("fav_animal.user_id = ?", fav)
+
+		return db
+	}
+}
