@@ -9,7 +9,7 @@ import AnimalCard from '../components/AnimalCard'
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
-const SeeMoreScreen = ({route, navigation}) => {
+const SeeMoreScreen = ({ navigation }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [typeArrow, setTypeArrow] = useState('down');
@@ -19,6 +19,7 @@ const SeeMoreScreen = ({route, navigation}) => {
   const [statusArrow, setStatusArrow] = useState('down');
 
   {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
+  {/*TODO: globalne zarządzanie stanem filtrów*/}
   const [filters, setFilters] = useState({
     type: null,
     sex: null,

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./navigation/TabNavigator";
-import AppContext from './components/AppContext';
+import AppContext from './contexts/AppContext';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
