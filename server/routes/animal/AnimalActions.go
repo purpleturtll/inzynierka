@@ -19,6 +19,7 @@ const pageSize = 2
 
 // Struktura z danymi do wysłania
 type AnimalSend struct {
+	ID            uint      `json:"id"`
 	AnimalType    string    `json:"type"`
 	Breed         string    `json:"breed"`
 	Name          string    `json:"name"`
@@ -45,6 +46,7 @@ func AnimalConvert(animals_db []models.Animal) []AnimalSend {
 		db.Connection().Select("type").Where("id = ?", v.AnimalTypeID).First(&animalType)
 		db.Connection().Select("city").Where("id = ?", v.ShelterID).First(&shelter)
 		animal := AnimalSend{
+			ID:            v.ID,
 			AnimalType:    animalType.Type,
 			Breed:         v.Breed,
 			Name:          v.Name,
