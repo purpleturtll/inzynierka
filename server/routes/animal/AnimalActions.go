@@ -43,8 +43,8 @@ func AnimalConvert(animals_db []models.Animal) []AnimalSend {
 	var shelter models.Shelter
 
 	for _, v := range animals_db {
-		db.Connection().Select("type").Where("id = ?", v.AnimalTypeID).First(&animalType)
-		db.Connection().Select("city").Where("id = ?", v.ShelterID).First(&shelter)
+		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
+		db.Connection().Select("city").First(&shelter, v.ShelterID)
 		animal := AnimalSend{
 			ID:            v.ID,
 			AnimalType:    animalType.Type,
@@ -128,13 +128,31 @@ func Filter(c echo.Context) error {
 
 	// Przygotowanie danych do wysłania
 	animals = AnimalConvert(animals_db)
-	fmt.Print(animals)
 
 	return c.JSON(http.StatusOK, animals)
 }
 
 func Update(c echo.Context) error {
-	return nil
+	var animal models.Animal
+	obj := new(models.Animal)
+	if err := c.Bind(obj); err != nil {
+		return err
+	}
+	b, _ := json.MarshalIndent(obj, "", "\t")
+	fmt.Printf("%v\n", string(b))
+
+	result := db.Connection().First(&animal, obj.ID)
+	if result.Error == gorm.ErrRecordNotFound {
+		return c.String(http.StatusNotFound, "Not Found")
+	}
+
+	animal = *obj
+	result = db.Connection().Save(&animal)
+
+	if result.Error != nil {
+		return c.String(http.StatusInternalServerError, "Error while updating")
+	}
+	return c.String(http.StatusOK, "Updated")
 }
 
 func Delete(c echo.Context) error {
