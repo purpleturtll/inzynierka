@@ -3,12 +3,13 @@ import {
   View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, ScrollView
 } from 'react-native';
 import {Feather} from '@expo/vector-icons';
-import AppContext from '../components/AppContext'
+import { AppContext } from '../contexts/AppContext'
 
 
 const SignInScreen = ({ navigation }) => {
   const [signInError, setSignInError] = useState();
   const error = 'Niepoprawny e-mail lub hasło';
+  {/*AppContext dla ozdoby w tej chwili*/}
   const myContext = useContext(AppContext);
   
   const [data, setData] = useState({

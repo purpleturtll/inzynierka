@@ -1,16 +1,19 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, Modal, FlatList, TouchableOpacity, Button, LogBox} from 'react-native';
+import React, {useState, useContext} from 'react';
+import { View, Text, StyleSheet, Modal, FlatList, TouchableOpacity, LogBox} from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react-native';
-import AnimalCard from '../components/AnimalCard'
+import AnimalCard from '../components/AnimalCard';
+import { AnimalDataContext } from '../contexts/AnimalContext';
+import { FilterContext } from '../contexts/FilterContext';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
-const SeeMoreScreen = ({route, navigation}) => {
+const SeeMoreScreen = ({ navigation }) => {
 
+  {/*Stany GUI*/}
   const [modalOpen, setModalOpen] = useState(false);
   const [typeArrow, setTypeArrow] = useState('down');
   const [sexArrow, setSexArrow] = useState('down');
@@ -19,19 +22,12 @@ const SeeMoreScreen = ({route, navigation}) => {
   const [statusArrow, setStatusArrow] = useState('down');
 
   {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
-  const [filters, setFilters] = useState({
-    type: null,
-    sex: null,
-    location: null,
-    age: null,
-    weight: null,
-    race: null,
-    adoptable: null,
-    urgent: null
-  });
+  {/*Globalny kontekst filtrów*/}
+  const filterCtx = useContext(FilterContext);
 
+  {/*Czyści wszystkie filtry*/}
   function clearFilters() {
-    setFilters(
+    filterCtx.setFilters(
       {
         type: null,
         sex: null,
@@ -45,54 +41,72 @@ const SeeMoreScreen = ({route, navigation}) => {
     );
   }
 
+  {/*Pomocniczy enum dozwolonych pól filtrów*/}
+  const FILTER_FIELD = {
+    TYPE: 'type',
+    SEX: 'sex',
+    LOCATION: 'location',
+    STATUS: 'status',
+    AGE: 'age',
+    WEIGHT: 'weight',
+    RACE: 'race'
+  }
+
+  {/*Ustawia statusy filtrów*/}
   function setStatus(id) {
     switch(id)
     {
       case '1':
-        if(filters.urgent === false || filters.urgent == null)
-          setFilters({...filters, urgent: true});
+        if(filterCtx.filters.urgent === false || filterCtx.filters.urgent == null)
+          filterCtx.setFilters({...filterCtx.filters, urgent: true});
         else 
-          setFilters({...filters, urgent: false});
+          filterCtx.setFilters({...filterCtx.filters, urgent: false});
         break;
       case '2':
-        if(filters.adoptable === false || filters.adoptable == null)
-          setFilters({...filters, urgent: true});
+        if(filterCtx.filters.adoptable === false || filterCtx.filters.adoptable == null)
+          filterCtx.setFilters({...filterCtx.filters, adoptable: true});
         else
-          setFilters({...filters, urgent: false});
+          filterCtx.setFilters({...filterCtx.filters, adoptable: false});
         break;
       default: break;
     }
   }
 
+  {/*Ustawia wartość podanego pola*/}
   function setFilterValue(fieldName, value) {
     switch(fieldName)
     {
-      case 'type':
-        setFilters({...filters, type: value});
+      case FILTER_FIELD.TYPE:
+          filterCtx.setFilters({...filterCtx.filters, type: value});
         break;
-      case 'sex':
-        setFilters({...filters, sex: value});
+      case FILTER_FIELD.SEX:
+          filterCtx.setFilters({...filterCtx.filters, sex: value});
         break;
-      case 'location':
-        setFilters({...filters, location: value});
+      case FILTER_FIELD.LOCATION:
+          filterCtx.setFilters({...filterCtx.filters, location: value});
         break;
-      case 'status':
+      case FILTER_FIELD.STATUS:
         setStatus(value);
         break;
-      case 'age':
-        setFilters({...filters, age: value});
+      case FILTER_FIELD.AGE:
+          filterCtx.setFilters({...filterCtx.filters, age: value});
         break;
-      case 'weight':
-        setFilters({...filters, weight: value});
+      case FILTER_FIELD.WEIGHT:
+          filterCtx.setFilters({...filterCtx.filters, weight: value});
         break;
-      case 'race':
-        setFilters({...filters, race: value});
+      case FILTER_FIELD.RACE:
+          filterCtx.setFilters({...filterCtx.filters, race: value});
         break;
       default:
         break;
     }
   }
 
+  {/*Funkcja pomocnicza, do późniejszego usunięcia*/}
+  function DebugBool2String(b) {
+    return b == true ? 'true' : 'false' ;
+  }
+  
   {/*Typy zwierząt*/}
   const animalTypes = [
     {id: '1', label: 'Psy'},
@@ -125,6 +139,7 @@ const SeeMoreScreen = ({route, navigation}) => {
     {id: '4', label: '10+ lat', monthsMin: 120, monthsMax: null},
   ];
 
+  {/*Kategorie wagowe*/}
   const weightCategories = [
     {id: '1', label: 'do 5 kg'},
     {id: '2', label: '5 - 14 kg'},
@@ -133,11 +148,13 @@ const SeeMoreScreen = ({route, navigation}) => {
     {id: '5', label: '45+ kg'},
   ];
 
+  {/*Rasy kotów*/}
   const catRaces = [
     {id: '1', label: 'Europejska'},
     {id: '2', label: 'Syryjska'},
   ];
 
+  {/*Rasy psów*/}
   const dogRaces = [
     {id: '101', label: 'Amstaff/Pitbull'},
     {id: '102', label: 'Bernardyn'},
@@ -155,13 +172,14 @@ const SeeMoreScreen = ({route, navigation}) => {
     {id: '114', label: 'Inne'},
   ];
 
+  {/*Dostępne statusy*/}
   const statuses = [
     {id: '1', label: 'pilne'},
     {id: '2', label: 'do adopcji'},
   ];
 
-  {/*TODO: dane zwierząt docelowo pobierane z global store*/}
-  var animalList = route.params;
+  {/*Globalny kontekst listy zwierząt*/}
+  var animalList = useContext(AnimalDataContext).animals;
 
   return(
     <View>
@@ -237,7 +255,7 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={animalTypes}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue('type', item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.TYPE, item.id)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
               )}
@@ -260,7 +278,7 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={animalSexes}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue('sex', item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.SEX, item.id)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
               )}
@@ -283,7 +301,7 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={shelters}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue('location', item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.LOCATION, item.id)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
                 
@@ -307,7 +325,7 @@ const SeeMoreScreen = ({route, navigation}) => {
               keyExtractor={(item) => item.id }
               data={statuses}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue('status', item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.STATUS, item.id)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
               )}
@@ -327,7 +345,7 @@ const SeeMoreScreen = ({route, navigation}) => {
             keyExtractor={(item) => item.id }
             data={ageCategories}
             renderItem={({item}) => (
-              <TouchableOpacity onPress={() => setFilterValue('age', item.id)}>
+              <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.AGE, item.id)}>
                 <Label name={item.label}/>
               </TouchableOpacity>
             )}
@@ -346,7 +364,7 @@ const SeeMoreScreen = ({route, navigation}) => {
             keyExtractor={(item) => item.id }
             data={weightCategories}
             renderItem={({item}) => (
-              <TouchableOpacity onPress={() => setFilterValue('weight', item.id)}>
+              <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.WEIGHT, item.id)}>
                 <Label name={item.label}/>
               </TouchableOpacity>
             )}
@@ -370,7 +388,7 @@ const SeeMoreScreen = ({route, navigation}) => {
                 keyExtractor={(item) => item.id }
                 data={catRaces}
                 renderItem={({item}) => (
-                  <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                  <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.RACE, item.id)}>
                     <AlignedLabel name={item.label}/>
                   </TouchableOpacity>
                 )}
@@ -383,7 +401,7 @@ const SeeMoreScreen = ({route, navigation}) => {
                   keyExtractor={(item) => item.id }
                   data={dogRaces}
                   renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => setFilterValue('race', item.id)}>
+                    <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.RACE, item.id)}>
                       <AlignedLabel name={item.label}/>
                     </TouchableOpacity>
                   )}
@@ -403,15 +421,14 @@ const SeeMoreScreen = ({route, navigation}) => {
         {/*Testy stanu*/}
         <View>
           <Text style={{fontWeight: 'bold'}}>Debug</Text>
-          <Text>Typ: {filters.type}</Text>
-          <Text>Płeć: {filters.sex}</Text>
-          <Text>Lokalizacja: {filters.location}</Text>
-          <Text>Wiek: {filters.age}</Text>
-          <Text>Waga: {filters.weight}</Text>
-          <Text>Rasa: {filters.race}</Text>
-          {/*wartości typu boolean nie są renderowane*/}
-          <Text>Status pilne: {filters.urgent}</Text>
-          <Text>Status do adopcji: {filters.adoptable}</Text>
+          <Text>Typ: {filterCtx.filters.type}</Text>
+          <Text>Płeć: {filterCtx.filters.sex}</Text>
+          <Text>Lokalizacja: {filterCtx.filters.location}</Text>
+          <Text>Wiek: {filterCtx.filters.age}</Text>
+          <Text>Waga: {filterCtx.filters.weight}</Text>
+          <Text>Rasa: {filterCtx.filters.race}</Text>
+          <Text>Status pilne: {DebugBool2String(filterCtx.filters.urgent)}</Text>
+          <Text>Status do adopcji: {DebugBool2String(filterCtx.filters.adoptable)}</Text>
         </View>
         </ScrollView>
       </Modal>

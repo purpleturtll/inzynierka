@@ -1,100 +1,30 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useContext } from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
+import { AnimalDataContext } from '../contexts/AnimalContext'
 
-{/*REFACTOR: dane nie powinny być przekazywane przez propsy*/}
-export const onSeeMorePress = (navigation, animalList) => {
-  if(navigation != undefined)
-    navigation.navigate('SeeMoreScreen', animalList);
+export const onSeeMorePress = (navigation) => {
+  if(navigation != undefined) navigation.navigate('SeeMoreScreen');
 }
 
 const HomeScreen = ({ navigation }) => {
 
-  const [animals, setAnimals] = useState([
-    {
-      id: 1,
-      name: 'Angus',
-      type: 'pies',
-      race: 'mieszaniec',
-      sex: 'samiec',
-      postDate: '6/3/21',
-      favourite: true,
-      adoptable: true,
-      urgent: true,
-      weight: 9,
-      ageMonths: 156,
-      city: 'Warszawa',
-      location: 'Schronisko dla Bezdomnych Zwierząt w Warszawie',
-      takeInDate: '20-11-2020',
-      description: 'Opis Angusa',
-      imageUrl: '',
-      image: 'dog1'
-    },
-    {
-      id: 2,
-      name: 'Mruczek',
-      type: 'kot',
-      race: 'europejska',
-      sex: 'samiec',
-      postDate: '2/3/21',
-      favourite: false,
-      adoptable: true,
-      urgent: false,
-      weight: 7,
-      ageMonths: 60,
-      city: 'Otwock',
-      location: 'Schronisko dla Bezdomnych Zwierząt w Otwocku',
-      takeInDate: '24-12-2020',
-      description: 'Opis Mruczka',
-      imageUrl: '',
-      image: 'cat1'
-    },
-    {
-      id: 3,
-      name: 'Mia',
-      type: 'pies',
-      race: 'buldog',
-      sex: 'samica',
-      postDate: '1/3/21',
-      favourite: false,
-      adoptable: false,
-      urgent: true,
-      weight: 5,
-      ageMonths: 10,
-      city: 'Lublin',
-      location: 'Schronisko dla Bezdomnych Zwierząt w Lublinie',
-      takeInDate: '7-02-2021',
-      description: 'Opis Mii',
-      imageUrl: '',
-      image: 'dog2'
-    },
-  ]);
+  const animals = useContext(AnimalDataContext).animals;
 
-  const handleFavChange = (id) => {
-    animals.map(animal => {
-      if(animal.id==id){
-        setAnimals({
-          ...animals,
-          favourite: !animal.favourite,
-      });
-      }
-      console.log(animal.favourite);
-    })
+  {/*TODO: wywołania API GET*/}
+  const onFilterDogsPress = () => {
+    {/*TODO*/}
   }
 
-const onFilterDogsPress = () => {
-  {/*TODO*/}
-}
+  const onFilterCatsPress = () => {
+    {/*TODO*/}
+  }
 
-const onFilterCatsPress = () => {
-  {/*TODO*/}
-}
-
-const onFilterOtherPress = () => {
-  {/*TODO*/}
-}
+  const onFilterOtherPress = () => {
+    {/*TODO*/}
+  }
 
   return(
   <View>
@@ -166,21 +96,20 @@ const onFilterOtherPress = () => {
             <TouchableOpacity
               testID={"SeeMoreButton"} 
               style={styles.textElement}
-              onPress={() => onSeeMorePress(navigation, animals)}
+              onPress={() => onSeeMorePress(navigation)}
             >
               <Text style={styles.seeMore}>Zobacz więcej</Text>
             </TouchableOpacity>
           </View>
         </View>
         
-        {/*Lista zwierzaków*/}  
+        {/*Lista zwierzaków*/}
         <View style={styles.cardContainer}>
           {animals.map((item) => {
             return(
               <View key={item.id}>
                 <AnimalCard animal={item}
-                  navigation={navigation} 
-                  onFavChange={() => handleFavChange}
+                  navigation={navigation}
                 />
               </View>
             )
