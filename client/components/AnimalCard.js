@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import { useAnimalFavUpdate } from '../contexts/AnimalContexts';
+import { AnimalDataContext } from '../contexts/AnimalContext';
 
 export default AnimalCard = ({animal, navigation}) => {
 
@@ -10,7 +10,7 @@ export default AnimalCard = ({animal, navigation}) => {
     const [localState, setLocalState] = useState(animal);
 
     {/*funkcja aktualizująca stan globalny (kontekst AnimalDataContext)*/}
-    const updateFavourite = useAnimalFavUpdate();
+    const animalCtx = useContext(AnimalDataContext);
 
     {/*funkcja nawigująca do szczegółów zwierzaka (klik na obrazku AnimalCard)*/}
     const onAnimalPress = (anim) => {
@@ -61,7 +61,7 @@ export default AnimalCard = ({animal, navigation}) => {
             {/*stan lokalny w AnimalCard*/}
             setLocalState({...localState, favourite: !localState.favourite});
             {/*stan globalny w AnimalDataContext*/}
-            updateFavourite(localState.id);
+            animalCtx.updateFavourite(localState.id);
           }}>
             <View style={styles.heart}>
               <AntDesign name={hearts.icon[localState.favourite]} size={30} color='black'/> 

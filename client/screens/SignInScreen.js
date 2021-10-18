@@ -3,7 +3,7 @@ import {
   View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, ScrollView
 } from 'react-native';
 import {Feather} from '@expo/vector-icons';
-import AppContext from '../contexts/AppContext'
+import { AppContext } from '../contexts/AppContext'
 
 
 const SignInScreen = ({ navigation }) => {

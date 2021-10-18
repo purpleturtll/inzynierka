@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react-native';
 import AnimalCard from '../components/AnimalCard';
-import { useAnimalData } from '../contexts/AnimalContexts';
+import { AnimalDataContext } from '../contexts/AnimalContext';
 import { FilterContext } from '../contexts/FilterContext';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -179,7 +179,7 @@ const SeeMoreScreen = ({ navigation }) => {
   ];
 
   {/*Globalny kontekst listy zwierząt*/}
-  var animalList = useAnimalData();
+  var animalList = useContext(AnimalDataContext).animals;
 
   return(
     <View>

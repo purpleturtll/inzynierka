@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState} from 'react'
 
 const initState = [
   {
@@ -60,24 +60,15 @@ const initState = [
   },
 ];
 
-{/*konteksty dla danych i aktualizacji ulubionych (klik na serduszku)*/}
-const AnimalDataContext = React.createContext();
-const AnimalUpdateContext = React.createContext();
+{/*Kontekst dla danych i aktualizacji ulubionych (klik na serduszku)*/}
+export const AnimalDataContext = React.createContext();
 
-export function useAnimalData() {
-  return useContext(AnimalDataContext);
-}
-
-export function useAnimalFavUpdate() {
-    return useContext(AnimalUpdateContext);
-}
-
-{/*zarządzanie stanem i dostępem do niego*/}
+{/*Zarządzanie stanem i dostępem do niego*/}
 export const AnimalDataProvider = ({ children }) => {
 
     const [animals, setAnimals] = useState(initState);
 
-    {/*aktualizacja stanu - animal.favourite*/}
+    {/*Aktualizacja animal.favourite*/}
     function updateFavourite(id) {
       
       animals.map(animal => {
@@ -98,10 +89,8 @@ export const AnimalDataProvider = ({ children }) => {
     }
 
     return(
-        <AnimalDataContext.Provider value={animals}>
-            <AnimalUpdateContext.Provider value={updateFavourite}>
-                {children}
-            </AnimalUpdateContext.Provider>
+        <AnimalDataContext.Provider value={{ animals, setAnimals, updateFavourite }}>
+            {children}
         </AnimalDataContext.Provider>
       );
 }

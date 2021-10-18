@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
-import { useAnimalData } from '../contexts/AnimalContexts'
+import { AnimalDataContext } from '../contexts/AnimalContext'
 
 export const onSeeMorePress = (navigation) => {
   if(navigation != undefined) navigation.navigate('SeeMoreScreen');
@@ -11,7 +11,7 @@ export const onSeeMorePress = (navigation) => {
 
 const HomeScreen = ({ navigation }) => {
 
-  const animals = useAnimalData();
+  const animals = useContext(AnimalDataContext).animals;
 
   {/*TODO: wywołania API GET*/}
   const onFilterDogsPress = () => {

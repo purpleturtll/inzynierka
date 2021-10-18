@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { View,  StyleSheet, FlatList, Text } from 'react-native';
 import AnimalCard from '../components/AnimalCard'
-import { useAnimalData } from '../contexts/AnimalContexts';
+import { AnimalDataContext } from '../contexts/AnimalContext';
 
 const FollowedAnimalsScreen = ({ navigation }) => {
   
-  const favourites = useAnimalData().filter(function(item){return item.favourite == true});
-  
-  const [state, setState] = useState(favourites);
+  const animalCtx = useContext(AnimalDataContext);
+  const favourites = animalCtx.animals.filter(function(item){return item.favourite == true});
 
   function CountToPolish(count) {
     switch(count)

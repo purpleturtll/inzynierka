@@ -22,7 +22,7 @@ import DeleteAccountScreen from '../screens/DeleteAccountScreen';
 import DeletedAccountScreen from '../screens/DeletedAccountScreen';
 import AnimalDetailsScreen from '../screens/AnimalDetailsScreen';
 import SeeMoreScreen from '../screens/SeeMoreScreen';
-import { AnimalDataProvider } from '../contexts/AnimalContexts';
+import { AnimalDataProvider } from '../contexts/AnimalContext';
 
 const Stack = createStackNavigator();
 
