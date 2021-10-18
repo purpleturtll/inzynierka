@@ -5,7 +5,6 @@ import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
 import { useAnimalData } from '../contexts/AnimalContexts'
 
-{/*REFACTOR: dane nie powinny być przekazywane przez propsy*/}
 export const onSeeMorePress = (navigation) => {
   if(navigation != undefined) navigation.navigate('SeeMoreScreen');
 }
@@ -14,7 +13,7 @@ const HomeScreen = ({ navigation }) => {
 
   const animals = useAnimalData();
 
-  {/*TODO: globalne zarządzanie stanem filtrów*/}
+  {/*TODO: wywołania API GET*/}
   const onFilterDogsPress = () => {
     {/*TODO*/}
   }
@@ -104,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
         
-        {/*Lista zwierzaków*/}  
+        {/*Lista zwierzaków*/}
         <View style={styles.cardContainer}>
           {animals.map((item) => {
             return(
