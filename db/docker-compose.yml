@@ -1,0 +1,14 @@
+version: '3.2'
+
+services:
+  db:
+    build: .
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: 1qaz@WSX3
+      MSSQL_DB: INZ_DB
+      MSSQL_USER: admin
+      MSSQL_PASSWORD: jHsjH42Hj
+    ports:
+      - "1433:1433"
+    container_name: inz-db
