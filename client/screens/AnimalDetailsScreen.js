@@ -9,23 +9,23 @@ const AnimalDetailsScreen = ({ route, navigation, onFavChange }) => {
 
   {/*TODO: Dane powinny być przechowywane globalnie, to tymczasowy antywzorzec - https://reactnavigation.org/docs/params/ */}
   const {
-      id, // brak w modelu, bazodanowe id będzie cacy (?)
-      name, // "name"
-      type, // "animal_type"
-      race, // "breed"
-      sex, // "sex"
-      postDate, // brak w modelu (?)
-      favourite, // "fav_animal" (potrzebny bool dla pojedynczego usera) (?)
-      adoptable, // "adoptable"
-      urgent, // "recently_found" (?)
-      weight, // "weight"
-      ageMonths, // "age"
-      city, // brak w modelu (?)
-      location, // "shelter_id" (?)
-      takeInDate, // "admission_date"
-      description, // "description"
-      imageUrl, // potrzebujemy osobny model na obrazek (?)
-      image // tmp statyczna ścieżka do obrazka (do wyrzucenia)
+      id, // id
+      name, // name
+      type, // type
+      race, // breed
+      sex, // sex
+      postDate, // to be removed
+      favourite, // gorm:"many2many:fav_animal"
+      adoptable, // adoptable
+      urgent, // recently_found
+      weight, // weight
+      ageMonths, // age
+      city, // city
+      location, // to be removed
+      takeInDate, // admission_date
+      description, // description
+      imageUrl, // TODO
+      image // to be removed
   } = route.params;
 
   const images = {
