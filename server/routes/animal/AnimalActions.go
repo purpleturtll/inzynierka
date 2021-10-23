@@ -15,7 +15,7 @@ import (
 )
 
 // Wielkość strony do wysłania
-const pageSize = 2
+const pageSize = 10
 
 // Struktura z danymi do wysłania
 type AnimalSend struct {

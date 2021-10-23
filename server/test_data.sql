@@ -283,7 +283,7 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
+           ,1
            ,N'mieszaniec'
            ,N'Angus'
            ,0
@@ -300,7 +300,7 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
+           ,1
            ,N'bulldog'
            ,N'Łajka'
            ,1
@@ -317,7 +317,7 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,1
+           ,2
            ,N'mieszaniec'
            ,N'Mruczek'
            ,2
@@ -334,7 +334,7 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,3
+           ,4
            ,N'gekon'
            ,N'Marcin'
            ,1
@@ -351,7 +351,7 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
+           ,1
            ,N'jamnik'
            ,N'Radosław'
            ,0
