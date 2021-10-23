@@ -286,7 +286,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'mieszaniec'
            ,N'Angus'
-           ,0
+           ,1
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,5
@@ -303,7 +303,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'bulldog'
            ,N'Łajka'
-           ,1
+           ,2
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,8
@@ -320,7 +320,7 @@ INSERT INTO [dbo].[animals]
            ,2
            ,N'mieszaniec'
            ,N'Mruczek'
-           ,2
+           ,3
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,3
@@ -337,7 +337,7 @@ INSERT INTO [dbo].[animals]
            ,4
            ,N'gekon'
            ,N'Marcin'
-           ,1
+           ,2
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,4
@@ -354,7 +354,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'jamnik'
            ,N'Radosław'
-           ,0
+           ,1
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,7
