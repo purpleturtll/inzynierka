@@ -4,13 +4,14 @@ import {
 } from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import { AppContext } from '../contexts/AppContext'
+import { AnimalDataContext } from '../contexts/AnimalContext';
 
 
 const SignInScreen = ({ navigation }) => {
   const [signInError, setSignInError] = useState();
   const error = 'Niepoprawny e-mail lub hasło';
-  {/*AppContext dla ozdoby w tej chwili*/}
-  const myContext = useContext(AppContext);
+  var appCtx = useContext(AppContext);
+  var animalCtx = useContext(AnimalDataContext);
   
   const [data, setData] = useState({
     email: '',
@@ -53,10 +54,10 @@ const SignInScreen = ({ navigation }) => {
     setData({
       ...data,
       secureTextEntry: !data.secureTextEntry
-    })
+    });
   }
 
-  const onSignInPress = () => {
+  async function onSignInPress() {
 
     if(data.email == ""){
       setSignInError('E-mail nie może być pusty')
@@ -66,26 +67,41 @@ const SignInScreen = ({ navigation }) => {
       setSignInError('Hasło nie może być puste')
       return
     }
-    else if(data.password.length < 8){
+    //Długość tymczasowo zmieniona na 3 dla wygody testowania
+    else if(data.password.length < 3){
       setSignInError(error)
       return
     }
-    const res = fetch('http://10.0.2.2:8080/auth/login', {
+
+    var status, tokenStr = null;
+    const res = await fetch('http://192.168.1.70:8080/auth/login', {
       body: JSON.stringify({
         email: data.email,
         password: data.password
       }), 
       headers: {"Content-Type": "application/json"},
       method:'POST'
-    }).then((response)=>{
-      if(response.status==200){
-        navigation.navigate('AccountScreen')
+    })
+    .then(response => {
+      status = response.status;
+      return response.json();
+    })
+    .then(body => {
+      var jsonStr = JSON.stringify(body);
+      tokenStr = JSON.parse(jsonStr).token;
+      if(status == 200){
+        appCtx.setLoggedIn(true);
+        console.log('Received auth token: \n' + tokenStr);
+        appCtx.setUserToken(tokenStr);
+        navigation.navigate('AccountScreen');
       }
-      else if(response.status==401){
+      else if(status == 401){
         setSignInError(error);
       }
-    })
+    });
+    if(tokenStr) animalCtx.updateAnimals(tokenStr);
   }
+
   return(
     <ScrollView style={styles.container}>
       <View style={styles.header}>

@@ -4,15 +4,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./navigation/TabNavigator";
 import { AppDataProvider } from './contexts/AppContext';
 import { FilterDataProvider } from './contexts/FilterContext';
+import { AnimalDataProvider } from './contexts/AnimalContext';
 
 const App = () => {
   return (
     <AppDataProvider>
-      {/* All other components are wrapped by the AppContext and FilterContext providers*/}
+      {/*Context wrapping*/}
       <FilterDataProvider>
-        <NavigationContainer>
-          <BottomTabNavigator />
-        </NavigationContainer>
+        <AnimalDataProvider>
+          <NavigationContainer>
+            <BottomTabNavigator />
+          </NavigationContainer>
+        </AnimalDataProvider>
       </FilterDataProvider>
     </AppDataProvider>
   );

@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import { AppContext } from './AppContext'
 
 const initState = [
   {
@@ -67,6 +68,39 @@ export const AnimalDataContext = React.createContext();
 export const AnimalDataProvider = ({ children }) => {
 
     const [animals, setAnimals] = useState(initState);
+    var appCtx = useContext(AppContext);
+
+    useEffect(() => {
+      console.log('new userToken set on AnimalCtx: ' + appCtx.userToken);
+    }, [appCtx.userToken]);
+
+    useEffect(() => {
+      console.log('new loggedIn set on AnimalCtx: ' + (appCtx.loggedIn ? 'true' : 'false'));
+    }, [appCtx.loggedIn]);
+
+    {/*GET /animal/read*/}
+    function getAnimals(tokenStr) {
+      var respBody = null;
+      console.log('getAnimals() request token: ' + tokenStr);
+      var res = fetch('http://192.168.1.70:8080/animal/read', {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + tokenStr
+        },
+        method: 'GET'})
+        .then(response => { return response.json() })
+        .then(data => {
+          var jsonStr = JSON.stringify(data);
+          respBody = JSON.parse(jsonStr);
+          console.log('getAnimals() received: \n' + jsonStr);
+        });
+        
+      return respBody != null ? respBody : initState;
+    }
+
+    function updateAnimals(tokenStr) {
+      setAnimals(getAnimals(tokenStr));
+    }
 
     {/*Aktualizacja animal.favourite*/}
     function updateFavourite(id) {
@@ -80,7 +114,7 @@ export const AnimalDataProvider = ({ children }) => {
           animalCopy.favourite = !animalCopy.favourite;
           animalsCopy[index] = animalCopy;
           setAnimals(animalsCopy);
-          console.log("setAnimals called for id: " + id);
+          console.log("updateFavourite called for id: " + id);
           animals.forEach(a => {
             console.log("name: " + a.name + ", fav: " + a.favourite);
           });
@@ -89,7 +123,7 @@ export const AnimalDataProvider = ({ children }) => {
     }
 
     return(
-        <AnimalDataContext.Provider value={{ animals, setAnimals, updateFavourite }}>
+        <AnimalDataContext.Provider value={{ animals, setAnimals, updateAnimals, updateFavourite }}>
             {children}
         </AnimalDataContext.Provider>
       );
