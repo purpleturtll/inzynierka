@@ -6,27 +6,41 @@ import { AnimalDataContext } from '../contexts/AnimalContext';
 
 export default AnimalCard = ({animal, navigation}) => {
 
-    {/*stan lokalny zwierzaka, potrzebny do poprawnego renderingu*/}
+    {/*Stan lokalny zwierzaka, potrzebny do poprawnego renderingu*/}
     const [localState, setLocalState] = useState(animal);
 
-    {/*funkcja aktualizująca stan globalny (kontekst AnimalDataContext)*/}
+    {/*Kontekst zwierząt*/}
     const animalCtx = useContext(AnimalDataContext);
 
-    {/*funkcja nawigująca do szczegółów zwierzaka (klik na obrazku AnimalCard)*/}
-    const onAnimalPress = (anim) => {
+    {/*Funkcja nawigująca do AnimalDetailsScreen (klik na obrazku AnimalCard)*/}
+    function onAnimalPress(anim) {
         navigation.navigate('AnimalDetailsScreen', anim);
     }
+
+    {/*Pomocnicza*/}
+    function age2Polish(age) {
+      switch(age) {
+        case 1: 
+          return 'rok';
+        case 2:
+        case 3:
+        case 4:
+          return 'lata';
+        default:
+          return 'lat';
+      }
+    }
   
-    {/*mapowanie obrazów po animal.image (HomeScreen.js, tymczasowe)*/}
+    {/*Mapowanie obrazów po animal.type (HomeScreen.js, tymczasowe)*/}
     const images = {
       animalType: {
-        'cat1': require('../assets/cat_1.jpg'),
-        'dog1': require('../assets/dog_1.jpg'),
-        'dog2': require('../assets/dog_2.jpg'),
+        'kot': require('../assets/cat_1.jpg'),
+        'pies': require('../assets/dog_1.jpg'),
+        'gad': require('../assets/dog_2.jpg'),
       }
     }
 
-    {/*nazwy ikon serduszek*/}
+    {/*Nazwy ikon serduszek*/}
     const hearts = {
       icon: {
         true: 'heart',
@@ -34,12 +48,12 @@ export default AnimalCard = ({animal, navigation}) => {
       }
     }
   
-    {/*karta*/}
+    {/*Karta*/}
     return(
       <View style={styles.card}>
         <TouchableOpacity onPress={() => onAnimalPress(localState)}>
           <Image 
-            source={images.animalType[localState.image]}
+            source={images.animalType[localState.type]}
             style={styles.image}
           />
         </TouchableOpacity>
@@ -50,11 +64,11 @@ export default AnimalCard = ({animal, navigation}) => {
             {/*tytuł*/}
             <View style={styles.headline}>
               <Text style={styles.headlineName}>{localState.name} </Text>
-              <Text style={styles.headlineDate}>{localState.postDate}</Text>
+              <Text style={styles.headlineDate}>{localState.admission_date}</Text>
             </View>
             {/*TODO: wyświetlanie wieku w miesiącach*/}
-            <Text>{localState.race}</Text>
-            <Text>{localState.sex}, {(localState.ageMonths/12).toFixed(0)} lat, {localState.weight} kg</Text>
+            <Text>{localState.breed}</Text>
+            <Text>{localState.sex}, {localState.age} {age2Polish(localState.age)}, {localState.weight} kg</Text>
           </View>
           {/*kolor serduszka #ff4242*/}
           <TouchableOpacity onPress={() => {

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const StatusDataRow = ({ status }) => {
-    if(status.adoptable && status.urgent)
+    if(status.adoptable && status.recently_found)
     {
         return(
             <View style={styles.rowView}>
@@ -34,7 +34,7 @@ const StatusDataRow = ({ status }) => {
             </View>
         );
     }
-    else if(status.urgent)
+    else if(status.recently_found)
     {
         return(
             <View style={styles.rowView}>

@@ -1,63 +1,63 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { AppContext } from './AppContext'
 
-const initState = [
+const emergencyState = [
   {
     id: 1,
     name: 'Angus',
     type: 'pies',
-    race: 'mieszaniec',
+    breed: 'mieszaniec',
     sex: 'samiec',
-    postDate: '6/3/21',
     favourite: true,
     adoptable: true,
-    urgent: true,
+    recently_found: true,
     weight: 9,
-    ageMonths: 156,
+    age: 156,
     city: 'Warszawa',
-    location: 'Schronisko dla Bezdomnych Zwierząt w Warszawie',
-    takeInDate: '20-11-2020',
+    admission_date: '20-11-2020',
     description: 'Opis Angusa',
     imageUrl: '',
-    image: 'dog1'
+    chip_number: 'A1234',
+    is_sterilized: false,
+    is_vaccinated: true
   },
   {
     id: 2,
     name: 'Mruczek',
     type: 'kot',
-    race: 'europejska',
+    breed: 'europejska',
     sex: 'samiec',
-    postDate: '2/3/21',
     favourite: false,
     adoptable: true,
-    urgent: false,
+    recently_found: false,
     weight: 7,
-    ageMonths: 60,
+    age: 60,
     city: 'Otwock',
-    location: 'Schronisko dla Bezdomnych Zwierząt w Otwocku',
-    takeInDate: '24-12-2020',
+    admission_date: '24-12-2020',
     description: 'Opis Mruczka',
     imageUrl: '',
-    image: 'cat1'
+    chip_number: 'B2345',
+    is_sterilized: false,
+    is_vaccinated: true
   },
   {
     id: 3,
     name: 'Mia',
     type: 'pies',
-    race: 'buldog',
+    breed: 'buldog',
     sex: 'samica',
-    postDate: '1/3/21',
     favourite: false,
     adoptable: false,
-    urgent: true,
+    recently_found: true,
     weight: 5,
-    ageMonths: 10,
+    age: 10,
     city: 'Lublin',
-    location: 'Schronisko dla Bezdomnych Zwierząt w Lublinie',
-    takeInDate: '7-02-2021',
+    admission_date: '7-02-2021',
     description: 'Opis Mii',
     imageUrl: '',
-    image: 'dog2'
+    chip_number: 'C3456',
+    is_sterilized: false,
+    is_vaccinated: true
   },
 ];
 
@@ -67,7 +67,7 @@ export const AnimalDataContext = React.createContext();
 {/*Zarządzanie stanem i dostępem do niego*/}
 export const AnimalDataProvider = ({ children }) => {
 
-    const [animals, setAnimals] = useState(initState);
+    const [animals, setAnimals] = useState([]);
     var appCtx = useContext(AppContext);
 
     useEffect(() => {
@@ -78,11 +78,15 @@ export const AnimalDataProvider = ({ children }) => {
       console.log('new loggedIn set on AnimalCtx: ' + (appCtx.loggedIn ? 'true' : 'false'));
     }, [appCtx.loggedIn]);
 
+    useEffect(() => {
+      console.log('new animals set on AnimalCtx: \n' + JSON.stringify(animals));
+    }, [animals]);
+
     {/*GET /animal/read*/}
-    function getAnimals(tokenStr) {
+    async function getAnimals(tokenStr) {
       var respBody = null;
       console.log('getAnimals() request token: ' + tokenStr);
-      var res = fetch('http://192.168.1.70:8080/animal/read', {
+      var res = await fetch('http://192.168.1.70:8080/animal/read', {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + tokenStr
@@ -95,11 +99,21 @@ export const AnimalDataProvider = ({ children }) => {
           console.log('getAnimals() received: \n' + jsonStr);
         });
         
-      return respBody != null ? respBody : initState;
+      return respBody != null ? respBody : emergencyState;
     }
 
-    function updateAnimals(tokenStr) {
-      setAnimals(getAnimals(tokenStr));
+    async function updateAnimals(tokenStr) {
+      var animals = await getAnimals(tokenStr);
+      console.log('animals object:\n' + JSON.stringify(animals));
+      //TODO: animal.favourite & obrazki z bazy, temp solution
+      animals.forEach( (animal) => {
+        if(animal.id < 3) animal.favourite = true;
+        else animal.favourite = false;
+        //wycięcie daty
+        animal.admission_date = animal.admission_date.substring(0, 10);
+      });
+      setAnimals([]);
+      setAnimals(animals);
     }
 
     {/*Aktualizacja animal.favourite*/}

@@ -5,34 +5,33 @@ import { AntDesign } from '@expo/vector-icons';
 import DataRow from '../components/DataRow';
 import StatusDataRow from '../components/StatusDataRow'
 
-const AnimalDetailsScreen = ({ route, navigation, onFavChange }) => {
+const AnimalDetailsScreen = ({ route, navigation }) => {
 
-  {/*TODO: Dane powinny być przechowywane globalnie, to tymczasowy antywzorzec - https://reactnavigation.org/docs/params/ */}
   const {
-      id, // id
-      name, // name
-      type, // type
-      race, // breed
-      sex, // sex
-      postDate, // to be removed
-      favourite, // gorm:"many2many:fav_animal"
-      adoptable, // adoptable
-      urgent, // recently_found
-      weight, // weight
-      ageMonths, // age
-      city, // city
-      location, // to be removed
-      takeInDate, // admission_date
-      description, // description
+      id,
+      name, // TODO
+      type,
+      breed,
+      sex,
+      favourite, // TODO
+      adoptable,
+      recently_found,
+      weight,
+      age,
+      city,
+      admission_date,
+      description,
       imageUrl, // TODO
-      image // to be removed
+      chip_number,
+      is_sterilized,
+      is_vaccinated
   } = route.params;
 
   const images = {
     animalType: {
-      'cat1': require('../assets/cat_1.jpg'),
-      'dog1': require('../assets/dog_1.jpg'),
-      'dog2': require('../assets/dog_2.jpg'),
+      'kot': require('../assets/cat_1.jpg'),
+      'pies': require('../assets/dog_1.jpg'),
+      'gad': require('../assets/dog_2.jpg'),
     }
   }
 
@@ -42,7 +41,7 @@ const AnimalDetailsScreen = ({ route, navigation, onFavChange }) => {
         <View style={styles.container}>
         <View style={styles.imageView}>
           <Image 
-            source={images.animalType[image]}
+            source={images.animalType[type]}
             style={styles.image}
           />
         </View>
@@ -52,14 +51,18 @@ const AnimalDetailsScreen = ({ route, navigation, onFavChange }) => {
             <HeartIcon favourite={favourite}/>
           </View>
         </View>
-        <DataRow label={'W typie rasy'} data={race}/>
+        <DataRow label={'W typie rasy'} data={breed}/>
         <DataRow label={'Płeć'} data={sex}/>
         {/*TODO - status*/}
-        <StatusDataRow status={{adoptable, urgent}}/>
+        <StatusDataRow status={{adoptable, recently_found}}/>
         <DataRow label={'Waga'} data={weight}/>
-        <DataRow label={'Wiek'} data={ageMonths}/>
-        <DataRow label={'Lokalizacja'} data={location}/>
-        <DataRow label={'Data przyjęcia'} data={takeInDate}/>
+        <DataRow label={'Wiek'} data={age}/>
+        <DataRow label={'Lokalizacja'} data={city}/>
+        <DataRow label={'Data przyjęcia'} data={admission_date}/>
+        <DataRow label={'Chip'} data={chip_number}></DataRow>
+        <DataRow label={'Szczepienia'} data={is_vaccinated}></DataRow>
+        <DataRow label={'Sterylizacja'} data={is_sterilized}></DataRow>
+        <DataRow label={'Opis'} data={description}></DataRow>
       </View>
       </ScrollView>
     </View>
@@ -68,22 +71,11 @@ const AnimalDetailsScreen = ({ route, navigation, onFavChange }) => {
 export default AnimalDetailsScreen;
 
 const HeartIcon = ({favourite}) => {
-  if(favourite)
-  {
     return(
         <View>
-          <AntDesign name={'heart'} size={30} color='black'/> 
+          <AntDesign name={favourite ? 'heart' : 'hearto'} size={30} color='black'/> 
         </View>
     );
-  }
-  else 
-  {
-    return(
-        <View>
-          <AntDesign name={'hearto'} size={30} color='black'/> 
-        </View>
-    );
-  }
 }
 
 //granatowy - #362893

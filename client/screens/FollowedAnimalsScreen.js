@@ -5,8 +5,11 @@ import { AnimalDataContext } from '../contexts/AnimalContext';
 
 const FollowedAnimalsScreen = ({ navigation }) => {
   
-  const animalCtx = useContext(AnimalDataContext);
-  const favourites = animalCtx.animals.filter(function(item){return item.favourite == true});
+  const favourites = useContext(AnimalDataContext).animals.filter(
+    function(item){return item.favourite == true}
+  );
+
+  //TODO: działające useEffect do aktualizacji
 
   function CountToPolish(count) {
     switch(count)
@@ -22,7 +25,7 @@ const FollowedAnimalsScreen = ({ navigation }) => {
       <View style={styles.header}>
 
         {/*Lista zwierzaków*/}  
-        <View style={{alignItems: 'center'}}>
+        <View style={styles.list}>
           <Text style={styles.infoText}>{CountToPolish(favourites.length)}</Text>
           <FlatList 
             showsVerticalScrollIndicator={false}
@@ -50,7 +53,13 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: '#fff'
   },
-
+  header: {
+    marginBottom: 10
+  },
+  list: {
+    alignItems: 'center',
+    marginBottom: 100
+  },
   button:{
     backgroundColor: '#E2E1E1',
     padding: 10,
