@@ -34,17 +34,31 @@ type AnimalSend struct {
 	RecentlyFound bool      `json:"recently_found"`
 	IsSterilized  bool      `json:"is_sterilized"`
 	IsVaccinated  bool      `json:"is_vaccinated"`
+	IsFavourite   bool      `json:"favourite"`
 }
 
-// Przenoszenie danych ze structa Animal do AnimalSend
-func AnimalConvert(animals_db []models.Animal) []AnimalSend {
+// Przenoszenie danych ze structa Animal do AnimalSend z 'favourite' dla user_id z parametru user-id (domyślnie 'false')
+func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	var animals []AnimalSend
 	var animalType models.AnimalType
 	var shelter models.Shelter
+	var fav_animal []models.Animal
+	var IsFav bool
 
 	for _, v := range animals_db {
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
 		db.Connection().Select("city").First(&shelter, v.ShelterID)
+		//znajdź rekord z powiązaniem z tabeli fav_animal
+		fav_assoc := db.Connection().Joins("LEFT JOIN fav_animal ON fav_animal.animal_id = animals.id").Where("id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
+		if user_id == "" {
+			IsFav = false
+		} else {
+			if fav_assoc.RowsAffected == 0 {
+				IsFav = false
+			} else {
+				IsFav = true
+			}
+		}
 		animal := AnimalSend{
 			ID:            v.ID,
 			AnimalType:    animalType.Type,
@@ -61,6 +75,7 @@ func AnimalConvert(animals_db []models.Animal) []AnimalSend {
 			RecentlyFound: v.RecentlyFound,
 			IsSterilized:  v.IsSterilized,
 			IsVaccinated:  v.IsVaccinated,
+			IsFavourite:   IsFav,
 		}
 		animals = append(animals, animal)
 	}
@@ -106,6 +121,7 @@ func Filter(c echo.Context) error {
 	var animals_db []models.Animal
 	var animals []AnimalSend
 
+	user_id := c.QueryParam("user-id")
 	animalType := c.QueryParam("animal-type")
 	sex := c.QueryParam("sex")
 	city := c.QueryParam("city")
@@ -127,8 +143,7 @@ func Filter(c echo.Context) error {
 	}
 
 	// Przygotowanie danych do wysłania
-	animals = AnimalConvert(animals_db)
-
+	animals = AnimalConvert(animals_db, user_id)
 	return c.JSON(http.StatusOK, animals)
 }
 
