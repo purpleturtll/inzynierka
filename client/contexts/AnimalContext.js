@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import { AppContext } from './AppContext'
+import { UserContext } from './UserContext'
 
 const emergencyState = [
   {
@@ -68,30 +68,32 @@ export const AnimalDataContext = React.createContext();
 export const AnimalDataProvider = ({ children }) => {
 
     const [animals, setAnimals] = useState([]);
-    var appCtx = useContext(AppContext);
+    var userCtx = useContext(UserContext);
 
     useEffect(() => {
-      console.log('new userToken set on AnimalCtx: ' + appCtx.userToken);
-    }, [appCtx.userToken]);
+      console.log('new token set on AnimalCtx: ' + userCtx.userToken);
+    }, [userCtx.userToken]);
 
     useEffect(() => {
-      console.log('new loggedIn set on AnimalCtx: ' + (appCtx.loggedIn ? 'true' : 'false'));
-    }, [appCtx.loggedIn]);
+      console.log('new loggedIn set on AnimalCtx: ' + (userCtx.loggedIn ? 'true' : 'false'));
+    }, [userCtx.loggedIn]);
 
     useEffect(() => {
       console.log('new animals set on AnimalCtx: \n' + JSON.stringify(animals));
     }, [animals]);
 
     {/*GET /animal/read*/}
-    async function getAnimals(tokenStr) {
+    async function getAnimals(tokenStr, user_id) {
       var respBody = null;
-      console.log('getAnimals() request token: ' + tokenStr);
-      var res = await fetch('http://192.168.1.70:8080/animal/read', {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + tokenStr
-        },
-        method: 'GET'})
+      console.log('getAnimals() request token: ' + tokenStr + " user id: " + user_id);
+      var res = await fetch('http://192.168.1.70:8080/animal/read?' + new URLSearchParams({"user-id": user_id}),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + tokenStr
+          },
+          method: 'GET'
+        })
         .then(response => { return response.json() })
         .then(data => {
           var jsonStr = JSON.stringify(data);
@@ -102,13 +104,11 @@ export const AnimalDataProvider = ({ children }) => {
       return respBody != null ? respBody : emergencyState;
     }
 
-    async function updateAnimals(tokenStr) {
-      var animals = await getAnimals(tokenStr);
+    async function updateAnimals(tokenStr, user_id) {
+      var animals = await getAnimals(tokenStr, user_id);
       console.log('animals object:\n' + JSON.stringify(animals));
-      //TODO: animal.favourite & obrazki z bazy, temp solution
+      //TODO: obrazki z bazy, temp solution
       animals.forEach( (animal) => {
-        if(animal.id < 3) animal.favourite = true;
-        else animal.favourite = false;
         //wycięcie daty
         animal.admission_date = animal.admission_date.substring(0, 10);
       });

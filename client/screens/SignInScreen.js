@@ -3,14 +3,14 @@ import {
   View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, ScrollView
 } from 'react-native';
 import {Feather} from '@expo/vector-icons';
-import { AppContext } from '../contexts/AppContext'
+import { UserContext } from '../contexts/UserContext'
 import { AnimalDataContext } from '../contexts/AnimalContext';
 
 
 const SignInScreen = ({ navigation }) => {
   const [signInError, setSignInError] = useState();
   const error = 'Niepoprawny e-mail lub hasło';
-  var appCtx = useContext(AppContext);
+  var userCtx = useContext(UserContext);
   var animalCtx = useContext(AnimalDataContext);
   
   const [data, setData] = useState({
@@ -73,7 +73,7 @@ const SignInScreen = ({ navigation }) => {
       return
     }
 
-    var status, tokenStr = null;
+    var status, tokenStr = null, user_id = null;
     const res = await fetch('http://192.168.1.70:8080/auth/login', {
       body: JSON.stringify({
         email: data.email,
@@ -88,18 +88,23 @@ const SignInScreen = ({ navigation }) => {
     })
     .then(body => {
       var jsonStr = JSON.stringify(body);
-      tokenStr = JSON.parse(jsonStr).token;
+      var jsonObj = JSON.parse(jsonStr);
+      tokenStr = jsonObj.token;
+      user_id = jsonObj.user_id;
       if(status == 200){
-        appCtx.setLoggedIn(true);
-        console.log('Received auth token: \n' + tokenStr);
-        appCtx.setUserToken(tokenStr);
+        userCtx.setUserData({
+          loggedIn: true,
+          token: tokenStr,
+          userId: user_id
+        });
+        console.log('Received auth token: \n' + tokenStr + 'for user ' + user_id);
         navigation.navigate('AccountScreen');
       }
       else if(status == 401){
         setSignInError(error);
       }
     });
-    if(tokenStr) animalCtx.updateAnimals(tokenStr);
+    if(tokenStr && user_id) animalCtx.updateAnimals(tokenStr, user_id);
   }
 
   return(

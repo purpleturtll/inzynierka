@@ -2,13 +2,13 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./navigation/TabNavigator";
-import { AppDataProvider } from './contexts/AppContext';
+import { UserDataProvider } from './contexts/UserContext';
 import { FilterDataProvider } from './contexts/FilterContext';
 import { AnimalDataProvider } from './contexts/AnimalContext';
 
 const App = () => {
   return (
-    <AppDataProvider>
+    <UserDataProvider>
       {/*Context wrapping*/}
       <FilterDataProvider>
         <AnimalDataProvider>
@@ -17,7 +17,7 @@ const App = () => {
           </NavigationContainer>
         </AnimalDataProvider>
       </FilterDataProvider>
-    </AppDataProvider>
+    </UserDataProvider>
   );
 }
 export default App;
