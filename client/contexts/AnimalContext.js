@@ -1,66 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { UserContext } from './UserContext'
 
-const emergencyState = [
-  {
-    id: 1,
-    name: 'Angus',
-    type: 'pies',
-    breed: 'mieszaniec',
-    sex: 'samiec',
-    favourite: true,
-    adoptable: true,
-    recently_found: true,
-    weight: 9,
-    age: 156,
-    city: 'Warszawa',
-    admission_date: '20-11-2020',
-    description: 'Opis Angusa',
-    imageUrl: '',
-    chip_number: 'A1234',
-    is_sterilized: false,
-    is_vaccinated: true
-  },
-  {
-    id: 2,
-    name: 'Mruczek',
-    type: 'kot',
-    breed: 'europejska',
-    sex: 'samiec',
-    favourite: false,
-    adoptable: true,
-    recently_found: false,
-    weight: 7,
-    age: 60,
-    city: 'Otwock',
-    admission_date: '24-12-2020',
-    description: 'Opis Mruczka',
-    imageUrl: '',
-    chip_number: 'B2345',
-    is_sterilized: false,
-    is_vaccinated: true
-  },
-  {
-    id: 3,
-    name: 'Mia',
-    type: 'pies',
-    breed: 'buldog',
-    sex: 'samica',
-    favourite: false,
-    adoptable: false,
-    recently_found: true,
-    weight: 5,
-    age: 10,
-    city: 'Lublin',
-    admission_date: '7-02-2021',
-    description: 'Opis Mii',
-    imageUrl: '',
-    chip_number: 'C3456',
-    is_sterilized: false,
-    is_vaccinated: true
-  },
-];
-
 {/*Kontekst dla danych i aktualizacji ulubionych (klik na serduszku)*/}
 export const AnimalDataContext = React.createContext();
 
@@ -68,25 +8,16 @@ export const AnimalDataContext = React.createContext();
 export const AnimalDataProvider = ({ children }) => {
 
     const [animals, setAnimals] = useState([]);
-    var userCtx = useContext(UserContext);
-
-    useEffect(() => {
-      console.log('new token set on AnimalCtx: ' + userCtx.userToken);
-    }, [userCtx.userToken]);
-
-    useEffect(() => {
-      console.log('new loggedIn set on AnimalCtx: ' + (userCtx.loggedIn ? 'true' : 'false'));
-    }, [userCtx.loggedIn]);
+    const userCtx = useContext(UserContext);
 
     useEffect(() => {
       console.log('new animals set on AnimalCtx: \n' + JSON.stringify(animals));
     }, [animals]);
 
     {/*GET /animal/read*/}
-    async function getAnimals(tokenStr, user_id) {
-      var respBody = null;
-      console.log('getAnimals() request token: ' + tokenStr + " user id: " + user_id);
-      var res = await fetch('http://192.168.1.70:8080/animal/read?' + new URLSearchParams({"user-id": user_id}),
+    async function getAnimals(tokenStr, params) {
+      var animals = [], status = null, newJwt = null;
+      var res = await fetch('http://192.168.1.70:8080/animal/read?' + params,
         {
           headers: {
             "Content-Type": "application/json",
@@ -94,19 +25,43 @@ export const AnimalDataProvider = ({ children }) => {
           },
           method: 'GET'
         })
-        .then(response => { return response.json() })
-        .then(data => {
-          var jsonStr = JSON.stringify(data);
-          respBody = JSON.parse(jsonStr);
-          console.log('getAnimals() received: \n' + jsonStr);
+        .then(response => { 
+          status = response.status;
+          return response.json();
+        })
+        .then(async (data) => {
+          switch(status) {
+            case 200:
+              // OK
+              var jsonStr = JSON.stringify(data);
+              animals = JSON.parse(jsonStr);
+              console.log('getAnimals() received: \n' + jsonStr);
+              break;
+            case 401: 
+              // jwt expired
+              if(userCtx.userData.email) {
+                var {newToken, userId} = await userCtx.relogin();
+                animals = [];
+                newJwt = newToken;
+                console.log('Refreshed jwt token for user ' + userId + ':\n' + newToken);
+              }
+              break;
+            default: 
+              console.log('Unhandled getAnimals response status: ' + status);
+              break;
+          }
         });
         
-      return respBody != null ? respBody : emergencyState;
+      return {newJwt, animals};
     }
 
-    async function updateAnimals(tokenStr, user_id) {
-      var animals = await getAnimals(tokenStr, user_id);
-      console.log('animals object:\n' + JSON.stringify(animals));
+    async function updateAnimals(tokenStr, params) {
+      var {newJwt, animals} = await getAnimals(tokenStr, params);
+      // Powtórne wywołanie z nowym jwt w przypadku utraty ważności
+      if(newJwt) {
+        var {newJwt, animals} = await getAnimals(newJwt, params);
+      }
+      console.log('Animals object update:\n' + JSON.stringify(animals));
       //TODO: obrazki z bazy, temp solution
       animals.forEach( (animal) => {
         //wycięcie daty

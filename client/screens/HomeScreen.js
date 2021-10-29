@@ -4,6 +4,7 @@ import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-ha
 import { Icon } from 'react-native-elements'
 import AnimalCard from '../components/AnimalCard'
 import { AnimalDataContext } from '../contexts/AnimalContext'
+import { UserContext } from '../contexts/UserContext'
 
 export const onSeeMorePress = (navigation) => {
   if(navigation != undefined) navigation.navigate('SeeMoreScreen');
@@ -11,19 +12,40 @@ export const onSeeMorePress = (navigation) => {
 
 const HomeScreen = ({ navigation }) => {
 
-  const animals = useContext(AnimalDataContext).animals;
+  const animalCtx = useContext(AnimalDataContext);
+  const userCtx = useContext(UserContext);
+  var userId = userCtx.userData.userId;
+  var token = userCtx.userData.token;
 
   {/*TODO: wywołania API GET*/}
-  const onFilterDogsPress = () => {
-    {/*TODO*/}
+  function onFilterDogsPress(userId, token) {
+    var params = new URLSearchParams({
+      "animal-type": "pies",
+      "user-id": userId,
+    });
+
+    if(userId && token) 
+      animalCtx.updateAnimals(token, params);
   }
 
-  const onFilterCatsPress = () => {
-    {/*TODO*/}
+  function onFilterCatsPress() {
+    var params = new URLSearchParams({
+      "animal-type": "kot",
+      "user-id": userId,
+    });
+
+    if(userId && token) 
+      animalCtx.updateAnimals(token, params);
   }
 
-  const onFilterOtherPress = () => {
-    {/*TODO*/}
+  function onFilterOtherPress() {
+    var params = new URLSearchParams({
+      "animal-type": "gryzoń,gad,ptak,królik,inne",
+      "user-id": userId,
+    });
+
+    if(userId && token) 
+      animalCtx.updateAnimals(token, params);
   }
 
   return(
@@ -47,7 +69,7 @@ const HomeScreen = ({ navigation }) => {
             {/*Psy*/}
             <TouchableOpacity 
               style={styles.categoryButtonView}
-              onPress={() => onFilterDogsPress()}
+              onPress={() => onFilterDogsPress(userId, token)}
             >
               <View style={styles.categoryButton}>
               <Text style={styles.categoryButtonText}>Psy</Text>
@@ -105,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
         
         {/*Lista zwierzaków*/}
         <View style={styles.cardContainer}>
-          {animals.map((item) => {
+          {animalCtx.animals.map((item) => {
             return(
               <View key={item.id}>
                 <AnimalCard animal={item}

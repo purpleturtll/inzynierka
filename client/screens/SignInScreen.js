@@ -95,16 +95,21 @@ const SignInScreen = ({ navigation }) => {
         userCtx.setUserData({
           loggedIn: true,
           token: tokenStr,
-          userId: user_id
+          userId: user_id,
+          email: data.email,
+          password: data.password
         });
-        console.log('Received auth token: \n' + tokenStr + 'for user ' + user_id);
+        console.log('Received auth token: \n' + tokenStr + ' for user ' + user_id);
         navigation.navigate('AccountScreen');
       }
       else if(status == 401){
         setSignInError(error);
       }
     });
-    if(tokenStr && user_id) animalCtx.updateAnimals(tokenStr, user_id);
+    if(tokenStr && user_id) {
+      var params = new URLSearchParams({"user-id": user_id});
+      animalCtx.updateAnimals(tokenStr, params);
+    }
   }
 
   return(
