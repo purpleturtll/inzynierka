@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
+import Constants from 'expo-constants';
 
 export const UserContext = React.createContext();
+
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 export const UserDataProvider = ({ children }) => {
     const [userData, setUserData] = useState({
@@ -18,7 +21,7 @@ export const UserDataProvider = ({ children }) => {
     //Odświeża jwt kiedy skończy się jego ważność
     async function relogin() {
         var status, newToken = null, userId = null;
-        const res = await fetch('http://192.168.1.70:8080/auth/login', {
+        const res = await fetch(`${apiUrl}/auth/login`, {
             body: JSON.stringify({
                 email: userData.email,
                 password: userData.password

@@ -17,7 +17,7 @@
     "caniuse-lite": "^1.0.30001269",
     "expo": "~40.0.0",
     "expo-asset": "~8.2.1",
-    "expo-constants": "~9.3.3",
+    "expo-constants": "^9.3.5",
     "expo-font": "~8.4.0",
     "expo-splash-screen": "~0.8.0",
     "expo-status-bar": "^1.0.4",

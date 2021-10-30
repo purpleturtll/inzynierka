@@ -1,8 +1,11 @@
-import React, {useState, useContext, useEffect} from 'react'
-import { UserContext } from './UserContext'
+import React, {useState, useContext, useEffect} from 'react';
+import { UserContext } from './UserContext';
+import Constants from 'expo-constants';
 
 {/*Kontekst dla danych i aktualizacji ulubionych (klik na serduszku)*/}
 export const AnimalDataContext = React.createContext();
+
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 {/*Zarządzanie stanem i dostępem do niego*/}
 export const AnimalDataProvider = ({ children }) => {
@@ -17,7 +20,7 @@ export const AnimalDataProvider = ({ children }) => {
     {/*GET /animal/read*/}
     async function getAnimals(tokenStr, params) {
       var animals = [], status = null, newJwt = null;
-      var res = await fetch('http://192.168.1.70:8080/animal/read?' + params,
+      var res = await fetch(`${apiUrl}/animal/read?` + params,
         {
           headers: {
             "Content-Type": "application/json",

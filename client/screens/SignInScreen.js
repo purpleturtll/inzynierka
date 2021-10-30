@@ -5,7 +5,9 @@ import {
 import {Feather} from '@expo/vector-icons';
 import { UserContext } from '../contexts/UserContext'
 import { AnimalDataContext } from '../contexts/AnimalContext';
+import Constants from 'expo-constants';
 
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 const SignInScreen = ({ navigation }) => {
   const [signInError, setSignInError] = useState();
@@ -74,7 +76,7 @@ const SignInScreen = ({ navigation }) => {
     }
 
     var status, tokenStr = null, user_id = null;
-    const res = await fetch('http://192.168.1.70:8080/auth/login', {
+    const res = await fetch(`${apiUrl}/auth/login`, {
       body: JSON.stringify({
         email: data.email,
         password: data.password

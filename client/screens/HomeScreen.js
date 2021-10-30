@@ -17,7 +17,6 @@ const HomeScreen = ({ navigation }) => {
   var userId = userCtx.userData.userId;
   var token = userCtx.userData.token;
 
-  {/*TODO: wywołania API GET*/}
   function onFilterDogsPress(userId, token) {
     var params = new URLSearchParams({
       "animal-type": "pies",
