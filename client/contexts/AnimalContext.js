@@ -61,9 +61,11 @@ export const AnimalDataProvider = ({ children }) => {
     async function updateAnimals(tokenStr, params) {
       var {newJwt, animals} = await getAnimals(tokenStr, params);
       // Powtórne wywołanie z nowym jwt w przypadku utraty ważności
-      if(newJwt) {
+      if(newJwt) 
         var {newJwt, animals} = await getAnimals(newJwt, params);
-      }
+      //Serwer nie znalazł wyników
+      if(animals == null) 
+        animals = [];
       console.log('Animals object update:\n' + JSON.stringify(animals));
       //TODO: obrazki z bazy, temp solution
       animals.forEach( (animal) => {

@@ -8,8 +8,11 @@ import { Collapse, CollapseHeader, CollapseBody } from 'accordion-collapse-react
 import AnimalCard from '../components/AnimalCard';
 import { AnimalDataContext } from '../contexts/AnimalContext';
 import { FilterContext } from '../contexts/FilterContext';
+import { UserContext } from '../contexts/UserContext';
+import Constants from 'expo-constants';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 const SeeMoreScreen = ({ navigation }) => {
 
@@ -21,35 +24,55 @@ const SeeMoreScreen = ({ navigation }) => {
   const [raceArrow, setRaceArrow] = useState('down');
   const [statusArrow, setStatusArrow] = useState('down');
 
-  {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
+  {/*Globalny kontekst zwierząt*/}
+  const animalCtx = useContext(AnimalDataContext);
   {/*Globalny kontekst filtrów*/}
   const filterCtx = useContext(FilterContext);
+  {/*Globalny kontekst użytkownika*/}
+  const userCtx = useContext(UserContext);
 
   {/*Czyści wszystkie filtry*/}
+  {/*Stan zaznaczonych filtrów - null oznacza, że filtr powinien być zignorowany*/}
   function clearFilters() {
-    filterCtx.setFilters(
-      {
-        type: null,
-        sex: null,
-        location: null,
-        age: null,
-        weight: null,
-        race: null,
-        adoptable: null,
-        urgent: null
-      }
-    );
+    filterCtx.setFilters({
+      type: null,
+      sex: null,
+      city: null,
+      age_from: null,
+      age_to: null,
+      weight_from: null,
+      weight_to: null,
+      breed: null,
+      adoptable: null,
+      recently_found: null,
+      //TODO: implementacja serwera
+      is_sterilized: null,
+      is_vaccinated: null
+    });
+  }
+
+  {/*Ustawia UI okna modalnego do tworzenia filtrów*/}
+  function openModal() {
+    setModalOpen(true);
+    setTypeArrow('down');
+    setSexArrow('down');
+    setLocationArrow('down');
+    setStatusArrow('down');
+    setRaceArrow('down');
   }
 
   {/*Pomocniczy enum dozwolonych pól filtrów*/}
   const FILTER_FIELD = {
     TYPE: 'type',
     SEX: 'sex',
-    LOCATION: 'location',
+    CITY: 'city',
     STATUS: 'status',
     AGE: 'age',
     WEIGHT: 'weight',
-    RACE: 'race'
+    BREED: 'breed',
+    //TODO
+    STERILIZED: 'is_sterilized',
+    VAXXED: 'is_vaccinated'
   }
 
   {/*Ustawia statusy filtrów*/}
@@ -74,6 +97,7 @@ const SeeMoreScreen = ({ navigation }) => {
 
   {/*Ustawia wartość podanego pola*/}
   function setFilterValue(fieldName, value) {
+    var category;
     switch(fieldName)
     {
       case FILTER_FIELD.TYPE:
@@ -82,40 +106,95 @@ const SeeMoreScreen = ({ navigation }) => {
       case FILTER_FIELD.SEX:
           filterCtx.setFilters({...filterCtx.filters, sex: value});
         break;
-      case FILTER_FIELD.LOCATION:
-          filterCtx.setFilters({...filterCtx.filters, location: value});
+      case FILTER_FIELD.CITY:
+          filterCtx.setFilters({...filterCtx.filters, city: value});
         break;
       case FILTER_FIELD.STATUS:
-        setStatus(value);
+          setStatus(value);
         break;
       case FILTER_FIELD.AGE:
-          filterCtx.setFilters({...filterCtx.filters, age: value});
+          category = ageCategories.find(c => c.id == value);
+          filterCtx.setFilters({
+            ...filterCtx.filters,
+            age_from: category.ageFrom,
+            age_to: category.ageTo
+          });
         break;
       case FILTER_FIELD.WEIGHT:
-          filterCtx.setFilters({...filterCtx.filters, weight: value});
+          category = weightCategories.find(c => c.id == value);
+          filterCtx.setFilters({
+            ...filterCtx.filters,
+            weight_from: category.weightFrom,
+            weight_to: category.weightTo
+          });
         break;
-      case FILTER_FIELD.RACE:
-          filterCtx.setFilters({...filterCtx.filters, race: value});
+      case FILTER_FIELD.BREED:
+          // temp solution, potrzebne rasy zwracane dynamicznie przez serwer
+          var breeds = (value < 100) ? catRaces : breeds;
+          category = breeds.find( c => c.id == value);
+          filterCtx.setFilters({...filterCtx.filters, breed: category.value});
         break;
       default:
         break;
     }
   }
 
+  //mapping parametrów i GET /animal/read?params
+  async function filterAnimals(filters) {
+    var params = new URLSearchParams({"user-id": userCtx.userData.userId});
+
+    for(const prop in filters) {
+      var value = filters[prop];
+      if(value != null) {
+        switch(prop) {
+          case 'type':
+            params.append('animal-type', value);
+            break;
+          case 'sex':
+            params.append(prop, value);
+            break;
+          case 'city':
+            params.append(prop, value);
+            break;
+          case 'age_from':
+            params.append('age-from', value);
+            break;
+          case 'age_to':
+            params.append('age-to', value);
+            break;
+          case 'weight_from':
+            params.append('weight-from', value);
+            break;
+          case 'weight_to':
+            params.append('weight-to', value);
+            break;
+          case 'breed':
+            params.append(prop, value);
+            break;
+          // TODO: filtry adoptable, recently_found, is_sterilized, is_vaccinated (serwer)
+          default:
+            break;
+        }
+      } 
+    }
+    console.log('Custom filters call:');
+    animalCtx.updateAnimals(userCtx.userData.token, params);
+  }
+
   {/*Funkcja pomocnicza, do późniejszego usunięcia*/}
-  function DebugBool2String(b) {
+  function debugBool2String(b) {
     return b == true ? 'true' : 'false' ;
   }
   
   {/*Typy zwierząt*/}
   const animalTypes = [
-    {id: '1', label: 'Psy'},
-    {id: '2', label: 'Koty'},
-    {id: '3', label: 'Gryzonie'},
-    {id: '4', label: 'Ptaki'},
-    {id: '5', label: 'Gady'},
-    {id: '6', label: 'Króliki'},
-    {id: '7', label: 'Inne'},
+    {id: '1', value: 'pies', label: 'Psy'},
+    {id: '2', value: 'kot', label: 'Koty'},
+    {id: '3', value: 'gryzoń', label: 'Gryzonie'},
+    {id: '4', value: 'gad', label: 'Gady'},
+    {id: '5', value: 'ptak', label: 'Ptaki'},
+    {id: '6', value: 'królik', label: 'Króliki'},
+    {id: '7', value: 'inne', label: 'Inne'},
   ];
 
   {/*Płci zwierząt*/}
@@ -124,52 +203,50 @@ const SeeMoreScreen = ({ navigation }) => {
     {id: '2', label: 'samiec'}
   ];
 
-  {/*TODO: lista schronisk docelowo pobierana z global store*/}
+  {/*TODO: shelter API*/}
   const shelters = [
-    {id: '1', label: 'Schronisko 1'},
-    {id: '2', label: 'Schronisko 2'},
-    {id: '3', label: 'Schronisko 3'}
+    {id: '1', value: 'Poznań', label: 'Schronisko 1 w Poznaniu'},
+    {id: '2', value: 'Warszawa', label: 'Schronisko 2 w Warszawie'},
+    {id: '3', value: 'Kraków', label: 'Schronisko 3 w Krakowie'}
   ];
 
-  {/*Wiek, wartości potrzebne przy customowych filtrach, zbędne przy predefiniowanych*/}
+  {/*Przedziały wiekowe, maksymalny wiek to 200 lat*/}
   const ageCategories = [
-    {id: '1', label: 'do 1 roku', monthsMin: 0, monthsMax: 11},
-    {id: '2', label: '1 - 4 lata', monthsMin: 12, monthsMax: 59},
-    {id: '3', label: '5 - 9 lata', monthsMin: 60, monthsMax: 119},
-    {id: '4', label: '10+ lat', monthsMin: 120, monthsMax: null},
+    {id: '1', label: 'do 1 roku', ageFrom: 0, ageTo: 11},
+    {id: '2', label: '1 - 4 lata', ageFrom: 12, ageTo: 59},
+    {id: '3', label: '5 - 9 lata', ageFrom: 60, ageTo: 119},
+    {id: '4', label: '10+ lat', ageFrom: 120, ageTo: 2400},
   ];
 
-  {/*Kategorie wagowe*/}
+  {/*Kategorie wagowe, maksymalna waga to tona*/}
   const weightCategories = [
-    {id: '1', label: 'do 5 kg'},
-    {id: '2', label: '5 - 14 kg'},
-    {id: '3', label: '15 - 24 kg'},
-    {id: '4', label: '25 - 44 kg'},
-    {id: '5', label: '45+ kg'},
+    {id: '1', label: 'do 5 kg', weightFrom: 0, weightTo: 4},
+    {id: '2', label: '5 - 14 kg', weightFrom: 5, weightTo: 14},
+    {id: '3', label: '15 - 24 kg', weightFrom: 15, weightTo: 24},
+    {id: '4', label: '25 - 44 kg', weightFrom: 25, weightTo: 44},
+    {id: '5', label: '45+ kg', weightFrom: 45, weightTo: 1000},
   ];
 
-  {/*Rasy kotów*/}
-  const catRaces = [
-    {id: '1', label: 'Europejska'},
-    {id: '2', label: 'Syryjska'},
-  ];
-
-  {/*Rasy psów*/}
-  const dogRaces = [
-    {id: '101', label: 'Amstaff/Pitbull'},
-    {id: '102', label: 'Bernardyn'},
-    {id: '103', label: 'Cocker spaniel'},
-    {id: '104', label: 'Foksterier'},
-    {id: '105', label: 'Husky'},
-    {id: '106', label: 'Jamnik'},
-    {id: '107', label: 'Labrador'},
-    {id: '108', label: 'Mieszaniec'},
-    {id: '109', label: 'Owczarek\nkaukaski'},
-    {id: '110', label: 'Owczarek\nniemiecki'},
-    {id: '111', label: 'Owczarek\npodhalański'},
-    {id: '112', label: 'Sznaucer'},
-    {id: '113', label: 'Terier'},
-    {id: '114', label: 'Inne'},
+  {/*TODO: breed API, rasy różnych gatunków*/}
+  const breeds = [
+    // Koty
+    {id: '1', value: 'mieszaniec', label: 'Mieszana'},
+    {id: '2', value: 'europejska', label: 'Europejska'},
+    {id: '3', value: 'syryjska', label: 'Syryjska'},
+    // Psy
+    {id: '101', value: 'amstaff/pitbull', label: 'Amstaff/Pitbull'},
+    {id: '102', value: 'bernardyn', label: 'Bernardyn'},
+    {id: '103', value: 'cocker spaniel', label: 'Cocker spaniel'},
+    {id: '104', value: 'foksterier', label: 'Foksterier'},
+    {id: '105', value: 'husky', label: 'Husky'},
+    {id: '106', value: 'jamnik', label: 'Jamnik'},
+    {id: '107', value: 'labrador', label: 'Labrador'},
+    {id: '108', value: 'owczarek kaukaski', label: 'Owczarek\nkaukaski'},
+    {id: '109', value: 'owczarek niemiecki', label: 'Owczarek\nniemiecki'},
+    {id: '110', value: 'owczarek podhalański', label: 'Owczarek\npodhalański'},
+    {id: '111', value: 'sznaucer', label: 'Sznaucer'},
+    {id: '112', value: 'terier', label: 'Terier'},
+    {id: '113', value: 'inne', label: 'Inne'},
   ];
 
   {/*Dostępne statusy*/}
@@ -179,7 +256,7 @@ const SeeMoreScreen = ({ navigation }) => {
   ];
 
   {/*Globalny kontekst listy zwierząt*/}
-  var animalList = useContext(AnimalDataContext).animals;
+  var animalList = animalCtx.animals;
 
   return(
     <View>
@@ -200,7 +277,7 @@ const SeeMoreScreen = ({ navigation }) => {
               name="options"
               size={30} 
               color="black"
-              onPress={() => setModalOpen(true)}
+              onPress={() => openModal()}
             />
           </View>
           
@@ -255,7 +332,7 @@ const SeeMoreScreen = ({ navigation }) => {
               keyExtractor={(item) => item.id }
               data={animalTypes}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.TYPE, item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.TYPE, item.value)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
               )}
@@ -278,7 +355,7 @@ const SeeMoreScreen = ({ navigation }) => {
               keyExtractor={(item) => item.id }
               data={animalSexes}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.SEX, item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.SEX, item.label)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
               )}
@@ -301,7 +378,7 @@ const SeeMoreScreen = ({ navigation }) => {
               keyExtractor={(item) => item.id }
               data={shelters}
               renderItem={({item}) => (
-                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.LOCATION, item.id)}>
+                <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.CITY, item.value)}>
                   <Label name={item.label}/>
                 </TouchableOpacity>
                 
@@ -381,27 +458,14 @@ const SeeMoreScreen = ({ navigation }) => {
           </CollapseHeader>
           <CollapseBody style={styles.collapseBody}>
             <View style={styles.raceCategoriesContainer}>
-              <Text style={{fontWeight: 'bold'}}>Kot</Text>
-              <FlatList 
-                contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
-                numColumns={2}
-                keyExtractor={(item) => item.id }
-                data={catRaces}
-                renderItem={({item}) => (
-                  <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.RACE, item.id)}>
-                    <AlignedLabel name={item.label}/>
-                  </TouchableOpacity>
-                )}
-              />
-              <Text style={{fontWeight: 'bold'}}>Pies</Text>
               <View style={{flex: 1, alignItems: 'center'}}>
                 <FlatList 
                   contentContainerStyle={{alignItems: 'center', marginLeft: 30}}
                   numColumns={2}
                   keyExtractor={(item) => item.id }
-                  data={dogRaces}
+                  data={breeds}
                   renderItem={({item}) => (
-                    <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.RACE, item.id)}>
+                    <TouchableOpacity onPress={() => setFilterValue(FILTER_FIELD.BREED, item.id)}>
                       <AlignedLabel name={item.label}/>
                     </TouchableOpacity>
                   )}
@@ -412,7 +476,10 @@ const SeeMoreScreen = ({ navigation }) => {
         </Collapse>
 
         {/*Pokaż wyniki*/}
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => {
+          filterAnimals(filterCtx.filters);
+          setModalOpen('false');
+        }}>
           <View style={styles.showResultsButton}>
               <Text style={{color: 'white', textAlign: 'center'}}>Pokaż wyniki</Text>
           </View>
@@ -423,12 +490,12 @@ const SeeMoreScreen = ({ navigation }) => {
           <Text style={{fontWeight: 'bold'}}>Debug</Text>
           <Text>Typ: {filterCtx.filters.type}</Text>
           <Text>Płeć: {filterCtx.filters.sex}</Text>
-          <Text>Lokalizacja: {filterCtx.filters.location}</Text>
-          <Text>Wiek: {filterCtx.filters.age}</Text>
-          <Text>Waga: {filterCtx.filters.weight}</Text>
-          <Text>Rasa: {filterCtx.filters.race}</Text>
-          <Text>Status pilne: {DebugBool2String(filterCtx.filters.urgent)}</Text>
-          <Text>Status do adopcji: {DebugBool2String(filterCtx.filters.adoptable)}</Text>
+          <Text>Lokalizacja: {filterCtx.filters.city}</Text>
+          <Text>Wiek: {filterCtx.filters.age_from}-{filterCtx.filters.age_to}</Text>
+          <Text>Waga: {filterCtx.filters.weight_from}-{filterCtx.filters.weight_to}</Text>
+          <Text>Rasa: {filterCtx.filters.breed}</Text>
+          <Text>Status pilne: {debugBool2String(filterCtx.filters.recently_found)}</Text>
+          <Text>Status do adopcji: {debugBool2String(filterCtx.filters.adoptable)}</Text>
         </View>
         </ScrollView>
       </Modal>

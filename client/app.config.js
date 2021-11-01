@@ -4,6 +4,6 @@ export default {
     "version": "pre-demo",
     "extra": {
         // base URL do API serwera
-        "apiUrl": "http://localhost:8080"
+        "apiUrl": "http://192.168.1.70:8080"
     }
 };

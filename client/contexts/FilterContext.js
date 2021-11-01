@@ -11,12 +11,17 @@ export const FilterDataProvider = ({ children }) => {
         {
             type: null,
             sex: null,
-            location: null,
-            age: null,
-            weight: null,
-            race: null,
+            city: null,
+            age_from: null,
+            age_to: null,
+            weight_from: null,
+            weight_to: null,
+            breed: null,
             adoptable: null,
-            urgent: null
+            recently_found: null,
+            //TODO: implementacja serwera
+            is_sterilized: null,
+            is_vaccinated: null
         }
     );
 

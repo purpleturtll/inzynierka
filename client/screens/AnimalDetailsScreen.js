@@ -13,7 +13,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
       type,
       breed,
       sex,
-      favourite, // TODO
+      favourite,
       adoptable,
       recently_found,
       weight,
