@@ -6,7 +6,7 @@ import { AnimalDataContext } from '../contexts/AnimalContext';
 
 export default AnimalCard = ({animal, navigation}) => {
 
-    {/*Stan lokalny zwierzaka, potrzebny do poprawnego renderingu*/}
+    {/*Stan lokalny zwierzaka, TODO: wyszukiwanie zwierzaka po id z animalCtx*/}
     const [localState, setLocalState] = useState(animal);
 
     {/*Kontekst zwierząt*/}
@@ -74,7 +74,7 @@ export default AnimalCard = ({animal, navigation}) => {
           <TouchableOpacity onPress={() => {
             {/*stan lokalny w AnimalCard*/}
             setLocalState({...localState, favourite: !localState.favourite});
-            {/*stan globalny w AnimalDataContext*/}
+            {/*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/}
             animalCtx.updateFavourite(localState.id);
           }}>
             <View style={styles.heart}>

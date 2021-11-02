@@ -53,12 +53,13 @@ const SeeMoreScreen = ({ navigation }) => {
 
   {/*Ustawia UI okna modalnego do tworzenia filtrów*/}
   function openModal() {
-    setModalOpen(true);
     setTypeArrow('down');
     setSexArrow('down');
     setLocationArrow('down');
     setStatusArrow('down');
     setRaceArrow('down');
+    clearFilters();
+    setModalOpen(true);
   }
 
   {/*Pomocniczy enum dozwolonych pól filtrów*/}
@@ -75,117 +76,6 @@ const SeeMoreScreen = ({ navigation }) => {
     VAXXED: 'is_vaccinated'
   }
 
-  {/*Ustawia statusy filtrów*/}
-  function setStatus(id) {
-    switch(id)
-    {
-      case '1':
-        if(filterCtx.filters.urgent === false || filterCtx.filters.urgent == null)
-          filterCtx.setFilters({...filterCtx.filters, urgent: true});
-        else 
-          filterCtx.setFilters({...filterCtx.filters, urgent: false});
-        break;
-      case '2':
-        if(filterCtx.filters.adoptable === false || filterCtx.filters.adoptable == null)
-          filterCtx.setFilters({...filterCtx.filters, adoptable: true});
-        else
-          filterCtx.setFilters({...filterCtx.filters, adoptable: false});
-        break;
-      default: break;
-    }
-  }
-
-  {/*Ustawia wartość podanego pola*/}
-  function setFilterValue(fieldName, value) {
-    var category;
-    switch(fieldName)
-    {
-      case FILTER_FIELD.TYPE:
-          filterCtx.setFilters({...filterCtx.filters, type: value});
-        break;
-      case FILTER_FIELD.SEX:
-          filterCtx.setFilters({...filterCtx.filters, sex: value});
-        break;
-      case FILTER_FIELD.CITY:
-          filterCtx.setFilters({...filterCtx.filters, city: value});
-        break;
-      case FILTER_FIELD.STATUS:
-          setStatus(value);
-        break;
-      case FILTER_FIELD.AGE:
-          category = ageCategories.find(c => c.id == value);
-          filterCtx.setFilters({
-            ...filterCtx.filters,
-            age_from: category.ageFrom,
-            age_to: category.ageTo
-          });
-        break;
-      case FILTER_FIELD.WEIGHT:
-          category = weightCategories.find(c => c.id == value);
-          filterCtx.setFilters({
-            ...filterCtx.filters,
-            weight_from: category.weightFrom,
-            weight_to: category.weightTo
-          });
-        break;
-      case FILTER_FIELD.BREED:
-          // temp solution, potrzebne rasy zwracane dynamicznie przez serwer
-          var breeds = (value < 100) ? catRaces : breeds;
-          category = breeds.find( c => c.id == value);
-          filterCtx.setFilters({...filterCtx.filters, breed: category.value});
-        break;
-      default:
-        break;
-    }
-  }
-
-  //mapping parametrów i GET /animal/read?params
-  async function filterAnimals(filters) {
-    var params = new URLSearchParams({"user-id": userCtx.userData.userId});
-
-    for(const prop in filters) {
-      var value = filters[prop];
-      if(value != null) {
-        switch(prop) {
-          case 'type':
-            params.append('animal-type', value);
-            break;
-          case 'sex':
-            params.append(prop, value);
-            break;
-          case 'city':
-            params.append(prop, value);
-            break;
-          case 'age_from':
-            params.append('age-from', value);
-            break;
-          case 'age_to':
-            params.append('age-to', value);
-            break;
-          case 'weight_from':
-            params.append('weight-from', value);
-            break;
-          case 'weight_to':
-            params.append('weight-to', value);
-            break;
-          case 'breed':
-            params.append(prop, value);
-            break;
-          // TODO: filtry adoptable, recently_found, is_sterilized, is_vaccinated (serwer)
-          default:
-            break;
-        }
-      } 
-    }
-    console.log('Custom filters call:');
-    animalCtx.updateAnimals(userCtx.userData.token, params);
-  }
-
-  {/*Funkcja pomocnicza, do późniejszego usunięcia*/}
-  function debugBool2String(b) {
-    return b == true ? 'true' : 'false' ;
-  }
-  
   {/*Typy zwierząt*/}
   const animalTypes = [
     {id: '1', value: 'pies', label: 'Psy'},
@@ -254,6 +144,82 @@ const SeeMoreScreen = ({ navigation }) => {
     {id: '1', label: 'pilne'},
     {id: '2', label: 'do adopcji'},
   ];
+
+  {/*Ustawia statusy filtrów*/}
+  function setStatus(id) {
+    switch(id)
+    {
+      case '1':
+        if(filterCtx.filters.urgent === false || filterCtx.filters.urgent == null)
+          filterCtx.setFilters({...filterCtx.filters, urgent: true});
+        else 
+          filterCtx.setFilters({...filterCtx.filters, urgent: false});
+        break;
+      case '2':
+        if(filterCtx.filters.adoptable === false || filterCtx.filters.adoptable == null)
+          filterCtx.setFilters({...filterCtx.filters, adoptable: true});
+        else
+          filterCtx.setFilters({...filterCtx.filters, adoptable: false});
+        break;
+      default: break;
+    }
+  }
+
+  {/*Ustawia wartość podanego pola*/}
+  function setFilterValue(fieldName, value) {
+    var category;
+    switch(fieldName)
+    {
+      case FILTER_FIELD.TYPE:
+          filterCtx.setFilters({...filterCtx.filters, type: value});
+        break;
+      case FILTER_FIELD.SEX:
+          filterCtx.setFilters({...filterCtx.filters, sex: value});
+        break;
+      case FILTER_FIELD.CITY:
+          filterCtx.setFilters({...filterCtx.filters, city: value});
+        break;
+      case FILTER_FIELD.STATUS:
+          setStatus(value);
+        break;
+      case FILTER_FIELD.AGE:
+          category = ageCategories.find(c => c.id == value);
+          filterCtx.setFilters({
+            ...filterCtx.filters,
+            age_from: category.ageFrom,
+            age_to: category.ageTo
+          });
+        break;
+      case FILTER_FIELD.WEIGHT:
+          category = weightCategories.find(c => c.id == value);
+          filterCtx.setFilters({
+            ...filterCtx.filters,
+            weight_from: category.weightFrom,
+            weight_to: category.weightTo
+          });
+        break;
+      case FILTER_FIELD.BREED:
+          // temp solution, potrzebne rasy zwracane dynamicznie przez serwer
+          category = breeds.find( c => c.id == value);
+          filterCtx.setFilters({...filterCtx.filters, breed: category.value});
+        break;
+      default:
+        break;
+    }
+  }
+
+  //mapping parametrów i GET /animal/read?params
+  async function filterAnimals(filters) {
+    console.log('Animals custom-filtered');
+    var params = new URLSearchParams({"user-id": userCtx.userData.userId});
+    params = filterCtx.toParams(filters, params);
+    animalCtx.updateAnimals(userCtx.userData.token, params);
+  }
+
+  {/*Funkcja pomocnicza, do późniejszego usunięcia*/}
+  function debugBool2String(b) {
+    return b == true ? 'true' : 'false' ;
+  }
 
   {/*Globalny kontekst listy zwierząt*/}
   var animalList = animalCtx.animals;

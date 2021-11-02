@@ -38,7 +38,6 @@ export const AnimalDataProvider = ({ children }) => {
               // OK
               var jsonStr = JSON.stringify(data);
               animals = JSON.parse(jsonStr);
-              console.log('getAnimals() received: \n' + jsonStr);
               break;
             case 401: 
               // jwt expired
@@ -72,26 +71,22 @@ export const AnimalDataProvider = ({ children }) => {
         //wycięcie daty
         animal.admission_date = animal.admission_date.substring(0, 10);
       });
-      setAnimals([]);
       setAnimals(animals);
     }
 
-    {/*Aktualizacja animal.favourite*/}
+    //Aktualizacja animal.favourite
+    //TODO: fav on-click PUT na serwer
     function updateFavourite(id) {
       
       animals.map(animal => {
         if(animal.id==id){
-          console.log("animal.id: " + id + ", animal.name: " + animal.name);
+          console.log(`updateFavourite called for ${animal.name}, id = ${id}`);
           var index = animals.findIndex(a => a.id == id);
           let animalsCopy = animals;
           let animalCopy = animalsCopy[index];
           animalCopy.favourite = !animalCopy.favourite;
           animalsCopy[index] = animalCopy;
           setAnimals(animalsCopy);
-          console.log("updateFavourite called for id: " + id);
-          animals.forEach(a => {
-            console.log("name: " + a.name + ", fav: " + a.favourite);
-          });
         }
       });
     }

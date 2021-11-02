@@ -143,7 +143,12 @@ func Filter(c echo.Context) error {
 	}
 
 	// Przygotowanie danych do wysłania
-	animals = AnimalConvert(animals_db, user_id)
+	if favourite != "" {
+		animals = AnimalConvert(animals_db, favourite)
+	} else {
+		animals = AnimalConvert(animals_db, user_id)
+	}
+
 	return c.JSON(http.StatusOK, animals)
 }
 

@@ -7,6 +7,7 @@ import StatusDataRow from '../components/StatusDataRow'
 
 const AnimalDetailsScreen = ({ route, navigation }) => {
 
+  //TODO: animalCtx.getAnimal(id) zamiast route.params
   const {
       id,
       name, // TODO
