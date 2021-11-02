@@ -13,7 +13,7 @@ var err error
 
 func Init() {
 	dsn := "sqlserver://admin:jHsjH42Hj@localhost:1433?database=INZ_DB"
-	db, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{FullSaveAssociations: true})
 	if err != nil {
 		return
 	}
