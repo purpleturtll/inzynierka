@@ -129,7 +129,7 @@ const HomeScreen = ({ navigation }) => {
           {animalCtx.animals.map((item) => {
             return(
               <View key={item.id}>
-                <AnimalCard animal={item}
+                <AnimalCard animalId={item.id}
                   navigation={navigation}
                 />
               </View>

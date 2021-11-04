@@ -101,7 +101,7 @@ const FollowedAnimalsScreen = ({ navigation }) => {
             data={favs}
             renderItem={({ item }) => (
               <AnimalCard 
-                animal={item}
+                animalId={item.id}
                 navigation={navigation}
               />
             )}

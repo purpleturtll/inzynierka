@@ -1,16 +1,14 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { AnimalDataContext } from '../contexts/AnimalContext';
 
-export default AnimalCard = ({animal, navigation}) => {
-
-    {/*Stan lokalny zwierzaka, TODO: wyszukiwanie zwierzaka po id z animalCtx*/}
-    const [localState, setLocalState] = useState(animal);
+export default AnimalCard = ({animalId, navigation}) => {
 
     {/*Kontekst zwierząt*/}
     const animalCtx = useContext(AnimalDataContext);
+    var animal = animalCtx.getAnimal(animalId);
 
     {/*Funkcja nawigująca do AnimalDetailsScreen (klik na obrazku AnimalCard)*/}
     function onAnimalPress(anim) {
@@ -51,9 +49,9 @@ export default AnimalCard = ({animal, navigation}) => {
     {/*Karta*/}
     return(
       <View style={styles.card}>
-        <TouchableOpacity onPress={() => onAnimalPress(localState)}>
+        <TouchableOpacity onPress={() => onAnimalPress(animal)}>
           <Image 
-            source={images.animalType[localState.type]}
+            source={images.animalType[animal.type]}
             style={styles.image}
           />
         </TouchableOpacity>
@@ -63,22 +61,20 @@ export default AnimalCard = ({animal, navigation}) => {
           <View>
             {/*tytuł*/}
             <View style={styles.headline}>
-              <Text style={styles.headlineName}>{localState.name} </Text>
-              <Text style={styles.headlineDate}>{localState.admission_date}</Text>
+              <Text style={styles.headlineName}>{animal.name} </Text>
+              <Text style={styles.headlineDate}>{animal.admission_date}</Text>
             </View>
             {/*TODO: wyświetlanie wieku w miesiącach*/}
-            <Text>{localState.breed}</Text>
-            <Text>{localState.sex}, {localState.age} {age2Polish(localState.age)}, {localState.weight} kg</Text>
+            <Text>{animal.breed}</Text>
+            <Text>{animal.sex}, {animal.age} {age2Polish(animal.age)}, {animal.weight} kg</Text>
           </View>
           {/*kolor serduszka #ff4242*/}
           <TouchableOpacity onPress={() => {
-            {/*stan lokalny w AnimalCard*/}
-            setLocalState({...localState, favourite: !localState.favourite});
             {/*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/}
-            animalCtx.updateFavourite(localState.id);
+            animalCtx.updateFavourite(animal.id);
           }}>
             <View style={styles.heart}>
-              <AntDesign name={hearts.icon[localState.favourite]} size={30} color='black'/> 
+              <AntDesign name={hearts.icon[animal.favourite]} size={30} color='black'/> 
             </View>
           </TouchableOpacity>
         </View>

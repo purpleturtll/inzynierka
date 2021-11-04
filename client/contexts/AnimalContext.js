@@ -75,24 +75,104 @@ export const AnimalDataProvider = ({ children }) => {
     }
 
     //Aktualizacja animal.favourite
-    //TODO: fav on-click PUT na serwer
-    function updateFavourite(id) {
-      
-      animals.map(animal => {
-        if(animal.id==id){
-          console.log(`updateFavourite called for ${animal.name}, id = ${id}`);
-          var index = animals.findIndex(a => a.id == id);
-          let animalsCopy = animals;
-          let animalCopy = animalsCopy[index];
-          animalCopy.favourite = !animalCopy.favourite;
-          animalsCopy[index] = animalCopy;
-          setAnimals(animalsCopy);
-        }
-      });
+    async function updateFavourite(id) {
+
+      var animal = getAnimal(id);
+      var newJwt = null, token = userCtx.userData.token;
+      const isDeleting = animal.favourite;
+      console.log(`${isDeleting ? 'delete' : 'create'}Favourite called for ${animal.name}, id = ${id}`);
+      newJwt = isDeleting ? await deleteFavourite(token, id) : await createFavourite(token, id);
+      if(newJwt) {
+        newJwt = isDeleting ? await deleteFavourite(newJwt, id) : await createFavourite(newJwt, id);
+      }
+      // Odświeża całą listę zwierząt
+      // TODO: GET animal/read/id, podmienienie obiektu w liście i setAnimals
+      var params = new URLSearchParams({"user-id": userCtx.userData.userId});
+      token = newJwt ? newJwt : userCtx.userData.token;
+      updateAnimals(token, params);
+    }
+
+    async function deleteFavourite(token, id) {
+      var status = null, newJwt = null;
+
+      var res = await fetch(`${apiUrl}/fav_animal/delete`,
+        {
+          body: JSON.stringify({
+            animal_id: id.toString(),
+            user_id: userCtx.userData.userId.toString()
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          method: 'DELETE'
+        })
+        .then(async response => { 
+          status = response.status;
+          switch(status) {
+            case 204:
+              // No Content
+              break;
+            case 401: 
+              // jwt expired
+              if(userCtx.userData.email) {
+                var {newToken, userId} = await userCtx.relogin();
+                newJwt = newToken;
+                console.log('Refreshed jwt token for user ' + userId + ':\n' + newToken);
+              }
+              break;
+            default: 
+              console.log('Unhandled deleteFavourite response status: ' + status);
+              break;
+          }
+        });
+        return newJwt;
+    }
+
+    async function createFavourite(token, id) {
+      var status = null, newJwt = null;
+
+      // toString() potrzebne
+      var res = await fetch(`${apiUrl}/fav_animal/create`,
+        {
+          body: JSON.stringify({
+            animal_id: id.toString(),
+            user_id: userCtx.userData.userId.toString()
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          method: 'POST'
+        })
+        .then(async response => { 
+          status = response.status;
+          switch(status) {
+            case 201:
+              // Created
+              break;
+            case 401: 
+              // jwt expired
+              if(userCtx.userData.email) {
+                var {newToken, userId} = await userCtx.relogin();
+                newJwt = newToken;
+                console.log('Refreshed jwt token for user ' + userId + ':\n' + newToken);
+              }
+              break;
+            default: 
+              console.log('Unhandled createFavourite response status: ' + status);
+              break;
+          }
+        });
+        return newJwt;
+    }
+
+    function getAnimal(id) {
+      return animals.find(a => a.id == id);
     }
 
     return(
-        <AnimalDataContext.Provider value={{ animals, setAnimals, updateAnimals, updateFavourite }}>
+        <AnimalDataContext.Provider value={{ animals, setAnimals, updateAnimals, updateFavourite, getAnimal }}>
             {children}
         </AnimalDataContext.Provider>
       );
