@@ -9,10 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func ReadForUser(c echo.Context) error {
-	user_id := c.Param("user_id")
+func Read(c echo.Context) error {
+	id := c.Param("id")
 	var res []models.FavAnimal
-	result := db.Connection().Where("user_id = ?", user_id).Find(&res)
+	result := db.Connection().Find(&res, id)
 	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
 	} else {

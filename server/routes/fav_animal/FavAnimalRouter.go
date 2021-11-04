@@ -6,6 +6,6 @@ type Router struct{}
 
 func (Router) Init(g *echo.Group) {
 	g.POST("/create", Create)
-	g.GET("/read/:user_id", ReadForUser)
+	g.GET("/read/:id", Read)
 	g.DELETE("/delete", Delete)
 }
