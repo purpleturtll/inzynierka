@@ -1,53 +1,53 @@
 package favanimal
 
 import (
-	"fmt"
 	"inzynierka/db"
 	"inzynierka/models"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
-
 	"gorm.io/gorm"
 )
 
-func Read(c echo.Context) error {
-	id := c.Param("id")
-	obj := &models.User{}
-	res := []models.Animal{}
-	result := db.Connection().Model(&obj).Where("id IN ?", id).Association("fav_animal").Find(&res)
-	//fmt.Println(result)
-	if result == gorm.ErrRecordNotFound {
+func ReadForUser(c echo.Context) error {
+	user_id := c.Param("user_id")
+	var res []models.FavAnimal
+	result := db.Connection().Where("user_id = ?", user_id).Find(&res)
+	if result.Error == gorm.ErrRecordNotFound {
 		return c.String(http.StatusNotFound, "Not Found")
+	} else {
+		return c.JSON(http.StatusOK, res)
 	}
-	return c.JSON(http.StatusOK, res)
 }
 
+// Unfollow
 func Delete(c echo.Context) error {
-	id := c.Param("id")
-	animal_id, _ := strconv.Atoi(c.Param("animal_id"))
-	obj := &models.User{}
-	animal := &models.Animal{}
-	db.Connection().First(&animal, animal_id)
-	result := db.Connection().Model(&obj).Where("id IN ?", id).Association("fav_animal").Delete(&animal)
-	fmt.Println(result)
-	if result == gorm.ErrRecordNotFound {
-		return c.String(http.StatusNotFound, "Not Found")
+	obj := new(models.FavAnimal)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
 	}
-	return c.JSON(http.StatusOK, nil)
+	lookup := new(models.FavAnimal)
+	result := db.Connection().Where("animal_id = ? AND user_id = ?", obj.AnimalID, obj.UserID).Find(&lookup)
+	if result.RowsAffected == 0 {
+		return c.String(http.StatusNotFound, "Not Found")
+	} else {
+		db.Connection().Unscoped().Delete(&lookup)
+		return c.JSON(http.StatusNoContent, nil)
+	}
 }
 
+// Follow
 func Create(c echo.Context) error {
-	id := c.Param("id")
-	animal_id, _ := strconv.Atoi(c.Param("animal_id"))
-	obj := &models.User{}
-	animal := &models.Animal{}
-	db.Connection().First(&animal, animal_id)
-	result := db.Connection().Model(&obj).Where("id IN ?", id).Association("fav_animal").Append(&animal)
-	fmt.Println(result)
-	if result == gorm.ErrRecordNotFound {
+	obj := new(models.FavAnimal)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
+	}
+	lookup := new(models.FavAnimal)
+	result := db.Connection().Where("animal_id = ? AND user_id = ?", obj.AnimalID, obj.UserID).Find(&lookup)
+	if result.RowsAffected == 0 {
+		db.Connection().Where("animal_id = ? AND user_id = ?", lookup.AnimalID, lookup.UserID).Create(&obj)
+		return c.JSON(http.StatusCreated, nil)
+	} else {
 		return c.String(http.StatusNotFound, "Not Found")
 	}
-	return c.JSON(http.StatusOK, nil)
 }

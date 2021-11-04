@@ -24,6 +24,7 @@ func Init(g *echo.Group) {
 	animal_type.Router{}.Init(animalTypeGroup)
 
 	favAnimalGroup := g.Group("/fav_animal")
+	favAnimalGroup.Use(middleware.JWTWithConfig(config.JWTConfig))
 	favanimal.Router{}.Init(favAnimalGroup)
 
 	// Requires no auth

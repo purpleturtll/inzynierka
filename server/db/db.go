@@ -24,6 +24,7 @@ func Migrate() {
 		&models.Animal{},
 		&models.AnimalType{},
 		&models.Chat{},
+		&models.FavAnimal{},
 		&models.Picture{},
 		&models.Shelter{},
 		&models.User{},

@@ -42,14 +42,14 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	var animals []AnimalSend
 	var animalType models.AnimalType
 	var shelter models.Shelter
-	var fav_animal []models.Animal
+	var fav_animal []models.FavAnimal
 	var IsFav bool
 
 	for _, v := range animals_db {
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
 		db.Connection().Select("city").First(&shelter, v.ShelterID)
-		//znajdź rekord z powiązaniem z tabeli fav_animal
-		fav_assoc := db.Connection().Joins("LEFT JOIN fav_animal ON fav_animal.animal_id = animals.id").Where("id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
+		//znajdź rekord z powiązaniem z tabeli fav_animals
+		fav_assoc := db.Connection().Where("animal_id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
 		if user_id == "" {
 			IsFav = false
 		} else {
