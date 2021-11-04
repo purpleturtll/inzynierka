@@ -76,13 +76,17 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[fav_animal]    Script Date: 05.06.2021 00:42:17 ******/
+/****** Object:  Table [dbo].[fav_animals]    Script Date: 05.06.2021 00:42:17 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF OBJECT_ID(N'dbo.fav_animal', N'U') IS NULL
-CREATE TABLE [dbo].[fav_animal](
+IF OBJECT_ID(N'dbo.fav_animals', N'U') IS NULL
+CREATE TABLE [dbo].[fav_animals](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[created_at] [datetimeoffset](7) NULL,
+	[updated_at] [datetimeoffset](7) NULL,
+	[deleted_at] [datetimeoffset](7) NULL,
 	[animal_id] [bigint] NOT NULL,
 	[user_id] [bigint] NOT NULL,
 PRIMARY KEY CLUSTERED 
@@ -159,15 +163,15 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[fav_animal]  WITH CHECK ADD  CONSTRAINT [fk_fav_animal_animal] FOREIGN KEY([animal_id])
+ALTER TABLE [dbo].[fav_animals]  WITH CHECK ADD  CONSTRAINT [fk_fav_animals_animal] FOREIGN KEY([animal_id])
 REFERENCES [dbo].[animals] ([id])
 GO
-ALTER TABLE [dbo].[fav_animal] CHECK CONSTRAINT [fk_fav_animal_animal]
+ALTER TABLE [dbo].[fav_animals] CHECK CONSTRAINT [fk_fav_animals_animal]
 GO
-ALTER TABLE [dbo].[fav_animal]  WITH CHECK ADD  CONSTRAINT [fk_fav_animal_user] FOREIGN KEY([user_id])
+ALTER TABLE [dbo].[fav_animals]  WITH CHECK ADD  CONSTRAINT [fk_fav_animals_user] FOREIGN KEY([user_id])
 REFERENCES [dbo].[users] ([id])
 GO
-ALTER TABLE [dbo].[fav_animal] CHECK CONSTRAINT [fk_fav_animal_user]
+ALTER TABLE [dbo].[fav_animals] CHECK CONSTRAINT [fk_fav_animals_user]
 GO
 
 USE [INZ_DB]
@@ -415,7 +419,7 @@ GO
 USE [INZ_DB]
 GO
 
-INSERT INTO [dbo].[fav_animal]
+INSERT INTO [dbo].[fav_animals]
            ([animal_id]
            ,[user_id])
      VALUES
