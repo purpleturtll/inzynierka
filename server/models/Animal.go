@@ -8,7 +8,7 @@ import (
 
 type Animal struct {
 	gorm.Model
-	Users         []User    `gorm:"many2many:fav_animal"`
+	Users         []User    `gorm:"many2many:fav_animals"`
 	AnimalTypeID  uint      `json:"animal_type"`
 	Breed         string    `json:"breed"`
 	Name          string    `json:"name"`
