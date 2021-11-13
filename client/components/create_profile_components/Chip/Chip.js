@@ -3,7 +3,7 @@ import { TextInput, View, Text } from 'react-native';
 import styles from '../styles';
 
 
-function Chip({ changeChip, profileError }) {
+function Chip({ changeChip, profileError, wrongCHIPFormat}) {
   return (
     <View>
       <Text style={[styles.marginsText, styles.headerTitle]}>Numer chip (opcjonalne)</Text>

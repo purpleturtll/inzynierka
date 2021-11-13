@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from '../styles';
 
-function AnimalSex({ changeAnimalSex, profileError, animalSexes, animalSexFilter}){
+function AnimalSex({ changeAnimalSex, profileError, animalSexes, animalSexFilter, unselected}){
   return(
 
     <View>

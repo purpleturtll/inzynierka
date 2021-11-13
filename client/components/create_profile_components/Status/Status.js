@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from '../styles';
 
 
-function Status(changeStatus, profileError, animalStatus, animalStatusFilter){
+function Status({changeStatus, profileError, animalStatus, animalStatusFilter, unselectedStatus}){
   return (
     <View>
     <View style={styles.standardHeader}>
@@ -17,8 +17,7 @@ function Status(changeStatus, profileError, animalStatus, animalStatusFilter){
       data={animalStatus}
       renderItem={({ item }) => (
         <TouchableOpacity onPress={() => { changeStatus(item.id) }}>
-          <LabelStatus item={item} selected={animalStatusFilter} />
-          {animalStatusFilter == item.id ? <Text style={[styles.label, styles.selected]}>{item.label}</Text> : <Text style={[styles.label]}>{item.label}</Text>}
+          {animalStatusFilter.includes(item.id) ? <Text style={[styles.label, styles.selected]}>{item.label}</Text> : <Text style={[styles.label]}>{item.label}</Text>}
         </TouchableOpacity>
       )}
     />
