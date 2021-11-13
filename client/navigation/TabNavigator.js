@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {MainStackNavigator, MessageStackNavigator, FollowedStackNavigator, AccountStackNavigator} from './StackNavigation';
 import {Feather} from '@expo/vector-icons';
+import CreateAnimalProfileScreen from "../screens/CreateAnimalProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,8 @@ const BottomTabNavigator = () => {
             <Feather name="home" color={color} size={size} />
           ), }}
       />
-      <Tab.Screen name="messages" component={MessageStackNavigator}
+      {/* <Tab.Screen name="messages" component={MessageStackNavigator} */}
+      <Tab.Screen name="messages" component={CreateAnimalProfileScreen}
          options={{
           tabBarLabel: 'Rozmowy',
           tabBarIcon: ({ color, size }) => (
