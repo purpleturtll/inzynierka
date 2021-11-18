@@ -63,6 +63,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
+  buttonDate: {
+    marginLeft: 20,
+    borderWidth: 2,
+    borderColor: "#c4c4c4",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    width: "30%",
+    borderRadius: 10,
+    marginBottom: 10,
+  },
   addButton: {
     flexDirection: "row",
     height: 50,

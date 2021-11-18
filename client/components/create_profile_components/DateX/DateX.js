@@ -1,17 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "../styles";
 
-function DateX({ iconName, createProfileError }) {
+function DateX({ handleDateChange }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    return year + "-" + month + "-" + date;
+  };
+
+  const [text, setText] = useState(getCurrentDate);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
     setShow(false);
+
+    let tempDate = new Date(currentDate);
+    let tempText =
+      tempDate.getFullYear() +
+      "-" +
+      tempDate.getMonth() +
+      "-" +
+      tempDate.getDate();
+
+    handleDateChange(tempText);
+    setText(tempText);
   };
 
   const showMode = (currentMode) => {
@@ -19,34 +39,29 @@ function DateX({ iconName, createProfileError }) {
     setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode("date");
-  };
-
-  const showTimepicker = () => {
-    showMode("time");
-  };
-
   return (
     <View>
-      <Text style={[styles.marginsText, styles.headerTitle]}>Data przyjęcia</Text>
+      <Text style={[styles.marginsText, styles.headerTitle]}>
+        Data przyjęcia
+      </Text>
       <View>
-        <Button onPress={() => showMode("date")} title="Show date picker!" />
+        <TouchableOpacity
+          style={[styles.buttonDate]}
+          onPress={() => showMode("date")}
+        >
+          <Text style={{ textAlign: "center" }}>{text}</Text>
+        </TouchableOpacity>
       </View>
-      {show ? <DateTimePicker
-        testID="dateTimePicker"
-        value={date}
-        mode={mode}
-        is24Hour={true}
-        display="default"
-        onChange={onChange}
-      /> : null}
-      {/* {createProfileError.invalidDate && (
-        <Text style={[styles.error]}>{errorTrue}</Text>
-      )}
-      {createProfileError.wrongDateFormat && (
-        <Text style={[styles.error]}>{wrongDateFormat}</Text>
-      )} */}
+      {show ? (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      ) : null}
     </View>
   );
 }
