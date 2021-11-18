@@ -21,7 +21,7 @@ import AnimalSex from "../components/create_profile_components/Sex/Sex";
 import Status from "../components/create_profile_components/Status/Status";
 import Age from "../components/create_profile_components/Age/Age";
 import Weight from "../components/create_profile_components/Weight/Weight";
-import Date from "../components/create_profile_components/Date/Date";
+import DateX from "../components/create_profile_components/DateX/DateX";
 
 const marginLeftText = "5%";
 const marginBottomText = 10;
@@ -494,7 +494,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           wrongCHIPFormat={wrongCHIPFormat}
         />
 
-        <Date
+        <DateX
           // dateVal={data.date}
           iconName={iconName}
           createProfileError={createProfileError}
@@ -578,41 +578,68 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           {(animalTypeFilter == null ||
             animalTypeFilter == "1" ||
             animalTypeFilter == "2") && (
-            <Collapse
-              onToggle={() => {
-                if (breedNameIcon == "chevron-down") {
-                  setBreedNameIcon("chevron-up");
-                }
-                if (breedNameIcon == "chevron-up") {
-                  setBreedNameIcon("chevron-down");
-                }
-              }}
-            >
-              <CollapseHeader>
-                <View style={[styles.marginsText, styles.collapse]}>
-                  <Text style={styles.headerTitle}>W typie rasy</Text>
-                  <Feather
-                    name={breedNameIcon}
-                    color="black"
-                    size={22}
-                    style={{ marginTop: 3 }}
-                  />
-                </View>
-              </CollapseHeader>
-              <CollapseBody>
-                {(animalTypeFilter == "1" || animalTypeFilter == null) && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Pies
-                    </Text>
-                    <View style={{ flex: 1, alignItems: "center" }}>
+              <Collapse
+                onToggle={() => {
+                  if (breedNameIcon == "chevron-down") {
+                    setBreedNameIcon("chevron-up");
+                  }
+                  if (breedNameIcon == "chevron-up") {
+                    setBreedNameIcon("chevron-down");
+                  }
+                }}
+              >
+                <CollapseHeader>
+                  <View style={[styles.marginsText, styles.collapse]}>
+                    <Text style={styles.headerTitle}>W typie rasy</Text>
+                    <Feather
+                      name={breedNameIcon}
+                      color="black"
+                      size={22}
+                      style={{ marginTop: 3 }}
+                    />
+                  </View>
+                </CollapseHeader>
+                <CollapseBody>
+                  {(animalTypeFilter == "1" || animalTypeFilter == null) && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Pies
+                      </Text>
+                      <View style={{ flex: 1, alignItems: "center" }}>
+                        <FlatList
+                          contentContainerStyle={{ alignItems: "center" }}
+                          numColumns={2}
+                          keyExtractor={(item) => item.id}
+                          data={dogRaces}
+                          renderItem={({ item }) => (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setFilterValue("race", item.id);
+                                setBreedFilter(item.id);
+                              }}
+                            >
+                              <AlignedLabel item={item} selected={breedFilter} />
+                            </TouchableOpacity>
+                          )}
+                        />
+                      </View>
+                    </View>
+                  )}
+
+                  {animalTypeFilter == "2" && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Kot
+                      </Text>
                       <FlatList
                         contentContainerStyle={{ alignItems: "center" }}
                         numColumns={2}
                         keyExtractor={(item) => item.id}
-                        data={dogRaces}
+                        data={catRaces}
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() => {
@@ -625,37 +652,10 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         )}
                       />
                     </View>
-                  </View>
-                )}
-
-                {animalTypeFilter == "2" && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Kot
-                    </Text>
-                    <FlatList
-                      contentContainerStyle={{ alignItems: "center" }}
-                      numColumns={2}
-                      keyExtractor={(item) => item.id}
-                      data={catRaces}
-                      renderItem={({ item }) => (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue("race", item.id);
-                            setBreedFilter(item.id);
-                          }}
-                        >
-                          <AlignedLabel item={item} selected={breedFilter} />
-                        </TouchableOpacity>
-                      )}
-                    />
-                  </View>
-                )}
-              </CollapseBody>
-            </Collapse>
-          )}
+                  )}
+                </CollapseBody>
+              </Collapse>
+            )}
         </View>
 
         <View>

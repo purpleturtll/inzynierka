@@ -3,7 +3,7 @@ import { Text, View, Button } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "../styles";
 
-function Date({ iconName, createProfileError }) {
+function DateX({ iconName, createProfileError }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -11,6 +11,7 @@ function Date({ iconName, createProfileError }) {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+    setShow(false);
   };
 
   const showMode = (currentMode) => {
@@ -28,20 +29,18 @@ function Date({ iconName, createProfileError }) {
 
   return (
     <View>
-      <Text style={[styles.marginsText, styles.headerTitle]}>
-        Data przyjęcia
-      </Text>
+      <Text style={[styles.marginsText, styles.headerTitle]}>Data przyjęcia</Text>
       <View>
         <Button onPress={() => showMode("date")} title="Show date picker!" />
       </View>
-      {/* <DateTimePicker
+      {show ? <DateTimePicker
         testID="dateTimePicker"
         value={date}
         mode={mode}
         is24Hour={true}
         display="default"
         onChange={onChange}
-      /> */}
+      /> : null}
       {/* {createProfileError.invalidDate && (
         <Text style={[styles.error]}>{errorTrue}</Text>
       )}
@@ -52,4 +51,4 @@ function Date({ iconName, createProfileError }) {
   );
 }
 
-export default Date;
+export default DateX;
