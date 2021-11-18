@@ -21,6 +21,7 @@ import AnimalSex from "../components/create_profile_components/Sex/Sex";
 import Status from "../components/create_profile_components/Status/Status";
 import Age from "../components/create_profile_components/Age/Age";
 import Weight from "../components/create_profile_components/Weight/Weight";
+import Date from "../components/create_profile_components/Date/Date";
 
 const marginLeftText = "5%";
 const marginBottomText = 10;
@@ -493,30 +494,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           wrongCHIPFormat={wrongCHIPFormat}
         />
 
-        <View>
-          <Text style={[styles.marginsText, styles.headerTitle]}>
-            Data przyjęcia (DD/MM/YYYY)
-          </Text>
-          <TextInput
-            placeholderTextColor="#000"
-            placeholderStyle={{}}
-            style={[
-              styles.textInput,
-              createProfileError.invalidDate ||
-              createProfileError.wrongDateFormat
-                ? styles.inputError
-                : null,
-            ]}
-            autoCapitalize="none"
-            onChangeText={(val) => handleDateChange(val)}
-          />
-          {createProfileError.invalidDate && (
-            <Text style={[styles.error]}>{errorTrue}</Text>
-          )}
-          {createProfileError.wrongDateFormat && (
-            <Text style={[styles.error]}>{wrongDateFormat}</Text>
-          )}
-        </View>
+        <Date
+          // dateVal={data.date}
+          iconName={iconName}
+          createProfileError={createProfileError}
+        />
 
         <View>
           {/* collapse typ */}
