@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginLeft: 20,
   },
-  textInputAge: {
+  textInputSmall: {
     marginLeft: 20,
     width: "30%",
     paddingHorizontal: 20,
@@ -35,6 +35,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E2E1E1",
     borderRadius: 40,
     marginBottom: 10,
+  },
+  textInputName: {
+    fontSize: 16,
+    paddingTop: 10,
+    marginLeft: 10,
   },
   inputTitle: {
     marginLeft: marginLeftText,

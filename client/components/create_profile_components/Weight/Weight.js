@@ -4,13 +4,12 @@ import styles from "../styles";
 
 const marginLeftText = "5%";
 const marginBottomText = 10;
-const errorText = "Podaj wiek";
 
-function Age({
-  handleYearsChange,
-  handleMonthsChange,
-  years,
-  months,
+function Weight({
+  handleKgChange,
+  handleGramChange,
+  kg,
+  g,
   errorTrue,
   createProfileError,
 }) {
@@ -19,11 +18,14 @@ function Age({
       <View style={styles.standardHeader}>
         <Text
           style={[
-            { marginLeft: marginLeftText, marginBottom: marginBottomText },
+            {
+              marginLeft: marginLeftText,
+              marginBottom: marginBottomText,
+            },
             styles.headerTitle,
           ]}
         >
-          Wiek
+          Waga
         </Text>
       </View>
 
@@ -33,32 +35,33 @@ function Age({
           placeholderStyle={{}}
           style={[
             styles.textInputSmall,
-            createProfileError.emptyAge ? styles.inputError : null,
+            createProfileError.emptyWeight ? styles.inputError : null,
           ]}
           autoCapitalize="none"
-          value={years}
-          onChangeText={(val) => handleYearsChange(val)}
+          value={kg}
+          onChangeText={(val) => handleKgChange(val)}
         />
-        <Text style={[styles.textInputName]}>lat</Text>
+        <Text style={[styles.textInputName]}>kg</Text>
 
         <TextInput
           placeholderTextColor="#000"
           placeholderStyle={{}}
           style={[
             styles.textInputSmall,
-            createProfileError.emptyAge ? styles.inputError : null,
+            createProfileError.emptyWeight ? styles.inputError : null,
           ]}
           autoCapitalize="none"
-          value={months}
-          onChangeText={(val) => handleMonthsChange(val)}
+          value={g}
+          onChangeText={(val) => handleGramChange(val)}
         />
-        <Text style={[styles.textInputName]}>mies</Text>
+        <Text style={[styles.textInputName]}>g</Text>
       </View>
-      {createProfileError.emptyAge && (
+
+      {createProfileError.emptyWeight && (
         <Text style={[styles.error]}>{errorTrue}</Text>
       )}
     </View>
   );
 }
 
-export default Age;
+export default Weight;

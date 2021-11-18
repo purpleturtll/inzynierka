@@ -14,17 +14,13 @@ import {
   CollapseBody,
 } from "accordion-collapse-react-native";
 import { Feather } from "@expo/vector-icons";
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from "react-native-simple-radio-button";
 import Name from "../components/create_profile_components/Name/Name";
 import Chip from "../components/create_profile_components/Chip/Chip";
 import AnimalType from "../components/create_profile_components/AnimalType/AnimalType";
 import AnimalSex from "../components/create_profile_components/Sex/Sex";
 import Status from "../components/create_profile_components/Status/Status";
 import Age from "../components/create_profile_components/Age/Age";
+import Weight from "../components/create_profile_components/Weight/Weight";
 
 const marginLeftText = "5%";
 const marginBottomText = 10;
@@ -44,7 +40,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     unselectedAnimalType: false,
     unselectedSex: false,
     unselectedStatus: false,
-    invalidAge: false,
+    emptyAge: false,
+    emptyWeight: false,
     invalidWeight: false,
     wrongDateFormat: false,
     wrongCHIPFormat: false,
@@ -136,23 +133,6 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     { id: "114", label: "Inne" },
   ];
 
-  // radio wiek
-  const radio_age_props = [
-    { label: "lat", value: 0 },
-    { label: "mies", value: 1 },
-  ];
-
-  // radio waga
-  var radio_weight_props = [
-    { label: "g", value: 0 },
-    { label: "kg", value: 1 },
-  ];
-
-  const [weight, setWeight] = useState(0);
-  const [ageFormat, setAgeFormat] = useState(0);
-  const [years, setYears] = useState("");
-  const [months, setMonths] = useState("");
-
   const [data, setData] = useState({
     animal_type: "",
     breed: "",
@@ -161,8 +141,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     CHIP: "",
     years: "",
     months: "",
-    weight: "",
-    age: 0,
+    kg: "",
+    g: "",
     description: "",
     date: "",
     check_textInputChange: false,
@@ -210,14 +190,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 
   // Age ------------------
 
-  const AgeToMonths = () => {
-    console.log(data.years, data.months);
+  function AgeToMonths() {
     let tempAge = parseInt(data.years) * 12 + parseInt(data.months);
-    setData({
-      ...data,
-      age: tempAge,
-    });
-  };
+    console.log(tempAge);
+    return tempAge;
+  }
 
   const handleYearsChange = (val) => {
     setData({
@@ -233,17 +210,27 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     });
   };
 
-  const handleWeightChange = (val) => {
+  //Weight --------------
+
+  const handleKgChange = (val) => {
     setData({
       ...data,
-      weight: val,
+      kg: val,
     });
-    setCreateProfileError({
-      ...createProfileError,
-      invalidWeight: false,
-    });
-    error = false;
   };
+
+  const handleGramChange = (val) => {
+    setData({
+      ...data,
+      g: val,
+    });
+  };
+
+  function WeightToGram() {
+    let tempWeight = parseInt(data.kg) * 1000 + parseInt(data.g);
+    console.log(tempWeight);
+    return tempWeight;
+  }
 
   const handleAnimalTypeChange = (val) => {
     setData({
@@ -316,8 +303,10 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
   };
 
   const onRegisterPress = () => {
+    //funkcje z return do fetch
     AgeToMonths();
-    console.log(data.age);
+    WeightToGram();
+
     if (data.name == "") {
       setCreateProfileError((prevState) => {
         return {
@@ -415,38 +404,36 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       error = true;
     }
 
-    if (data.age == "") {
+    if (data.years == "" && data.months == "") {
       setCreateProfileError((prevState) => {
         return {
           ...prevState,
-          invalidAge: true,
+          emptyAge: true,
         };
       });
       error = true;
-    }
-
-    if (data.age > 0) {
-      setCreateProfileError({
-        ...createProfileError,
-        invalidAge: false,
-      });
-      error = false;
     } else {
       setCreateProfileError({
         ...createProfileError,
-        invalidAge: true,
+        emptyAge: false,
       });
-      error = true;
+      error = false;
     }
 
-    if (data.weight == "") {
+    if (data.kg == "" && data.g == "") {
       setCreateProfileError((prevState) => {
         return {
           ...prevState,
-          invalidWeight: true,
+          emptyWeight: true,
         };
       });
       error = true;
+    } else {
+      setCreateProfileError({
+        ...createProfileError,
+        emptyWeight: false,
+      });
+      error = false;
     }
 
     if (data.description == "") {
@@ -589,51 +576,19 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                 handleMonthsChange={handleMonthsChange}
                 years={data.years}
                 months={data.months}
+                errorTrue={errorTrue}
                 createProfileError={createProfileError}
               />
 
               {/*Waga*/}
-              <View>
-                <View style={styles.standardHeader}>
-                  <Text
-                    style={[
-                      {
-                        marginLeft: marginLeftText,
-                        marginBottom: marginBottomText,
-                      },
-                      styles.headerTitle,
-                    ]}
-                  >
-                    Waga
-                  </Text>
-                  <RadioForm
-                    radio_props={radio_weight_props}
-                    initial={0}
-                    formHorizontal={true}
-                    buttonColor={"#362893"}
-                    selectedButtonColor={"#362893"}
-                    borderWidth={1}
-                    buttonSize={15}
-                    style={{ marginLeft: 20, marginTop: 2 }}
-                    labelStyle={{ marginRight: 15 }}
-                    onPress={(value) => setWeight(value)}
-                  />
-                </View>
-                <TextInput
-                  placeholderTextColor="#000"
-                  placeholderStyle={{}}
-                  style={[
-                    styles.textInput,
-                    styles.textInputCollapse,
-                    createProfileError.invalidWeight ? styles.inputError : null,
-                  ]}
-                  autoCapitalize="none"
-                  onChangeText={(val) => handleWeightChange(val)}
-                />
-                {createProfileError.invalidWeight && (
-                  <Text style={[styles.error]}>{errorTrue}</Text>
-                )}
-              </View>
+              <Weight
+                handleKgChange={handleKgChange}
+                handleGramChange={handleGramChange}
+                kg={data.kg}
+                g={data.g}
+                errorTrue={errorTrue}
+                createProfileError={createProfileError}
+              />
             </CollapseBody>
           </Collapse>
 
