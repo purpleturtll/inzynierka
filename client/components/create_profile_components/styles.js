@@ -1,78 +1,87 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-const marginLeftText = '5%';
+const marginLeftText = "5%";
 const marginBottomText = 10;
 
 const styles = StyleSheet.create({
   container: {
-    width: '85%',
-    marginLeft: '7.5%'
+    width: "85%",
+    marginLeft: "7.5%",
   },
   title: {
     fontSize: 33,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 40,
-    marginBottom: 10
+    marginBottom: 10,
   },
   textInput: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#E2E1E1',
+    backgroundColor: "#E2E1E1",
     borderRadius: 40,
     marginBottom: 10,
   },
   textInputCollapse: {
-    width: '90%',
+    width: "90%",
     marginLeft: 20,
+  },
+  textInputAge: {
+    marginLeft: 20,
+    width: "30%",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#E2E1E1",
+    borderRadius: 40,
+    marginBottom: 10,
   },
   inputTitle: {
     marginLeft: marginLeftText,
     marginBottom: marginBottomText,
     marginTop: 10,
     fontSize: 16,
-    fontWeight: '900'
+    fontWeight: "900",
   },
   inputError: {
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 1,
-    marginBottom: 4
+    marginBottom: 4,
   },
   description: {
     height: 200,
     paddingHorizontal: 30,
-    paddingVertical: 25
+    paddingVertical: 25,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   addButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
     marginTop: 20,
     marginBottom: 10,
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#362893',
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#362893",
     borderRadius: 20,
     padding: 10,
   },
   error: {
     marginLeft: marginLeftText,
-    color: 'red',
+    color: "red",
     fontSize: 15,
-    marginBottom: 10
+    marginBottom: 10,
   },
   collapse: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   collapseHeader: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginHorizontal: 30,
     marginTop: 20,
     marginBottom: 10,
@@ -80,21 +89,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     borderWidth: 1.8,
-    borderColor: 'gray',
-    borderStyle: 'solid'
+    borderColor: "gray",
+    borderStyle: "solid",
   },
   standardHeader: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginLeft: 10,
     marginRight: 30,
     marginTop: 20,
     marginBottom: 10,
     paddingHorizontal: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   headerTitle: {
-    fontWeight: 'bold',
-    fontSize: 18
+    fontWeight: "bold",
+    fontSize: 18,
   },
   marginsText: {
     marginLeft: marginLeftText,
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 6,
     paddingHorizontal: 15,
-    backgroundColor: '#c4c4c4',
+    backgroundColor: "#c4c4c4",
     borderRadius: 10,
   },
   alignedLabel: {
@@ -116,13 +125,13 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    backgroundColor: '#c4c4c4',
+    backgroundColor: "#c4c4c4",
     borderRadius: 10,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   selected: {
-    backgroundColor: '#fff'
-  }
+    backgroundColor: "#fff",
+  },
 });
 
 export default styles;
