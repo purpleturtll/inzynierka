@@ -22,6 +22,7 @@ import Status from "../components/create_profile_components/Status/Status";
 import Age from "../components/create_profile_components/Age/Age";
 import Weight from "../components/create_profile_components/Weight/Weight";
 import DateX from "../components/create_profile_components/DateX/DateX";
+import Description from "../components/create_profile_components/Description/Description";
 
 const marginLeftText = "5%";
 const marginBottomText = 10;
@@ -652,24 +653,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           )}
         </View>
 
-        <View>
-          <Text style={[styles.marginsText, styles.headerTitle]}>Opis</Text>
-          <TextInput
-            placeholderTextColor="#000"
-            multiline={true}
-            style={[
-              { textAlignVertical: "top" },
-              styles.textInput,
-              styles.description,
-              createProfileError.invalidDescription ? styles.inputError : null,
-            ]}
-            autoCapitalize="sentences"
-            onChangeText={(val) => handleDescriptionChange(val)}
-          />
-          {createProfileError.invalidDescription && (
-            <Text style={[styles.error]}>{errorTrue}</Text>
-          )}
-        </View>
+        <Description
+          handleDescriptionChange={handleDescriptionChange}
+          createProfileError={createProfileError}
+          errorTrue={errorTrue}
+        />
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.addButton} onPress={onRegisterPress}>
