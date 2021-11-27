@@ -3,8 +3,6 @@ import {
   View,
   ScrollView,
   Text,
-  TextInput,
-  StyleSheet,
   TouchableOpacity,
   FlatList,
 } from "react-native";
@@ -13,6 +11,7 @@ import {
   CollapseHeader,
   CollapseBody,
 } from "accordion-collapse-react-native";
+import styles from "../components/create_profile_components/styles";
 import { Feather } from "@expo/vector-icons";
 import Name from "../components/create_profile_components/Name/Name";
 import Chip from "../components/create_profile_components/Chip/Chip";
@@ -24,12 +23,8 @@ import Weight from "../components/create_profile_components/Weight/Weight";
 import DateX from "../components/create_profile_components/DateX/DateX";
 import Description from "../components/create_profile_components/Description/Description";
 
-const marginLeftText = "5%";
-const marginBottomText = 10;
-
 const CreateAnimalProfileScreen = ({ navigation }) => {
   const errorTrue = "Pole nie może być puste";
-  const wrongDateFormat = "Niepoprawna data";
   const wrongCHIPFormat = "Numer chip powinien zawierać 15 cyfr";
   const unselected = "Wybierz jedną z opcji";
   const unselectedStatus = "Wybierz co najmniej jedną z opcji";
@@ -459,7 +454,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
         adoptable: true,
         admission_date: data.date,
         description: data.description,
-        age: data.age,
+        age: data.years,
         chip_number: data.CHIP,
         recently_found: true,
         is_sterilized: true,
@@ -471,7 +466,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       if (response.status == 201) {
         navigation.navigate("CreatedAnimalProfileScreen");
       } else {
-        navigation.navigate("CreateAnimalProfileScreen");
+        //navigation.navigate("CreateAnimalProfileScreen");
       }
     });
   };
@@ -703,125 +698,3 @@ const AlignedLabel = ({ item, selected }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: "85%",
-    marginLeft: "7.5%",
-  },
-  title: {
-    fontSize: 33,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 40,
-    marginBottom: 10,
-  },
-  textInput: {
-    width: "100%",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#E2E1E1",
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  textInputCollapse: {
-    width: "90%",
-    marginLeft: 20,
-  },
-  inputTitle: {
-    marginLeft: marginLeftText,
-    marginBottom: marginBottomText,
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: "900",
-  },
-  inputError: {
-    borderColor: "red",
-    borderWidth: 1,
-    marginBottom: 4,
-  },
-  description: {
-    height: 200,
-    paddingHorizontal: 30,
-    paddingVertical: 25,
-  },
-  buttonContainer: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  addButton: {
-    flexDirection: "row",
-    height: 50,
-    marginTop: 20,
-    marginBottom: 10,
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#362893",
-    borderRadius: 20,
-    padding: 10,
-  },
-  error: {
-    marginLeft: marginLeftText,
-    color: "red",
-    fontSize: 15,
-    marginBottom: 10,
-  },
-  collapse: {
-    flexDirection: "row",
-  },
-
-  collapseHeader: {
-    flexDirection: "row",
-    marginHorizontal: 30,
-    marginTop: 20,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 10,
-    borderWidth: 1.8,
-    borderColor: "gray",
-    borderStyle: "solid",
-  },
-  standardHeader: {
-    flexDirection: "row",
-    marginLeft: 10,
-    marginRight: 30,
-    marginTop: 20,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-  },
-  headerTitle: {
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  marginsText: {
-    marginLeft: marginLeftText,
-    marginBottom: marginBottomText,
-    marginTop: 10,
-  },
-  label: {
-    marginRight: 15,
-    marginVertical: 10,
-    paddingVertical: 6,
-    paddingHorizontal: 15,
-    backgroundColor: "#c4c4c4",
-    borderRadius: 10,
-  },
-  alignedLabel: {
-    flex: 1,
-    width: 100,
-    margin: 10,
-    marginLeft: 0,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    backgroundColor: "#c4c4c4",
-    borderRadius: 10,
-    justifyContent: "center",
-  },
-  selected: {
-    backgroundColor: "#fff",
-  },
-});
