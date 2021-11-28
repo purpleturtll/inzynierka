@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Constants from 'expo-constants';
 
 export const UserContext = React.createContext();
@@ -10,6 +10,7 @@ export const UserDataProvider = ({ children }) => {
         loggedIn: false,
         token: '',
         userId: null,
+        isShelter: false,
         email: '',
         password: ''
     });
@@ -25,33 +26,35 @@ export const UserDataProvider = ({ children }) => {
             body: JSON.stringify({
                 email: userData.email,
                 password: userData.password
-            }), 
-            headers: {"Content-Type": "application/json"},
-            method:'POST'
+            }),
+            headers: { "Content-Type": "application/json" },
+            method: 'POST'
         })
-        .then(response => {
-            status = response.status;
-            return response.json();
-        })
-        .then(body => {
-            var jsonStr = JSON.stringify(body);
-            var jsonObj = JSON.parse(jsonStr);
-            newToken = jsonObj.token;
-            userId = jsonObj.user_id;
-            if(status == 200){
-                setUserData({
-                    ...userData,
-                    token: newToken,
-                    userId: userId
-                });
-            }
-        });
-        return {newToken, userId};
+            .then(response => {
+                status = response.status;
+                return response.json();
+            })
+            .then(body => {
+                var jsonStr = JSON.stringify(body);
+                var jsonObj = JSON.parse(jsonStr);
+                newToken = jsonObj.token;
+                userId = jsonObj.user_id;
+                isShelter = jsonObj.is_shelter;
+                if (status == 200) {
+                    setUserData({
+                        ...userData,
+                        token: newToken,
+                        isShelter: isShelter,
+                        userId: userId
+                    });
+                }
+            });
+        return { newToken, userId };
     }
 
-    return(
+    return (
         <UserContext.Provider value={{ userData, setUserData, relogin }}>
             {children}
         </UserContext.Provider>
-    );  
+    );
 }

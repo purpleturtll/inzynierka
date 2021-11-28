@@ -46,8 +46,8 @@ const MessageStackNavigator = () => {
 const FollowedStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name='FollowedAnimalsScreen' 
+      <Stack.Screen
+        name='FollowedAnimalsScreen'
         component={FollowedAnimalsScreen}
       />
       <Stack.Screen
@@ -66,6 +66,13 @@ const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="SignInScreen"
+        component={SignInScreen}
+        options={{
+          title: ' '
+        }}
+      />
+      <Stack.Screen
         name="AccountScreen"
         component={AccountScreen}
         options={{
@@ -76,13 +83,6 @@ const AccountStackNavigator = () => {
         options={{
           title: ''
         }} />
-      <Stack.Screen
-        name="SignInScreen"
-        component={SignInScreen}
-        options={{
-          title: ' '
-        }}
-      />
       <Stack.Screen name="DoneRegistrationScreen" component={DoneRegistrationScreen}
         options={{ headerShown: false }} />
       <Stack.Screen name="PasswordRecoveryScreen" component={PasswordRecoveryScreen}
@@ -155,7 +155,7 @@ const AccountStackNavigator = () => {
 const MyStack = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TempScreen"
+      <Stack.Navigator initialRouteName="SignInScreen"
       >
         <Stack.Screen
           name="SignInScreen"

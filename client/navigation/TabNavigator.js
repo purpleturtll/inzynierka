@@ -1,16 +1,21 @@
-import React from "react";
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useContext, useEffect } from "react";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {MainStackNavigator, MessageStackNavigator, FollowedStackNavigator, AccountStackNavigator} from './StackNavigation';
-import {Feather} from '@expo/vector-icons';
+import { MainStackNavigator, MessageStackNavigator, FollowedStackNavigator, AccountStackNavigator } from './StackNavigation';
+import { UserContext } from '../contexts/UserContext'
+import { Feather } from '@expo/vector-icons';
 import CreateAnimalProfileScreen from "../screens/CreateAnimalProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-  return(
+  const userCtx = useContext(UserContext);
+
+  useEffect(() => { }, [userCtx])
+
+  return (
     <Tab.Navigator
-          initialRouteName="HomeScreen"
+      initialRouteName="HomeScreen"
       tabBarOptions={{
         activeTintColor: '#362893',
       }}>
@@ -19,32 +24,39 @@ const BottomTabNavigator = () => {
           tabBarLabel: 'Główna',
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
-          ), }}
+          ),
+        }}
       />
       {/* <Tab.Screen name="messages" component={MessageStackNavigator} */}
-      <Tab.Screen name="messages" component={CreateAnimalProfileScreen}
-         options={{
-          tabBarLabel: 'Rozmowy',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="mail" color={color} size={size} />
-          ), }}
-      />
-      <Tab.Screen name="followed" component={FollowedStackNavigator}
-         options={{
-          tabBarLabel: 'Ulubione',
-          tabBarIcon: ({ color, size }) => (
-            <Feather name="heart" color={color} size={size} />
-          ), }}
-      />
+      {userCtx.userData.isShelter ?
+        < Tab.Screen name="messages" component={CreateAnimalProfileScreen}
+          options={{
+            tabBarLabel: 'Rozmowy',
+            tabBarIcon: ({ color, size }) => (
+              <Feather name="plus" color={color} size={size} />
+            ),
+          }}
+        />
+        :
+        <Tab.Screen name="followed" component={FollowedStackNavigator}
+          options={{
+            tabBarLabel: 'Ulubione',
+            tabBarIcon: ({ color, size }) => (
+              <Feather name="heart" color={color} size={size} />
+            ),
+          }}
+        />
+      }
       <Tab.Screen name="account" component={AccountStackNavigator}
-         options={{
+        options={{
           tabBarLabel: 'Konto',
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
-          ), }}
+          ),
+        }}
       />
     </Tab.Navigator>
   )
-} 
+}
 
 export default BottomTabNavigator;

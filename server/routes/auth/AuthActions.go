@@ -21,17 +21,36 @@ func Login(c echo.Context) error {
 	}
 	b, _ := json.MarshalIndent(obj, "", "\t")
 	fmt.Printf("%v\n", string(b))
-	found := new(models.User)
-	result := db.Connection().First(&found, "email = ? AND password = ?", obj.Email, obj.Password)
-	if result.Error == gorm.ErrRecordNotFound {
+	foundUser := new(models.User)
+	resultUser := db.Connection().First(&foundUser, "email = ? AND password = ?", obj.Email, obj.Password)
+	foundShelter := new(models.Shelter)
+	resultShelter := db.Connection().First(&foundShelter, "email = ? AND password = ?", obj.Email, obj.Password)
+	if resultUser.Error == gorm.ErrRecordNotFound && resultShelter.Error == gorm.ErrRecordNotFound {
+		fmt.Println("AAAAAAAAAAAAAAA nie ma nigdzie")
 		return echo.ErrUnauthorized
 	}
 
+	var isShelter bool
+	var email string
+	var id uint
+
+	if resultUser.Error == gorm.ErrRecordNotFound {
+		// Is Shelter
+		isShelter = true
+		email = foundShelter.Email
+		id = foundShelter.ID
+	} else {
+		// Is User
+		isShelter = false
+		email = foundUser.Email
+		id = foundUser.ID
+	}
+
 	claims := &config.Claims{
-		Email: found.Email,
-		Admin: true,
+		Email:     email,
+		IsShelter: isShelter, // Set shelter flag for client app
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 10).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 1000).Unix(), // Long time for testing
 		},
 	}
 
@@ -43,8 +62,9 @@ func Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"token":   t,
-		"user_id": found.ID,
+		"token":      t,
+		"user_id":    id,
+		"is_shelter": isShelter,
 	})
 }
 
