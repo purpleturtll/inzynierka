@@ -6,6 +6,7 @@ import (
 	"inzynierka/db"
 	"inzynierka/models"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -35,6 +36,7 @@ type AnimalSend struct {
 	IsSterilized  bool      `json:"is_sterilized"`
 	IsVaccinated  bool      `json:"is_vaccinated"`
 	IsFavourite   bool      `json:"favourite"`
+	Picture       string    `json:"picture"`
 }
 
 // Przenoszenie danych ze structa Animal do AnimalSend z 'favourite' dla user_id z parametru user-id (domyślnie 'false')
@@ -44,12 +46,14 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	var shelter models.Shelter
 	var fav_animal []models.FavAnimal
 	var IsFav bool
+	var picture models.Picture
 
 	for _, v := range animals_db {
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
 		db.Connection().Select("city").First(&shelter, v.ShelterID)
 		//znajdź rekord z powiązaniem z tabeli fav_animals
 		fav_assoc := db.Connection().Where("animal_id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
+		db.Connection().Where("animal_id = ?", v.ID).Select("path").Find(&picture)
 		if user_id == "" {
 			IsFav = false
 		} else {
@@ -59,6 +63,13 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 				IsFav = true
 			}
 		}
+
+		picture_bytes, picture_err := os.ReadFile("../pictures/" + picture.Path + ".jpg")
+		if picture_err != nil {
+			fmt.Print(picture_err, ": ../pictures/"+picture.Path+".jpg")
+		}
+		picture_string := string(picture_bytes)
+
 		animal := AnimalSend{
 			ID:            v.ID,
 			AnimalType:    animalType.Type,
@@ -76,6 +87,7 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 			IsSterilized:  v.IsSterilized,
 			IsVaccinated:  v.IsVaccinated,
 			IsFavourite:   IsFav,
+			Picture:       picture_string,
 		}
 		animals = append(animals, animal)
 	}
