@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"inzynierka/db"
 	"inzynierka/models"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -95,14 +96,58 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	return animals
 }
 
+// Tworzenie nowego profilu zwierzęcia, "doc" musi być pierwszą częścią
 func Create(c echo.Context) error {
-	obj := new(models.Animal)
-	if err := c.Bind(obj); err != nil {
+	var animal models.Animal
+	i := 0
+	mr, err := c.Request().MultipartReader()
+	if err != nil {
 		return err
 	}
-	b, _ := json.MarshalIndent(obj, "", "\t")
-	fmt.Printf("%v\n", string(b))
-	db.Connection().Create(obj)
+
+	for {
+		part, err := mr.NextPart()
+
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return err
+		}
+
+		if part.FormName() == "doc" {
+			obj := new(models.Animal)
+			part_json := json.NewDecoder(part)
+			if err := part_json.Decode(obj); err != nil {
+				return err
+			}
+			b, _ := json.MarshalIndent(obj, "", "\t")
+			fmt.Printf("%v\n", string(b))
+			db.Connection().Create(obj)
+			animal = *obj
+		}
+
+		if part.FormName() == "file" {
+			filename := strconv.Itoa(int(animal.ID)) + "_" + strconv.Itoa(i)
+			outfile, err := os.Create("../pictures/" + filename + ".jpg")
+			if err != nil {
+				return err
+			}
+			defer outfile.Close()
+
+			_, err = io.Copy(outfile, part)
+			if err != nil {
+				return err
+			}
+
+			picture := new(models.Picture)
+			picture.Path = filename
+			picture.AnimalID = animal.ID
+			db.Connection().Create(picture)
+		}
+		i += 1
+	}
+
 	return c.String(http.StatusCreated, "Created")
 }
 
