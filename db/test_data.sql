@@ -447,22 +447,22 @@ INSERT INTO [dbo].[pictures]
            ,NULL
            ,NULL
            ,0
-           ,NULL),
+           ,N'000_001'),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,1
-           ,NULL),
+           ,N'000_001'),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,2
-           ,NULL),
+           ,N'001_001'),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,3
-           ,NULL),
+           ,N'002_001'),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
