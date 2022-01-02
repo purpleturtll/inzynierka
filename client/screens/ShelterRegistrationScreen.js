@@ -103,7 +103,7 @@ const ShelterRegistrationScreen = ({ navigation }) => {
 
     //TODO: walidacja
     const onRegisterPress = () => {
-        const res = fetch("http://10.0.2.2:8080/auth/register_shelter", {
+        const res = fetch(`${apiUrl}/auth/register_shelter`, {
             body: JSON.stringify({
                 username: data.username,
                 password: data.password,

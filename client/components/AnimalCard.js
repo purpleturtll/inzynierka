@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { AnimalDataContext } from '../contexts/AnimalContext';
-
+import Constants from 'expo-constants';
+const apiUrl = Constants.manifest.extra.apiUrl;
 export default AnimalCard = ({ animalId, navigation }) => {
 
   {/*Kontekst zwierząt*/ }
@@ -42,7 +43,7 @@ export default AnimalCard = ({ animalId, navigation }) => {
     <View style={styles.card}>
       <TouchableOpacity onPress={() => onAnimalPress(animal)}>
         <Image
-          source={{ uri: `http://10.0.2.2:8080/pictures/00${animalId}.jpg` }}
+          source={{ uri: `${apiUrl}/pictures/00${animalId}.jpg` }}
           style={styles.image}
         />
       </TouchableOpacity>
