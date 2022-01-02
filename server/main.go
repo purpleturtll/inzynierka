@@ -12,6 +12,7 @@ func main() {
 	db.Init()
 	db.Migrate()
 	e := echo.New()
+	e.Static("/pictures", "pictures")
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 

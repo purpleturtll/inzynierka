@@ -37,7 +37,6 @@ type AnimalSend struct {
 	IsSterilized  bool      `json:"is_sterilized"`
 	IsVaccinated  bool      `json:"is_vaccinated"`
 	IsFavourite   bool      `json:"favourite"`
-	Picture       string    `json:"picture"`
 }
 
 // Przenoszenie danych ze structa Animal do AnimalSend z 'favourite' dla user_id z parametru user-id (domyślnie 'false')
@@ -47,14 +46,12 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	var shelter models.Shelter
 	var fav_animal []models.FavAnimal
 	var IsFav bool
-	var picture models.Picture
 
 	for _, v := range animals_db {
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
 		db.Connection().Select("city").First(&shelter, v.ShelterID)
 		//znajdź rekord z powiązaniem z tabeli fav_animals
 		fav_assoc := db.Connection().Where("animal_id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
-		db.Connection().Where("animal_id = ?", v.ID).Select("path").Find(&picture)
 		if user_id == "" {
 			IsFav = false
 		} else {
@@ -64,12 +61,6 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 				IsFav = true
 			}
 		}
-
-		picture_bytes, picture_err := os.ReadFile("../pictures/" + picture.Path + ".jpg")
-		if picture_err != nil {
-			fmt.Print(picture_err, ": ../pictures/"+picture.Path+".jpg")
-		}
-		picture_string := string(picture_bytes)
 
 		animal := AnimalSend{
 			ID:            v.ID,
@@ -88,7 +79,6 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 			IsSterilized:  v.IsSterilized,
 			IsVaccinated:  v.IsVaccinated,
 			IsFavourite:   IsFav,
-			Picture:       picture_string,
 		}
 		animals = append(animals, animal)
 	}
@@ -99,54 +89,44 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 // Tworzenie nowego profilu zwierzęcia, "doc" musi być pierwszą częścią
 func Create(c echo.Context) error {
 	var animal models.Animal
-	i := 0
-	mr, err := c.Request().MultipartReader()
+
+	incomingAnimalData := c.FormValue("doc")
+	obj := new(models.Animal)
+	part_json := json.NewDecoder(strings.NewReader(incomingAnimalData))
+	if err := part_json.Decode(obj); err != nil {
+		return err
+	}
+	b, _ := json.MarshalIndent(obj, "", "\t")
+	fmt.Printf("%v\n", string(b))
+	db.Connection().Create(obj)
+	animal = *obj
+
+	incomingAnimalPicture, err := c.FormFile("file")
+	if err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, "Missing image")
+	}
+	src, err := incomingAnimalPicture.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	filename := strconv.Itoa(int(animal.ID))
+	outfile, err := os.Create("./pictures/" + filename + ".jpg")
+	if err != nil {
+		return err
+	}
+	defer outfile.Close()
+
+	_, err = io.Copy(outfile, src)
 	if err != nil {
 		return err
 	}
 
-	for {
-		part, err := mr.NextPart()
-
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return err
-		}
-
-		if part.FormName() == "doc" {
-			obj := new(models.Animal)
-			part_json := json.NewDecoder(part)
-			if err := part_json.Decode(obj); err != nil {
-				return err
-			}
-			b, _ := json.MarshalIndent(obj, "", "\t")
-			fmt.Printf("%v\n", string(b))
-			db.Connection().Create(obj)
-			animal = *obj
-		}
-
-		if part.FormName() == "file" {
-			filename := strconv.Itoa(int(animal.ID)) + "_" + strconv.Itoa(i)
-			outfile, err := os.Create("../pictures/" + filename + ".jpg")
-			if err != nil {
-				return err
-			}
-			defer outfile.Close()
-
-			_, err = io.Copy(outfile, part)
-			if err != nil {
-				return err
-			}
-
-			picture := new(models.Picture)
-			picture.Path = filename
-			picture.AnimalID = animal.ID
-			db.Connection().Create(picture)
-		}
-		i += 1
-	}
+	picture := new(models.Picture)
+	picture.Path = filename
+	picture.AnimalID = animal.ID
+	db.Connection().Create(picture)
 
 	return c.String(http.StatusCreated, "Created")
 }
