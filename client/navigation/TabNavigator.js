@@ -16,11 +16,12 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   const userCtx = useContext(UserContext);
 
-  useEffect(() => {}, [userCtx]);
+  useEffect(() => { }, [userCtx]);
 
   return (
     <Tab.Navigator
       initialRouteName="HomeScreen"
+      screenOptions={{ headerShown: false }}
       tabBarOptions={{
         activeTintColor: "#362893",
         style: { height: 55, paddingBottom: 5 },

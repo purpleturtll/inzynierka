@@ -33,7 +33,7 @@ const MainStackNavigator = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        // options={{ headerTitleAlign: "center" }}
+      // options={{ headerTitleAlign: "center" }}
       ></Stack.Screen>
       <Stack.Screen
         name="SeeMoreScreen"
