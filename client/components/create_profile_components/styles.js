@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   container: {
     width: "85%",
     marginLeft: "7.5%",
+    marginTop: 30,
   },
   title: {
     fontSize: 33,

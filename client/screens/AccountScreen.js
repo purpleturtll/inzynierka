@@ -1,60 +1,87 @@
-import React from 'react';
+import React, { useContext, useEffect } from "react";
 import {
-  View, Text, StyleSheet, TouchableOpacity, Image, Dimensions
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { UserContext } from "../contexts/UserContext";
 
 const AccountScreen = ({ navigation }) => {
+  const userCtx = useContext(UserContext);
+
+  useEffect(() => {}, [userCtx]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image
-          source={require('../assets/user.png')}
-          style={styles.logo} />
-        <Text style={styles.welcome}>Witaj, Jan Kowalski!</Text>
+        <Image source={require("../assets/user.png")} style={styles.logo} />
+
+        {userCtx.userData.isShelter ? (
+          <Text style={styles.welcomeShelter}>
+            Schronisko dla Zwierząt w Poznaniu
+          </Text>
+        ) : (
+          <Text style={styles.welcome}>Witaj, Jan Kowalski!</Text>
+        )}
       </View>
       <View style={styles.body}>
         <View>
-          <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('ChangeEmailScreen')}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => navigation.navigate("ChangeEmailScreen")}
+          >
             <Text style={styles.optionText}>Zmień adres e-mail</Text>
             <Feather
               name="chevron-right"
               color="#4A4A4A"
               size={22}
-              style={{ textAlignVertical: 'center', paddingRight: 13 }}
+              style={{ textAlignVertical: "center", paddingRight: 13 }}
             />
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('ChangePasswordScreen')}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => navigation.navigate("ChangePasswordScreen")}
+          >
             <Text style={styles.optionText}>Zmień hasło</Text>
             <Feather
               name="chevron-right"
               color="#4A4A4A"
               size={22}
-              style={{ textAlignVertical: 'center', paddingRight: 13 }}
+              style={{ textAlignVertical: "center", paddingRight: 13 }}
             />
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('DeleteAccountScreen')}>
+          <TouchableOpacity
+            style={styles.option}
+            onPress={() => navigation.navigate("DeleteAccountScreen")}
+          >
             <Text style={styles.optionText}>Usuń konto</Text>
             <Feather
               name="chevron-right"
               color="#4A4A4A"
               size={22}
-              style={{ textAlignVertical: 'center', paddingRight: 13 }}
+              style={{ textAlignVertical: "center", paddingRight: 13 }}
             />
           </TouchableOpacity>
         </View>
         {/*TODO: prawdziwe wylogowanie (appCtx, unieważnienie jwt))*/}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignInScreen')}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("SignInScreen")}
+        >
           <Text style={styles.buttonText}>Wyloguj</Text>
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 export default AccountScreen;
 
 const { height } = Dimensions.get("screen");
@@ -65,53 +92,59 @@ const height_logo = height * 0.22;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   header: {
     flex: 2,
-    alignItems: 'center',
+    alignItems: "center",
   },
   logo: {
     width: height_logo,
     height: height_logo,
-    marginTop: height * 0.05
+    marginTop: height * 0.05,
   },
   welcome: {
     marginTop: height * 0.03,
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+  },
+  welcomeShelter: {
+    marginTop: height * 0.04,
+    marginHorizontal: 40,
+    fontSize: 27,
+    fontWeight: "bold",
   },
   option: {
-    flexDirection: 'row',
-    width: '80%',
+    flexDirection: "row",
+    width: "80%",
     height: 45,
     marginVertical: height * 0.013,
     borderWidth: 3,
-    borderColor: '#4A4A4A',
+    borderColor: "#4A4A4A",
     borderRadius: 10,
   },
   optionText: {
     flex: 1,
     fontSize: 18,
     textAlignVertical: "center",
-    marginLeft: '8%'
+    marginLeft: "8%",
   },
   body: {
     flex: 2,
-    alignItems: 'center',
-    marginTop: height * 0.03
+    alignItems: "center",
+    marginTop: height * 0.03,
   },
   button: {
-    width: '30%',
+    width: "30%",
     marginTop: height * 0.014,
     paddingVertical: 15,
-    alignItems: 'center',
-    backgroundColor: '#4A4A4A',
+    alignItems: "center",
+    backgroundColor: "#4A4A4A",
     borderRadius: 20,
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff'
-  }
+    fontWeight: "bold",
+    color: "#fff",
+  },
 });
