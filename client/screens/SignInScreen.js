@@ -1,19 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import {
-  View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, ScrollView
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { UserContext } from '../contexts/UserContext'
-import { AnimalDataContext } from '../contexts/AnimalContext';
-import Constants from 'expo-constants';
-import { CommonActions } from '@react-navigation/native';
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+  ScrollView,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { UserContext } from "../contexts/UserContext";
+import { AnimalDataContext } from "../contexts/AnimalContext";
+import Constants from "expo-constants";
+import { CommonActions } from "@react-navigation/native";
 
 const apiUrl = Constants.manifest.extra.apiUrl;
 
 const ReloadNavigation = (navigation, isShelter) => {
-  navigation.dispatch(state => {
+  navigation.dispatch((state) => {
     if (isShelter) {
-      const routes = state.routes.filter(r => r.name !== 'messages');
+      const routes = state.routes.filter((r) => r.name !== "messages");
 
       return CommonActions.reset({
         ...state,
@@ -21,7 +28,7 @@ const ReloadNavigation = (navigation, isShelter) => {
         index: routes.length - 1,
       });
     } else {
-      const routes = state.routes.filter(r => r.name !== 'followed');
+      const routes = state.routes.filter((r) => r.name !== "followed");
 
       return CommonActions.reset({
         ...state,
@@ -29,19 +36,19 @@ const ReloadNavigation = (navigation, isShelter) => {
       });
     }
   });
-}
+};
 
 const SignInScreen = ({ navigation }) => {
   const [signInError, setSignInError] = useState();
-  const error = 'Niepoprawny e-mail lub hasło';
+  const error = "Niepoprawny e-mail lub hasło";
   var userCtx = useContext(UserContext);
   var animalCtx = useContext(AnimalDataContext);
 
   const [data, setData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     check_textInputChange: false,
-    secureTextEntry: true
+    secureTextEntry: true,
   });
 
   const textInputChange = (val) => {
@@ -49,68 +56,68 @@ const SignInScreen = ({ navigation }) => {
       setData({
         ...data,
         email: val,
-        check_textInputChange: true
+        check_textInputChange: true,
       });
     } else {
       setData({
         ...data,
         email: val,
-        check_textInputChange: false
+        check_textInputChange: false,
       });
     }
-  }
+  };
 
   const handleEmailChange = (val) => {
     setData({
       ...data,
-      email: val
+      email: val,
     });
-  }
+  };
 
   const handlePasswordChange = (val) => {
     setData({
       ...data,
-      password: val
+      password: val,
     });
-  }
+  };
 
   const updateSecureTextEntry = () => {
     setData({
       ...data,
-      secureTextEntry: !data.secureTextEntry
+      secureTextEntry: !data.secureTextEntry,
     });
-  }
+  };
 
   async function onSignInPress() {
-
     if (data.email == "") {
-      setSignInError('E-mail nie może być pusty')
-      return
-    }
-    else if (data.password == "") {
-      setSignInError('Hasło nie może być puste')
-      return
+      setSignInError("E-mail nie może być pusty");
+      return;
+    } else if (data.password == "") {
+      setSignInError("Hasło nie może być puste");
+      return;
     }
     //Długość tymczasowo zmieniona na 3 dla wygody testowania
     else if (data.password.length < 3) {
-      setSignInError(error)
-      return
+      setSignInError(error);
+      return;
     }
 
-    var status, tokenStr = null, user_id = null;
+    var status,
+      tokenStr = null,
+      user_id = null;
     const res = await fetch(`${apiUrl}/auth/login`, {
       body: JSON.stringify({
         email: data.email,
-        password: data.password
+        password: data.password,
       }),
       headers: { "Content-Type": "application/json" },
-      method: 'POST'
+      method: "POST",
     })
-      .then(response => {
+      .then((response) => {
         status = response.status;
         return response.json();
       })
-      .then(body => {
+      .then((body) => {
         var jsonStr = JSON.stringify(body);
         var jsonObj = JSON.parse(jsonStr);
         tokenStr = jsonObj.token;
@@ -123,17 +130,19 @@ const SignInScreen = ({ navigation }) => {
             userId: user_id,
             isShelter: isShelter,
             email: data.email,
-            password: data.password
+            password: data.password,
           });
-          console.log('Received auth token: \n' + tokenStr + ' for user ' + user_id);
+          console.log(
+            "Received auth token: \n" + tokenStr + " for user " + user_id
+          );
           //ReloadNavigation(navigation, isShelter);
-          navigation.navigate('AccountScreen');
-        }
-        else if (status == 401) {
+          navigation.navigate("AccountScreen");
+        } else if (status == 401) {
           setSignInError(error);
         }
-      }).catch((reason) => {
-        console.log(`${reason} ${apiUrl}/auth/login`)
+      })
+      .catch((reason) => {
+        console.log(`${reason} ${apiUrl}/auth/login`);
       });
     if (tokenStr && user_id) {
       var params = new URLSearchParams({ "user-id": user_id });
@@ -144,11 +153,10 @@ const SignInScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image
-          source={require('../assets/login.png')}
-          style={styles.logo}
-        />
-        <Text style={{ marginVertical: 18, color: 'red', fontSize: 15 }}>{signInError}</Text>
+        <Image source={require("../assets/login.png")} style={styles.logo} />
+        <Text style={{ marginVertical: 18, color: "red", fontSize: 15 }}>
+          {signInError}
+        </Text>
       </View>
       <View style={styles.body}>
         <TextInput
@@ -169,41 +177,42 @@ const SignInScreen = ({ navigation }) => {
           autoCapitalize="none"
           onChangeText={(val) => handlePasswordChange(val)}
         />
-        <TouchableOpacity
-          onPress={updateSecureTextEntry}>
-          {data.secureTextEntry ?
-
+        <TouchableOpacity onPress={updateSecureTextEntry}>
+          {data.secureTextEntry ? (
             <Feather
               name="eye-off"
               color="grey"
               size={20}
               style={{ marginTop: 3 }}
             />
-            :
+          ) : (
             <Feather
               name="eye"
               color="grey"
               size={20}
               style={{ marginTop: 3 }}
             />
-          }
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.loginButton} onPress={onSignInPress}>
-          <Text style={{ color: '#fff', fontWeight: '900' }}>Zaloguj się</Text>
+          <Text style={{ color: "#fff", fontWeight: "900" }}>Zaloguj się</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={{ color: '#000', fontWeight: '900' }} onPress={() => navigation.navigate('PasswordRecoveryScreen')}>Zapomniałeś hasła?</Text>
-        </TouchableOpacity>
-        <Text style={{ color: '#000', marginVertical: 10 }}>lub</Text>
-        <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('ChooseAccountTypeScreen')}>
-          <Text style={{ color: '#fff', fontWeight: '900' }}>Utwórz konto</Text>
+        </TouchableOpacity> */}
+        <Text style={{ color: "#000", marginVertical: 10 }}>lub</Text>
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={() => navigation.navigate("ChooseAccountTypeScreen")}
+        >
+          <Text style={{ color: "#fff", fontWeight: "900" }}>Utwórz konto</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 export default SignInScreen;
 
 const { height } = Dimensions.get("screen");
@@ -214,60 +223,60 @@ const height_logo = height * 0.25;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
+    paddingTop: 55,
   },
   header: {
     flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   body: {
     flex: 3,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   loginButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
-    width: '30%',
+    width: "30%",
     marginTop: 25,
-    marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#362893',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#362893",
     borderRadius: 20,
     padding: 10,
   },
   registerButton: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 50,
-    width: '30%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FF5959',
+    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FF5959",
     borderRadius: 20,
     padding: 10,
   },
 
   textInput: {
-    marginLeft: '10%',
+    marginLeft: "10%",
     marginBottom: 15,
-    width: '80%',
+    width: "80%",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#E2E1E1',
+    backgroundColor: "#E2E1E1",
     borderRadius: 40,
   },
 
   passwordContainer: {
-    flexDirection: 'row',
-    marginLeft: '10%',
-    width: '80%',
+    flexDirection: "row",
+    marginLeft: "10%",
+    width: "80%",
     marginTop: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#E2E1E1',
+    backgroundColor: "#E2E1E1",
     borderRadius: 40,
   },
   textInputPass: {
@@ -278,5 +287,5 @@ const styles = StyleSheet.create({
     width: height_logo,
     height: height_logo,
     marginTop: 20,
-  }
+  },
 });
