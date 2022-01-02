@@ -9,10 +9,9 @@ function DateX({ handleDateChange }) {
   const [show, setShow] = useState(false);
 
   const getCurrentDate = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    return year + "-" + month + "-" + date;
+    let day = String(date.getDate()).padStart(2, "0");
+    let month = String(date.getMonth() + 1).padStart(2, "0");
+    return day + "-" + month + "-" + date.getFullYear();
   };
 
   const [text, setText] = useState(getCurrentDate);
@@ -23,14 +22,11 @@ function DateX({ handleDateChange }) {
     setShow(false);
 
     let tempDate = new Date(currentDate);
-    let tempText =
-      tempDate.getFullYear() +
-      "-" +
-      tempDate.getMonth() +
-      "-" +
-      tempDate.getDate();
+    let day = String(tempDate.getDate()).padStart(2, "0");
+    let month = String(tempDate.getMonth() + 1).padStart(2, "0");
+    let tempText = day + "-" + month + "-" + tempDate.getFullYear();
 
-    handleDateChange(tempText);
+    handleDateChange(tempDate);
     setText(tempText);
   };
 
