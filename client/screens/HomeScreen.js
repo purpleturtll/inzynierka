@@ -1,17 +1,20 @@
-import React, { useContext } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
-import { Icon } from 'react-native-elements'
-import AnimalCard from '../components/AnimalCard'
-import { AnimalDataContext } from '../contexts/AnimalContext'
-import { UserContext } from '../contexts/UserContext'
+import React, { useContext } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import { Icon } from "react-native-elements";
+import AnimalCard from "../components/AnimalCard";
+import { AnimalDataContext } from "../contexts/AnimalContext";
+import { UserContext } from "../contexts/UserContext";
 
 export const onSeeMorePress = (navigation) => {
-  if(navigation != undefined) navigation.navigate('SeeMoreScreen');
-}
+  if (navigation != undefined) navigation.navigate("SeeMoreScreen");
+};
 
 const HomeScreen = ({ navigation }) => {
-
   const animalCtx = useContext(AnimalDataContext);
   const userCtx = useContext(UserContext);
   var userId = userCtx.userData.userId;
@@ -23,8 +26,7 @@ const HomeScreen = ({ navigation }) => {
       "user-id": userId,
     });
 
-    if(userId && token) 
-      animalCtx.updateAnimals(token, params);
+    if (userId && token) animalCtx.updateAnimals(token, params);
   }
 
   function onFilterCatsPress() {
@@ -33,8 +35,7 @@ const HomeScreen = ({ navigation }) => {
       "user-id": userId,
     });
 
-    if(userId && token) 
-      animalCtx.updateAnimals(token, params);
+    if (userId && token) animalCtx.updateAnimals(token, params);
   }
 
   function onFilterOtherPress() {
@@ -43,128 +44,128 @@ const HomeScreen = ({ navigation }) => {
       "user-id": userId,
     });
 
-    if(userId && token) 
-      animalCtx.updateAnimals(token, params);
+    if (userId && token) animalCtx.updateAnimals(token, params);
   }
 
-  return(
-  <View>
-    {/*widok ekranu*/}
-    <ScrollView>
-      <View style={styles.container}>
-        {/*pasek wyszukiwania*/}
-        <View style={styles.searchbar}>
-          <Icon name='search' color='#777' size={30} style={styles.searchIcon}/>
-          <TextInput style={styles.input}
-          placeholder='Lorem ipsum ...'
-          />
-        </View>
-
-        {/* kategorie zwierząt*/}
-        <View>
-          <Text style={styles.categoryTitle}>Kogo szukasz?</Text>
-          <View style={styles.categoryButtonContainer}>
-
-            {/*Psy*/}
-            <TouchableOpacity 
-              style={styles.categoryButtonView}
-              onPress={() => onFilterDogsPress(userId, token)}
-            >
-              <View style={styles.categoryButton}>
-              <Text style={styles.categoryButtonText}>Psy</Text>
-              </View>
-              <Image 
-                source={require('../assets/dog_homepage.png')}
-                style={styles.categoryButtonImage}
-              />
-            </TouchableOpacity>
-            
-            {/*Koty*/}
-            <TouchableOpacity 
-              style={styles.categoryButtonView}
-              onPress={() => onFilterCatsPress()}
-            >
-              <View style={styles.categoryButton}>
-                <Text style={styles.categoryButtonText}>Koty</Text>
-              </View>
-              <Image 
-                source={require('../assets/cat_homepage.png')}
-                style={styles.categoryButtonImage}
-              />
-            </TouchableOpacity>
-            
-            {/*Inne*/}
-            <TouchableOpacity 
-              style={styles.categoryButtonView}
-              onPress={() => onFilterOtherPress()}
-            >
-              <View style={styles.categoryButton}>
-                <Text style={styles.categoryButtonText}>Inne</Text>
-              </View>
-              <Image 
-                source={require('../assets/hamster_homepage.png')}
-                style={styles.categoryButtonImage}
-              />
-            </TouchableOpacity>
-            
+  return (
+    <View>
+      {/*widok ekranu*/}
+      <ScrollView>
+        <View style={styles.container}>
+          {/*pasek wyszukiwania*/}
+          <View style={styles.searchbar}>
+            <Icon
+              name="search"
+              color="#777"
+              size={30}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Wyszukaj imię lub numer CHIP"
+            />
           </View>
 
-          {/*"Ostatnio dodane" i "Zobacz więcej"*/}
-          <View style={styles.textContainer}>
-            <View style={styles.textElement}>
-              <Text style={styles.latestText}>Ostatnio dodane</Text>
-            </View>
-            <TouchableOpacity
-              testID={"SeeMoreButton"} 
-              style={styles.textElement}
-              onPress={() => onSeeMorePress(navigation)}
-            >
-              <Text style={styles.seeMore}>Zobacz więcej</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        
-        {/*Lista zwierzaków*/}
-        <View style={styles.cardContainer}>
-          {animalCtx.animals.map((item) => {
-            return(
-              <View key={item.id}>
-                <AnimalCard animalId={item.id}
-                  navigation={navigation}
+          {/* kategorie zwierząt*/}
+          <View>
+            <Text style={styles.categoryTitle}>Kogo szukasz?</Text>
+            <View style={styles.categoryButtonContainer}>
+              {/*Psy*/}
+              <TouchableOpacity
+                style={styles.categoryButtonView}
+                onPress={() => onFilterDogsPress(userId, token)}
+              >
+                <View style={styles.categoryButton}>
+                  <Text style={styles.categoryButtonText}>Psy</Text>
+                </View>
+                <Image
+                  source={require("../assets/dog_homepage.png")}
+                  style={styles.categoryButtonImage}
                 />
+              </TouchableOpacity>
+
+              {/*Koty*/}
+              <TouchableOpacity
+                style={styles.categoryButtonView}
+                onPress={() => onFilterCatsPress()}
+              >
+                <View style={styles.categoryButton}>
+                  <Text style={styles.categoryButtonText}>Koty</Text>
+                </View>
+                <Image
+                  source={require("../assets/cat_homepage.png")}
+                  style={styles.categoryButtonImage}
+                />
+              </TouchableOpacity>
+
+              {/*Inne*/}
+              <TouchableOpacity
+                style={styles.categoryButtonView}
+                onPress={() => onFilterOtherPress()}
+              >
+                <View style={styles.categoryButton}>
+                  <Text style={styles.categoryButtonText}>Inne</Text>
+                </View>
+                <Image
+                  source={require("../assets/hamster_homepage.png")}
+                  style={styles.categoryButtonImage}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/*"Ostatnio dodane" i "Zobacz więcej"*/}
+            <View style={styles.textContainer}>
+              <View style={styles.textElement}>
+                <Text style={styles.latestText}>Ostatnio dodane</Text>
               </View>
-            )
-          })}
+              <TouchableOpacity
+                testID={"SeeMoreButton"}
+                style={styles.textElement}
+                onPress={() => onSeeMorePress(navigation)}
+              >
+                <Text style={styles.seeMore}>Zobacz więcej</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/*Lista zwierzaków*/}
+          <View style={styles.cardContainer}>
+            {animalCtx.animals.map((item) => {
+              return (
+                <View key={item.id}>
+                  <AnimalCard animalId={item.id} navigation={navigation} />
+                </View>
+              );
+            })}
+          </View>
         </View>
-      
-      </View>
-    </ScrollView>
-  </View>
-  )
-}
+      </ScrollView>
+    </View>
+  );
+};
 export default HomeScreen;
 
 //#362893
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: '5%',
-    marginVertical: '2%',
+    marginHorizontal: "5%",
+    marginVertical: "2%",
   },
-  searchIcon:{
+  searchIcon: {
     paddingLeft: 8,
     paddingTop: 6,
     paddingBottom: 3,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   searchbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderWidth: 1.7,
-    borderColor: '#555',
-    borderRadius: 20
+    borderColor: "#555",
+    borderRadius: 20,
   },
   input: {
     flex: 1,
@@ -173,25 +174,25 @@ const styles = StyleSheet.create({
   },
   icon: {
     flex: 1,
-    marginHorizontal: 3
+    marginHorizontal: 3,
   },
   categoryTitle: {
     fontSize: 25,
-    paddingVertical: '8%'
+    paddingVertical: "8%",
   },
   categoryButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   categoryButtonView: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: '8%'
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "8%",
   },
   categoryButton: {
-    backgroundColor: '#362893',
+    backgroundColor: "#362893",
     width: 80,
     height: 80,
     marginHorizontal: 10,
@@ -201,39 +202,39 @@ const styles = StyleSheet.create({
   },
   categoryButtonText: {
     fontSize: 18,
-    color: 'white',
+    color: "white",
     paddingVertical: 28,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   categoryButtonImage: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     width: 60,
     height: 60,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
   textContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
   },
   textElement: {
     flex: 1,
     paddingVertical: 5,
   },
   seeMore: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     paddingTop: 3,
     fontSize: 15,
-    color: '#777',
+    color: "#777",
   },
   latestText: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   cardContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
