@@ -447,25 +447,25 @@ INSERT INTO [dbo].[pictures]
            ,NULL
            ,NULL
            ,0
-           ,NULL),
+           ,"000"),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,1
-           ,NULL),
+           ,"001"),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,2
-           ,NULL),
+           ,"002"),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,3
-           ,NULL),
+           ,"003"),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,4
-           ,NULL)
+           ,"004")
 GO

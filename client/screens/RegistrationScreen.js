@@ -234,7 +234,7 @@ const RegistrationScreen = ({ navigation }) => {
             return;
         }
 
-        const res = fetch("http://10.0.2.2:8080/auth/register", {
+        const res = fetch(`${apiUrl}/auth/register`, {
             body: JSON.stringify({
                 firstname: data.firstname,
                 surname: data.surname,
@@ -365,7 +365,7 @@ const RegistrationScreen = ({ navigation }) => {
                         style={[
                             styles.passwordContainer,
                             registrationError.invalidPasswordConfirmation ||
-                            !registrationError.EqualPassword
+                                !registrationError.EqualPassword
                                 ? styles.inputError
                                 : null,
                         ]}
