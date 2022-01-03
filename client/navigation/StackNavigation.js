@@ -21,6 +21,7 @@ import ChangedPasswordScreen from "../screens/ChangedPasswordScreen";
 import DeleteAccountScreen from "../screens/DeleteAccountScreen";
 import DeletedAccountScreen from "../screens/DeletedAccountScreen";
 import AnimalDetailsScreen from "../screens/AnimalDetailsScreen";
+import CreatedAnimalProfileScreen from "../screens/CreateAnimalProfileScreen"; "../screens/CreatedAnimalProfileScreen";
 import SeeMoreScreen from "../screens/SeeMoreScreen";
 
 const Stack = createStackNavigator();
@@ -106,6 +107,10 @@ const AccountStackNavigator = () => {
       <Stack.Screen
         name="ChooseAccountTypeScreen"
         component={ChooseAccountTypeScreen}
+      />
+      <Stack.Screen
+        name='CreatedAnimalProfileScreen'
+        component={CreatedAnimalProfileScreen}
       />
       <Stack.Screen name="ChangeEmailScreen" component={ChangeEmailScreen} />
       <Stack.Screen name="ChangedEmailScreen" component={ChangedEmailScreen} />

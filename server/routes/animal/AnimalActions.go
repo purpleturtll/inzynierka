@@ -17,7 +17,7 @@ import (
 )
 
 // Wielkość strony do wysłania
-const pageSize = 10
+const pageSize = 100
 
 // Struktura z danymi do wysłania
 type AnimalSend struct {
@@ -90,16 +90,74 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 func Create(c echo.Context) error {
 	var animal models.Animal
 
+	type AnimalRcv struct {
+		AnimalType    string
+		Breed         string
+		Name          string
+		ShelterName   string
+		ChipNumber    string
+		Years         string
+		Months        string
+		Kg            string
+		G             string
+		Description   string
+		AdmissionDate string
+		Sex           string
+	}
+
 	incomingAnimalData := c.FormValue("doc")
-	obj := new(models.Animal)
+	c.Logger().Print(incomingAnimalData)
+	rcv := new(AnimalRcv)
 	part_json := json.NewDecoder(strings.NewReader(incomingAnimalData))
-	if err := part_json.Decode(obj); err != nil {
+	if err := part_json.Decode(rcv); err != nil {
 		return err
 	}
-	b, _ := json.MarshalIndent(obj, "", "\t")
+	b, _ := json.MarshalIndent(rcv, "", "\t")
 	fmt.Printf("%v\n", string(b))
-	db.Connection().Create(obj)
-	animal = *obj
+
+	var _type models.AnimalType
+	db.Connection().Where("type", rcv.AnimalType).First(&_type)
+	animal.AnimalTypeID = _type.ID
+
+	_y, err := strconv.Atoi(rcv.Years)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while converting years")
+	}
+	_m, err := strconv.Atoi(rcv.Months)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while converting months")
+	}
+	animal.Age = uint(_y + _m)
+
+	animal.Breed = rcv.Breed
+	animal.AdmissionDate = time.Now()
+	animal.Adoptable = true
+	animal.Description = rcv.Description
+	animal.Name = rcv.Name
+	animal.ChipNumber = rcv.ChipNumber
+	animal.IsSterilized = true
+	animal.IsVaccinated = false
+	animal.RecentlyFound = false
+	animal.Sex = rcv.Sex
+
+	var _shelter models.Shelter
+	db.Connection().Where("username", rcv.ShelterName).First(&_shelter)
+	animal.ShelterID = _shelter.ID
+
+	_kg, err := strconv.Atoi(rcv.Kg)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while converting grams")
+	}
+	_g, err := strconv.Atoi(rcv.G)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while converting kg")
+	}
+	animal.Weight = float32(_kg*1000 + _g)
+
+	err = db.Connection().Create(&animal).Error
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while creating animal")
+	}
 
 	incomingAnimalPicture, err := c.FormFile("file")
 	if err != nil {
@@ -112,7 +170,7 @@ func Create(c echo.Context) error {
 	defer src.Close()
 
 	filename := strconv.Itoa(int(animal.ID))
-	outfile, err := os.Create("./pictures/" + filename + ".jpg")
+	outfile, err := os.Create("./pictures/" + fmt.Sprintf("%03d", animal.ID) + ".jpg")
 	if err != nil {
 		return err
 	}

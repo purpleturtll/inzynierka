@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import {
   ScrollView,
@@ -20,13 +20,18 @@ const HomeScreen = ({ navigation }) => {
   var userId = userCtx.userData.userId;
   var token = userCtx.userData.token;
 
+  useEffect(() => {
+    animalCtx.updateAnimals(token, new URLSearchParams());
+  });
+
   function onFilterDogsPress(userId, token) {
     var params = new URLSearchParams({
       "animal-type": "pies",
       "user-id": userId,
     });
 
-    if (userId && token) animalCtx.updateAnimals(token, params);
+    // if (userId && token) animalCtx.updateAnimals(token, params);
+    animalCtx.updateAnimals(token, params);
   }
 
   function onFilterCatsPress() {
@@ -35,7 +40,8 @@ const HomeScreen = ({ navigation }) => {
       "user-id": userId,
     });
 
-    if (userId && token) animalCtx.updateAnimals(token, params);
+    // if (userId && token) animalCtx.updateAnimals(token, params);
+    animalCtx.updateAnimals(token, params);
   }
 
   function onFilterOtherPress() {
@@ -44,7 +50,8 @@ const HomeScreen = ({ navigation }) => {
       "user-id": userId,
     });
 
-    if (userId && token) animalCtx.updateAnimals(token, params);
+    // if (userId && token) animalCtx.updateAnimals(token, params);
+    animalCtx.updateAnimals(token, params);
   }
 
   return (

@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import {
   Collapse,
@@ -25,6 +26,9 @@ import Description from "../components/create_profile_components/Description/Des
 import VaccinatedSwitch from "../components/create_profile_components/VaccinatedSwitch/VaccinatedSwitch";
 import SterilizedSwitch from "../components/create_profile_components/SterilizedSwitch/SterilizedSwitch";
 import Constants from "expo-constants";
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { FileSystemUploadType } from "expo-file-system";
 const apiUrl = Constants.manifest.extra.apiUrl;
 const CreateAnimalProfileScreen = ({ navigation }) => {
   const errorTrue = "Pole nie może być puste";
@@ -86,53 +90,53 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     /*Typy zwierząt*/
   }
   const animalTypes = [
-    { id: "1", label: "Psy" },
-    { id: "2", label: "Koty" },
-    { id: "3", label: "Gryzonie" },
-    { id: "4", label: "Ptaki" },
-    { id: "5", label: "Gady" },
-    { id: "6", label: "Króliki" },
-    { id: "7", label: "Inne" },
+    { id: "0", label: "pies" },
+    { id: "1", label: "kot" },
+    { id: "2", label: "gryzoń" },
+    { id: "3", label: "gad" },
+    { id: "4", label: "ptak" },
+    { id: "5", label: "królik" },
+    { id: "6", label: "inne" },
   ];
 
   {
     /*Statusy zwierząt*/
   }
   const animalStatus = [
-    { id: "1", label: "do adopcji" },
-    { id: "2", label: "dom tymczasowy" },
-    { id: "3", label: "pilne" },
-    { id: "4", label: "kwarantanna" },
+    { id: "0", label: "do adopcji" },
+    { id: "1", label: "dom tymczasowy" },
+    { id: "2", label: "pilne" },
+    { id: "3", label: "kwarantanna" },
   ];
 
   {
     /*Płci zwierząt*/
   }
   const animalSexes = [
-    { id: "1", label: "samica" },
-    { id: "2", label: "samiec" },
+    { id: "0", label: "samica" },
+    { id: "1", label: "samiec" },
   ];
 
   const catRaces = [
-    { id: "1", label: "Europejska" },
-    { id: "2", label: "Syryjska" },
+    { id: "0", label: "Europejska" },
+    { id: "1", label: "Syryjska" },
   ];
 
   const dogRaces = [
-    { id: "101", label: "Amstaff/Pitbull" },
-    { id: "102", label: "Bernardyn" },
-    { id: "103", label: "Cocker spaniel" },
-    { id: "104", label: "Foksterier" },
-    { id: "105", label: "Husky" },
-    { id: "106", label: "Jamnik" },
-    { id: "107", label: "Labrador" },
-    { id: "108", label: "Mieszaniec" },
-    { id: "109", label: "Owczarek\nkaukaski" },
-    { id: "110", label: "Owczarek\nniemiecki" },
-    { id: "111", label: "Owczarek\npodhalański" },
-    { id: "112", label: "Sznaucer" },
-    { id: "113", label: "Terier" },
-    { id: "114", label: "Inne" },
+    { id: "01", label: "Amstaff/Pitbull" },
+    { id: "02", label: "Bernardyn" },
+    { id: "03", label: "Cocker spaniel" },
+    { id: "04", label: "Foksterier" },
+    { id: "05", label: "Husky" },
+    { id: "06", label: "Jamnik" },
+    { id: "07", label: "Labrador" },
+    { id: "08", label: "Mieszaniec" },
+    { id: "09", label: "Owczarek\nkaukaski" },
+    { id: "10", label: "Owczarek\nniemiecki" },
+    { id: "11", label: "Owczarek\npodhalański" },
+    { id: "12", label: "Sznaucer" },
+    { id: "13", label: "Terier" },
+    { id: "14", label: "Inne" },
   ];
 
   const [data, setData] = useState({
@@ -149,8 +153,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     date: "",
     isSterilized: false,
     isVaccinated: false,
+    sex: "",
     check_textInputChange: false,
   });
+
+  const [image, setImage] = useState(null);
 
   // ustawienie ikony strzałki typu
   const [iconName, setIconName] = useState("chevron-down");
@@ -458,30 +465,43 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       return;
     }
 
-    const res = fetch(`${apiUrl}/animal/create`, {
-      body: JSON.stringify({
-        animal_type: data.animal_type,
-        breed: data.breed,
-        name: data.name,
-        shelter_id: 1,
-        adoptable: true,
-        admission_date: data.date,
-        description: data.description,
-        age: data.years,
-        chip_number: data.CHIP,
-        recently_found: true,
-        is_sterilized: true,
-        is_vaccinated: true,
-      }),
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
+    FileSystem.uploadAsync(`${apiUrl}/animal/create`, image, {
+      uploadType: FileSystemUploadType.MULTIPART,
+      fieldName: "file",
+      parameters: {
+        "doc": JSON.stringify({
+          "AnimalType": data.animal_type,
+          "Breed": data.breed,
+          "Name": data.name,
+          "ShelterName": data.shelterName,
+          "ChipNumber": data.CHIP,
+          "Years": data.years,
+          "Months": data.months,
+          "Kg": data.kg,
+          "G": data.g,
+          "Description": data.description,
+          "AdmissionDate": data.date,
+          "Sex": data.sex,
+        }),
+      }
     }).then((response) => {
       if (response.status == 201) {
         navigation.navigate("CreatedAnimalProfileScreen");
       } else {
         //navigation.navigate("CreateAnimalProfileScreen");
       }
+    }).catch((error) => { console.log(error, image) });
+  };
+
+  const _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
     });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
   };
 
   return (
@@ -591,41 +611,68 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           {(animalTypeFilter == null ||
             animalTypeFilter == "1" ||
             animalTypeFilter == "2") && (
-            <Collapse
-              onToggle={() => {
-                if (breedNameIcon == "chevron-down") {
-                  setBreedNameIcon("chevron-up");
-                }
-                if (breedNameIcon == "chevron-up") {
-                  setBreedNameIcon("chevron-down");
-                }
-              }}
-            >
-              <CollapseHeader>
-                <View style={[styles.marginsText, styles.collapse]}>
-                  <Text style={styles.headerTitle}>W typie rasy</Text>
-                  <Feather
-                    name={breedNameIcon}
-                    color="black"
-                    size={22}
-                    style={{ marginTop: 3 }}
-                  />
-                </View>
-              </CollapseHeader>
-              <CollapseBody>
-                {(animalTypeFilter == "1" || animalTypeFilter == null) && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Pies
-                    </Text>
-                    <View style={{ flex: 1, alignItems: "center" }}>
+              <Collapse
+                onToggle={() => {
+                  if (breedNameIcon == "chevron-down") {
+                    setBreedNameIcon("chevron-up");
+                  }
+                  if (breedNameIcon == "chevron-up") {
+                    setBreedNameIcon("chevron-down");
+                  }
+                }}
+              >
+                <CollapseHeader>
+                  <View style={[styles.marginsText, styles.collapse]}>
+                    <Text style={styles.headerTitle}>W typie rasy</Text>
+                    <Feather
+                      name={breedNameIcon}
+                      color="black"
+                      size={22}
+                      style={{ marginTop: 3 }}
+                    />
+                  </View>
+                </CollapseHeader>
+                <CollapseBody>
+                  {(animalTypeFilter == "1" || animalTypeFilter == null) && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Pies
+                      </Text>
+                      <View style={{ flex: 1, alignItems: "center" }}>
+                        <FlatList
+                          contentContainerStyle={{ alignItems: "center" }}
+                          numColumns={2}
+                          keyExtractor={(item) => item.id}
+                          data={dogRaces}
+                          renderItem={({ item }) => (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setFilterValue("race", item.id);
+                                setBreedFilter(item.id);
+                              }}
+                            >
+                              <AlignedLabel item={item} selected={breedFilter} />
+                            </TouchableOpacity>
+                          )}
+                        />
+                      </View>
+                    </View>
+                  )}
+
+                  {animalTypeFilter == "2" && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Kot
+                      </Text>
                       <FlatList
                         contentContainerStyle={{ alignItems: "center" }}
                         numColumns={2}
                         keyExtractor={(item) => item.id}
-                        data={dogRaces}
+                        data={catRaces}
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() => {
@@ -638,38 +685,19 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         )}
                       />
                     </View>
-                  </View>
-                )}
-
-                {animalTypeFilter == "2" && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Kot
-                    </Text>
-                    <FlatList
-                      contentContainerStyle={{ alignItems: "center" }}
-                      numColumns={2}
-                      keyExtractor={(item) => item.id}
-                      data={catRaces}
-                      renderItem={({ item }) => (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue("race", item.id);
-                            setBreedFilter(item.id);
-                          }}
-                        >
-                          <AlignedLabel item={item} selected={breedFilter} />
-                        </TouchableOpacity>
-                      )}
-                    />
-                  </View>
-                )}
-              </CollapseBody>
-            </Collapse>
-          )}
+                  )}
+                </CollapseBody>
+              </Collapse>
+            )}
         </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.addButton} onPress={_pickImage}>
+            <Text style={{ color: "#fff" }}>Wybierz zdjęcie</Text>
+          </TouchableOpacity>
+        </View>
+
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
         <Description
           handleDescriptionChange={handleDescriptionChange}
