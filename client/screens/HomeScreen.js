@@ -62,8 +62,7 @@ const HomeScreen = ({ navigation }) => {
             />
             <TextInput
               style={styles.input}
-              placehol
-              der="Wyszukaj imię lub numer CHIP"
+              placeholder="Wyszukaj imię lub numer CHIP"
             />
           </View>
 

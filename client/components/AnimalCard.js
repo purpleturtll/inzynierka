@@ -1,11 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import { AnimalDataContext } from "../contexts/AnimalContext";
 import Constants from "expo-constants";
+import { UserContext } from "../contexts/UserContext";
+
 const apiUrl = Constants.manifest.extra.apiUrl;
 export default AnimalCard = ({ animalId, navigation }) => {
+  //  kontekst typ usera
+  const userCtx = useContext(UserContext);
+
+  useEffect(() => {}, [userCtx]);
+
   {
     /*Kontekst zwierząt*/
   }
@@ -72,6 +79,7 @@ export default AnimalCard = ({ animalId, navigation }) => {
             kg
           </Text>
         </View>
+
         {/*kolor serduszka #ff4242*/}
         <TouchableOpacity
           onPress={() => {
@@ -81,13 +89,15 @@ export default AnimalCard = ({ animalId, navigation }) => {
             animalCtx.updateFavourite(animal.id);
           }}
         >
-          <View style={styles.heart}>
-            <AntDesign
-              name={hearts.icon[animal.favourite]}
-              size={30}
-              color="#d12115"
-            />
-          </View>
+          {!userCtx.userData.isShelter && (
+            <View style={styles.heart}>
+              <AntDesign
+                name={hearts.icon[animal.favourite]}
+                size={30}
+                color="#d12115"
+              />
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </View>

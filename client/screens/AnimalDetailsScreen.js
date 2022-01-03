@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import DataRow from "../components/DataRow";
 import StatusDataRow from "../components/StatusDataRow";
+import { UserContext } from "../contexts/UserContext";
 
 const AnimalDetailsScreen = ({ route, navigation }) => {
   //TODO: animalCtx.getAnimal(id) zamiast route.params
@@ -35,6 +36,12 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
     },
   };
 
+  // kontekst user
+
+  const userCtx = useContext(UserContext);
+
+  useEffect(() => {}, [userCtx]);
+
   return (
     <View>
       <ScrollView>
@@ -44,9 +51,11 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.groupedRow}>
             <DataRow label={"Typ"} data={type} />
-            <View style={styles.heartView}>
-              <HeartIcon favourite={favourite} />
-            </View>
+            {!userCtx.userData.isShelter && (
+              <View style={styles.heartView}>
+                <HeartIcon favourite={favourite} />
+              </View>
+            )}
           </View>
           <DataRow label={"W typie rasy"} data={breed} />
           <DataRow label={"Płeć"} data={sex} />
