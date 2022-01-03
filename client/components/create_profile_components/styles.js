@@ -148,6 +148,20 @@ const styles = StyleSheet.create({
   selected: {
     backgroundColor: "#fff",
   },
+  switch: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  switchTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 15,
+    flex: 5,
+    marginTop: 5,
+    marginLeft: 30,
+    paddingBottom: 5,
+  },
 });
 
 export default styles;

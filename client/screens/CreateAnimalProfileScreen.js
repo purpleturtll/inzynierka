@@ -22,7 +22,9 @@ import Age from "../components/create_profile_components/Age/Age";
 import Weight from "../components/create_profile_components/Weight/Weight";
 import DateX from "../components/create_profile_components/DateX/DateX";
 import Description from "../components/create_profile_components/Description/Description";
-import Constants from 'expo-constants';
+import VaccinatedSwitch from "../components/create_profile_components/VaccinatedSwitch/VaccinatedSwitch";
+import SterilizedSwitch from "../components/create_profile_components/SterilizedSwitch/SterilizedSwitch";
+import Constants from "expo-constants";
 const apiUrl = Constants.manifest.extra.apiUrl;
 const CreateAnimalProfileScreen = ({ navigation }) => {
   const errorTrue = "Pole nie może być puste";
@@ -59,6 +61,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
   const [sexFilter, setSexFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState([]);
   const [breedFilter, setBreedFilter] = useState(null);
+  const [isVaccinated, setIsVaccinated] = useState(false);
+  const [isSterilized, setIsSterilized] = useState(false);
 
   function setFilterValue(fieldName, value) {
     switch (fieldName) {
@@ -143,6 +147,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     g: "",
     description: "",
     date: "",
+    isSterilized: false,
+    isVaccinated: false,
     check_textInputChange: false,
   });
 
@@ -302,6 +308,12 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     //funkcje z return do fetch
     AgeToMonths();
     WeightToGram();
+
+    setData({
+      ...data,
+      isVaccinated: isVaccinated,
+      isSterilized: isSterilized,
+    });
 
     if (data.name == "") {
       setCreateProfileError((prevState) => {
@@ -542,6 +554,16 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                 unselectedStatus={unselectedStatus}
               />
 
+              <VaccinatedSwitch
+                isVaccinated={isVaccinated}
+                setIsVaccinated={setIsVaccinated}
+              />
+
+              <SterilizedSwitch
+                isSterilized={isSterilized}
+                setIsSterilized={setIsSterilized}
+              />
+
               {/*Wiek*/}
 
               <Age
@@ -569,68 +591,41 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           {(animalTypeFilter == null ||
             animalTypeFilter == "1" ||
             animalTypeFilter == "2") && (
-              <Collapse
-                onToggle={() => {
-                  if (breedNameIcon == "chevron-down") {
-                    setBreedNameIcon("chevron-up");
-                  }
-                  if (breedNameIcon == "chevron-up") {
-                    setBreedNameIcon("chevron-down");
-                  }
-                }}
-              >
-                <CollapseHeader>
-                  <View style={[styles.marginsText, styles.collapse]}>
-                    <Text style={styles.headerTitle}>W typie rasy</Text>
-                    <Feather
-                      name={breedNameIcon}
-                      color="black"
-                      size={22}
-                      style={{ marginTop: 3 }}
-                    />
-                  </View>
-                </CollapseHeader>
-                <CollapseBody>
-                  {(animalTypeFilter == "1" || animalTypeFilter == null) && (
-                    <View
-                      style={[styles.marginsText, styles.raceCategoriesContainer]}
-                    >
-                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                        Pies
-                      </Text>
-                      <View style={{ flex: 1, alignItems: "center" }}>
-                        <FlatList
-                          contentContainerStyle={{ alignItems: "center" }}
-                          numColumns={2}
-                          keyExtractor={(item) => item.id}
-                          data={dogRaces}
-                          renderItem={({ item }) => (
-                            <TouchableOpacity
-                              onPress={() => {
-                                setFilterValue("race", item.id);
-                                setBreedFilter(item.id);
-                              }}
-                            >
-                              <AlignedLabel item={item} selected={breedFilter} />
-                            </TouchableOpacity>
-                          )}
-                        />
-                      </View>
-                    </View>
-                  )}
-
-                  {animalTypeFilter == "2" && (
-                    <View
-                      style={[styles.marginsText, styles.raceCategoriesContainer]}
-                    >
-                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                        Kot
-                      </Text>
+            <Collapse
+              onToggle={() => {
+                if (breedNameIcon == "chevron-down") {
+                  setBreedNameIcon("chevron-up");
+                }
+                if (breedNameIcon == "chevron-up") {
+                  setBreedNameIcon("chevron-down");
+                }
+              }}
+            >
+              <CollapseHeader>
+                <View style={[styles.marginsText, styles.collapse]}>
+                  <Text style={styles.headerTitle}>W typie rasy</Text>
+                  <Feather
+                    name={breedNameIcon}
+                    color="black"
+                    size={22}
+                    style={{ marginTop: 3 }}
+                  />
+                </View>
+              </CollapseHeader>
+              <CollapseBody>
+                {(animalTypeFilter == "1" || animalTypeFilter == null) && (
+                  <View
+                    style={[styles.marginsText, styles.raceCategoriesContainer]}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                      Pies
+                    </Text>
+                    <View style={{ flex: 1, alignItems: "center" }}>
                       <FlatList
                         contentContainerStyle={{ alignItems: "center" }}
                         numColumns={2}
                         keyExtractor={(item) => item.id}
-                        data={catRaces}
+                        data={dogRaces}
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() => {
@@ -643,10 +638,37 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         )}
                       />
                     </View>
-                  )}
-                </CollapseBody>
-              </Collapse>
-            )}
+                  </View>
+                )}
+
+                {animalTypeFilter == "2" && (
+                  <View
+                    style={[styles.marginsText, styles.raceCategoriesContainer]}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                      Kot
+                    </Text>
+                    <FlatList
+                      contentContainerStyle={{ alignItems: "center" }}
+                      numColumns={2}
+                      keyExtractor={(item) => item.id}
+                      data={catRaces}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setFilterValue("race", item.id);
+                            setBreedFilter(item.id);
+                          }}
+                        >
+                          <AlignedLabel item={item} selected={breedFilter} />
+                        </TouchableOpacity>
+                      )}
+                    />
+                  </View>
+                )}
+              </CollapseBody>
+            </Collapse>
+          )}
         </View>
 
         <Description
