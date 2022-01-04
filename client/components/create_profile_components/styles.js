@@ -66,12 +66,14 @@ const styles = StyleSheet.create({
   },
   buttonDate: {
     marginLeft: 20,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "#c4c4c4",
-    paddingVertical: 10,
+    paddingVertical: 12,
+    alignContent: "center",
     paddingHorizontal: 10,
-    width: "30%",
+    width: 120,
     borderRadius: 10,
+    marginTop: 5,
     marginBottom: 10,
   },
   addButton: {
@@ -161,6 +163,20 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 30,
     paddingBottom: 5,
+  },
+  imagePickerButton: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
+    marginLeft: 20,
+    borderWidth: 3,
+    borderColor: "#c4c4c4",
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    width: 120,
+    borderRadius: 10,
+    marginTop: 5,
+    marginBottom: 10,
   },
 });
 

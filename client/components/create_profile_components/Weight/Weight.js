@@ -29,7 +29,13 @@ function Weight({
         </Text>
       </View>
 
-      <View style={{ flexDirection: "row", alignContent: "space-around" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignContent: "space-around",
+          marginBottom: 20,
+        }}
+      >
         <TextInput
           placeholderTextColor="#000"
           placeholderStyle={{}}
