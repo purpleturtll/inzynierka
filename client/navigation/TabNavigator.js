@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import {
   MainStackNavigator,
-  MessageStackNavigator,
   FollowedStackNavigator,
   AccountStackNavigator,
 } from "./StackNavigation";
@@ -16,7 +15,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   const userCtx = useContext(UserContext);
 
-  useEffect(() => { }, [userCtx]);
+  useEffect(() => {}, [userCtx]);
 
   return (
     <Tab.Navigator
