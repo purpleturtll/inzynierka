@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState, useContext, useCallback } from "react";
+import { View, Text, StyleSheet, Image, RefreshControl } from "react-native";
 import {
   ScrollView,
   TextInput,
@@ -19,10 +19,17 @@ const HomeScreen = ({ navigation }) => {
   const userCtx = useContext(UserContext);
   var userId = userCtx.userData.userId;
   var token = userCtx.userData.token;
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
     animalCtx.updateAnimals(token, new URLSearchParams());
-  });
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   function onFilterDogsPress(userId, token) {
     var params = new URLSearchParams({
@@ -57,7 +64,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View>
       {/*widok ekranu*/}
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={styles.container}>
           {/*pasek wyszukiwania*/}
           <View style={styles.searchbar}>

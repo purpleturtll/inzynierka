@@ -609,8 +609,8 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 
           {/* collapse rasa */}
           {(animalTypeFilter == null ||
-            animalTypeFilter == "1" ||
-            animalTypeFilter == "2") && (
+            animalTypeFilter == "0" ||
+            animalTypeFilter == "1") && (
               <Collapse
                 onToggle={() => {
                   if (breedNameIcon == "chevron-down") {
@@ -633,7 +633,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                   </View>
                 </CollapseHeader>
                 <CollapseBody>
-                  {(animalTypeFilter == "1" || animalTypeFilter == null) && (
+                  {(animalTypeFilter == "0" || animalTypeFilter == null) && (
                     <View
                       style={[styles.marginsText, styles.raceCategoriesContainer]}
                     >
@@ -661,7 +661,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                     </View>
                   )}
 
-                  {animalTypeFilter == "2" && (
+                  {animalTypeFilter == "1" && (
                     <View
                       style={[styles.marginsText, styles.raceCategoriesContainer]}
                     >
