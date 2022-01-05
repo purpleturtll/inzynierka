@@ -32,6 +32,7 @@ func Login(c echo.Context) error {
 
 	var isShelter bool
 	var email string
+	var username string
 	var id uint
 
 	if resultUser.Error == gorm.ErrRecordNotFound {
@@ -39,14 +40,17 @@ func Login(c echo.Context) error {
 		isShelter = true
 		email = foundShelter.Email
 		id = foundShelter.ID
+		username = foundShelter.Username
 	} else {
 		// Is User
 		isShelter = false
 		email = foundUser.Email
 		id = foundUser.ID
+		username = foundUser.Firstname
 	}
 
 	claims := &config.Claims{
+		Username:  username,
 		Email:     email,
 		IsShelter: isShelter, // Set shelter flag for client app
 		StandardClaims: jwt.StandardClaims{
@@ -64,6 +68,7 @@ func Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
 		"token":      t,
 		"user_id":    id,
+		"username":   username,
 		"is_shelter": isShelter,
 	})
 }

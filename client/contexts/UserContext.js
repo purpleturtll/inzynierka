@@ -12,7 +12,8 @@ export const UserDataProvider = ({ children }) => {
         userId: null,
         isShelter: false,
         email: '',
-        password: ''
+        password: '',
+        username: '',
     });
 
     useEffect(() => {
@@ -39,13 +40,15 @@ export const UserDataProvider = ({ children }) => {
                 var jsonObj = JSON.parse(jsonStr);
                 newToken = jsonObj.token;
                 userId = jsonObj.user_id;
+                username = jsonObj.username;
                 isShelter = jsonObj.is_shelter;
                 if (status == 200) {
                     setUserData({
                         ...userData,
                         token: newToken,
                         isShelter: isShelter,
-                        userId: userId
+                        userId: userId,
+                        username: username,
                     });
                 }
             });

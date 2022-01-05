@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   ScrollView,
@@ -31,7 +31,12 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { FileSystemUploadType } from "expo-file-system";
 const apiUrl = Constants.manifest.extra.apiUrl;
+
+import { UserContext } from "../contexts/UserContext";
+
 const CreateAnimalProfileScreen = ({ navigation }) => {
+  const userCtx = useContext(UserContext);
+  var shelterId = userCtx.userData.userId;
   const errorTrue = "Pole nie może być puste";
   const wrongCHIPFormat = "Numer chip powinien zawierać 15 cyfr";
   const unselected = "Wybierz jedną z opcji";
@@ -212,6 +217,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       ...data,
       years: val,
     });
+    setCreateProfileError({
+      ...createProfileError,
+      emptyAge: false,
+    });
+    error = false;
   };
 
   const handleMonthsChange = (val) => {
@@ -219,6 +229,11 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       ...data,
       months: val,
     });
+    setCreateProfileError({
+      ...createProfileError,
+      emptyAge: false,
+    });
+    error = false;
   };
 
   //Weight --------------
@@ -243,6 +258,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
   }
 
   const handleAnimalTypeChange = (val) => {
+    console.log("TYPE: ", val)
     setData({
       ...data,
       animal_type: val,
@@ -466,23 +482,26 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
       return;
     }
 
+    let t = animalTypes.find((animalType) => animalType.id == data.animal_type);
+    console.log("MONTHS", data.months)
+
     FileSystem.uploadAsync(`${apiUrl}/animal/create`, image, {
       uploadType: FileSystemUploadType.MULTIPART,
       fieldName: "file",
       parameters: {
-        doc: JSON.stringify({
-          AnimalType: data.animal_type,
-          Breed: data.breed,
-          Name: data.name,
-          ShelterName: data.shelterName,
-          ChipNumber: data.CHIP,
-          Years: data.years,
-          Months: data.months,
-          Kg: data.kg,
-          G: data.g,
-          Description: data.description,
-          AdmissionDate: data.date,
-          Sex: data.sex,
+        "doc": JSON.stringify({
+          "AnimalType": t.label,
+          "Breed": data.breed,
+          "Name": data.name,
+          "ShelterId": shelterId,
+          "ChipNumber": data.CHIP,
+          "Years": data.years == "" ? "0" : data.years,
+          "Months": data.months == "" ? "0" : data.months,
+          "Kg": data.kg == "" ? "0" : data.kg,
+          "G": data.g == "" ? "0" : data.g,
+          "Description": data.description,
+          "AdmissionDate": data.date == "" ? new Date().toString() : data.date,
+          "Sex": data.sex.label,
         }),
       },
     })
@@ -614,46 +633,75 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
 
           {/* collapse rasa */}
           {(animalTypeFilter == null ||
-            animalTypeFilter == "1" ||
-            animalTypeFilter == "2") && (
-            <Collapse
-              onToggle={() => {
-                if (breedNameIcon == "chevron-down") {
-                  setBreedNameIcon("chevron-up");
-                }
-                if (breedNameIcon == "chevron-up") {
-                  setBreedNameIcon("chevron-down");
-                }
-              }}
-            >
-              <CollapseHeader>
-                <View style={[styles.marginsText, styles.collapse]}>
-                  <Text style={styles.headerTitle}>W typie rasy</Text>
-                  <Feather
-                    name={breedNameIcon}
-                    color="black"
-                    size={22}
-                    style={{ marginTop: 3 }}
-                  />
-                </View>
-              </CollapseHeader>
-              <CollapseBody>
-                {(animalTypeFilter == "1" || animalTypeFilter == null) && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Pies
-                    </Text>
-                    <View style={{ flex: 1, alignItems: "center" }}>
+            animalTypeFilter == "0" ||
+            animalTypeFilter == "1") && (
+              <Collapse
+                onToggle={() => {
+                  if (breedNameIcon == "chevron-down") {
+                    setBreedNameIcon("chevron-up");
+                  }
+                  if (breedNameIcon == "chevron-up") {
+                    setBreedNameIcon("chevron-down");
+                  }
+                }}
+              >
+                <CollapseHeader>
+                  <View style={[styles.marginsText, styles.collapse]}>
+                    <Text style={styles.headerTitle}>W typie rasy</Text>
+                    <Feather
+                      name={breedNameIcon}
+                      color="black"
+                      size={22}
+                      style={{ marginTop: 3 }}
+                    />
+                  </View>
+                </CollapseHeader>
+                <CollapseBody>
+                  {(animalTypeFilter == "0" || animalTypeFilter == null) && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Pies
+                      </Text>
+                      <View style={{ flex: 1, alignItems: "center" }}>
+                        <FlatList
+                          contentContainerStyle={{ alignItems: "center" }}
+                          numColumns={2}
+                          keyExtractor={(item) => item.id}
+                          data={dogRaces}
+                          renderItem={({ item }) => (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setData((data) => { return { ...data, breed: item.name } });
+                                setFilterValue("race", item.id);
+                                setBreedFilter(item.id);
+                              }}
+                            >
+                              <AlignedLabel item={item} selected={breedFilter} />
+                            </TouchableOpacity>
+                          )}
+                        />
+                      </View>
+                    </View>
+                  )}
+
+                  {animalTypeFilter == "1" && (
+                    <View
+                      style={[styles.marginsText, styles.raceCategoriesContainer]}
+                    >
+                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                        Kot
+                      </Text>
                       <FlatList
                         contentContainerStyle={{ alignItems: "center" }}
                         numColumns={2}
                         keyExtractor={(item) => item.id}
-                        data={dogRaces}
+                        data={catRaces}
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() => {
+                              setData((data) => { return { ...data, breed: item.name } });
                               setFilterValue("race", item.id);
                               setBreedFilter(item.id);
                             }}
@@ -663,37 +711,10 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         )}
                       />
                     </View>
-                  </View>
-                )}
-
-                {animalTypeFilter == "2" && (
-                  <View
-                    style={[styles.marginsText, styles.raceCategoriesContainer]}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                      Kot
-                    </Text>
-                    <FlatList
-                      contentContainerStyle={{ alignItems: "center" }}
-                      numColumns={2}
-                      keyExtractor={(item) => item.id}
-                      data={catRaces}
-                      renderItem={({ item }) => (
-                        <TouchableOpacity
-                          onPress={() => {
-                            setFilterValue("race", item.id);
-                            setBreedFilter(item.id);
-                          }}
-                        >
-                          <AlignedLabel item={item} selected={breedFilter} />
-                        </TouchableOpacity>
-                      )}
-                    />
-                  </View>
-                )}
-              </CollapseBody>
-            </Collapse>
-          )}
+                  )}
+                </CollapseBody>
+              </Collapse>
+            )}
         </View>
 
         <PickImage _pickImage={_pickImage} image={image} />
@@ -710,7 +731,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 };
 export default CreateAnimalProfileScreen;
