@@ -35,30 +35,31 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-      {/* <Tab.Screen name="messages" component={MessageStackNavigator} */}
-      {userCtx.userData.isShelter ? (
-        <Tab.Screen
-          name="add"
-          component={CreateAnimalProfileScreen}
-          options={{
-            tabBarLabel: "Dodaj",
-            tabBarIcon: ({ color, size }) => (
-              <Feather name="plus" color={color} size={size} />
-            ),
-          }}
-        />
-      ) : (
-        <Tab.Screen
-          name="followed"
-          component={FollowedStackNavigator}
-          options={{
-            tabBarLabel: "Ulubione",
-            tabBarIcon: ({ color, size }) => (
-              <Feather name="heart" color={color} size={size} />
-            ),
-          }}
-        />
-      )}
+
+      {userCtx.userData.loggedIn &&
+        (userCtx.userData.isShelter ? (
+          <Tab.Screen
+            name="add"
+            component={CreateAnimalProfileScreen}
+            options={{
+              tabBarLabel: "Dodaj",
+              tabBarIcon: ({ color, size }) => (
+                <Feather name="plus" color={color} size={size} />
+              ),
+            }}
+          />
+        ) : (
+          <Tab.Screen
+            name="followed"
+            component={FollowedStackNavigator}
+            options={{
+              tabBarLabel: "Ulubione",
+              tabBarIcon: ({ color, size }) => (
+                <Feather name="heart" color={color} size={size} />
+              ),
+            }}
+          />
+        ))}
       <Tab.Screen
         name="account"
         component={AccountStackNavigator}
