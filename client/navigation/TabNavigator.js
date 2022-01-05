@@ -9,7 +9,6 @@ import {
 import { UserContext } from "../contexts/UserContext";
 import { Feather } from "@expo/vector-icons";
 import CreateAnimalProfileScreen from "../screens/CreateAnimalProfileScreen";
-
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {

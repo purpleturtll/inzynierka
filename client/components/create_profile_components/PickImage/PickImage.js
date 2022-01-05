@@ -33,7 +33,14 @@ function PickImage(props) {
       {props.image && (
         <Image
           source={{ uri: props.image }}
-          style={{ width: 200, height: 200 }}
+          style={{
+            width: 200,
+            height: 200,
+            marginTop: 15,
+            alignSelf: "center",
+            borderColor: "#c4c4c4",
+            borderWidth: 1,
+          }}
         />
       )}
     </View>

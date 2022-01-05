@@ -512,7 +512,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Dodaj ogłoszenie</Text>
+        <Text style={styles.title}>Dodaj profil zwierzęcia</Text>
         <Text style={[styles.marginsText, styles.headerTitle]}>Imię</Text>
         <Name
           changeName={handleNameChange}

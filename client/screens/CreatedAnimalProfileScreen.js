@@ -21,16 +21,15 @@ const CreatedAnimalProfileScreen = ({ navigation }) => {
         style={styles.addButton}
         onPress={() => navigation.navigate("CreateAnimalProfileScreen")}
       >
-        <Ionicons name="md-add-circle" size={24} color="black" />
+        <Ionicons
+          name="md-add-circle"
+          size={44}
+          color="white"
+          style={{ flex: 2, marginLeft: 15 }}
+        />
 
-        <Text style={{ color: "#fff", fontSize: 19 }}>Dodaj kolejne</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.returnButton}
-        onPress={() => navigation.navigate("HomeScreen")}
-      >
-        <Text style={{ color: "#69667C", fontWeight: "bold", fontSize: 19 }}>
-          Powrót
+        <Text style={{ color: "#fff", fontSize: 19, flex: 5 }}>
+          Dodaj kolejne
         </Text>
       </TouchableOpacity>
     </View>
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "flex-end",
-    marginBottom: height * 0.05,
+    marginBottom: height * 0.14,
   },
   check: {
     width: 170,
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: height * 0.04,
-    marginBottom: height * 0.04,
+    marginBottom: height * 0.09,
     fontSize: 26,
     fontWeight: "bold",
   },
@@ -73,22 +72,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 20,
     width: width * 0.6,
-    paddingVertical: 15,
+    paddingVertical: 13,
     alignItems: "center",
     borderRadius: 20,
     backgroundColor: "#362893",
-  },
-  returnButton: {
-    flexDirection: "row",
-    paddingVertical: 15,
-    width: width * 0.35,
-    marginTop: height * 0.07,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 3,
-    borderColor: "#69667C",
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    padding: 10,
   },
 });
