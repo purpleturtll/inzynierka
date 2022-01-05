@@ -94,7 +94,7 @@ func Create(c echo.Context) error {
 		AnimalType    string
 		Breed         string
 		Name          string
-		ShelterName   string
+		ShelterId     uint
 		ChipNumber    string
 		Years         string
 		Months        string
@@ -116,7 +116,10 @@ func Create(c echo.Context) error {
 	fmt.Printf("%v\n", string(b))
 
 	var _type models.AnimalType
-	db.Connection().Where("type", rcv.AnimalType).First(&_type)
+	err := db.Connection().Where("type", rcv.AnimalType).First(&_type).Error
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while creating")
+	}
 	animal.AnimalTypeID = _type.ID
 
 	_y, err := strconv.Atoi(rcv.Years)
@@ -141,7 +144,10 @@ func Create(c echo.Context) error {
 	animal.Sex = rcv.Sex
 
 	var _shelter models.Shelter
-	db.Connection().Where("username", rcv.ShelterName).First(&_shelter)
+	err = db.Connection().Where("id", rcv.ShelterId).First(&_shelter).Error
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "Error while receiving shelter")
+	}
 	animal.ShelterID = _shelter.ID
 
 	_kg, err := strconv.Atoi(rcv.Kg)

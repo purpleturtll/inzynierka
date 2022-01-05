@@ -123,6 +123,7 @@ const SignInScreen = ({ navigation }) => {
         tokenStr = jsonObj.token;
         user_id = jsonObj.user_id;
         isShelter = jsonObj.is_shelter;
+        username = jsonObj.username;
         if (status == 200) {
           userCtx.setUserData({
             loggedIn: true,
@@ -131,6 +132,7 @@ const SignInScreen = ({ navigation }) => {
             isShelter: isShelter,
             email: data.email,
             password: data.password,
+            username: username,
           });
           console.log(
             "Received auth token: \n" + tokenStr + " for user " + user_id

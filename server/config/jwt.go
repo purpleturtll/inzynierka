@@ -8,6 +8,7 @@ import (
 var Secret = []byte("secret")
 
 type Claims struct {
+	Username  string `json:"username"`
 	Email     string `json:"email"`
 	IsShelter bool   `json:"isShelter"`
 	jwt.StandardClaims

@@ -16,9 +16,15 @@ function AnimalSex({ changeAnimalSex, profileError, animalSexes, animalSexFilter
         keyExtractor={(item) => item.id}
         data={animalSexes}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => { changeAnimalSex(item.label) }}>
-            {animalSexFilter == item.id ? <Text style={[styles.label, styles.selected]}>{item.label}</Text> : <Text style={[styles.label]}>{item.label}</Text>}
-          </TouchableOpacity>
+          animalSexFilter != null ? (
+            < TouchableOpacity onPress={() => { changeAnimalSex(item) }}>
+              {animalSexFilter.id == item.id ? <Text style={[styles.label, styles.selected]}>{item.label}</Text> : <Text style={[styles.label]}>{item.label}</Text>}
+            </TouchableOpacity>
+          ) : (
+            < TouchableOpacity onPress={() => { changeAnimalSex(item) }}>
+              <Text style={[styles.label]}>{item.label}</Text>
+            </TouchableOpacity>
+          )
         )}
       />
       {profileError.unselectedSex && <Text style={[styles.error]}>{unselected}</Text>}
