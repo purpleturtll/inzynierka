@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, Image, RefreshControl } from "react-native";
 import {
   ScrollView,
@@ -24,6 +24,10 @@ const HomeScreen = ({ navigation }) => {
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
+
+  useEffect(() => {
+    animalCtx.updateAnimals(token, new URLSearchParams());
+  }, [])
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

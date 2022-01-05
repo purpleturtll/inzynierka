@@ -297,13 +297,13 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
+           ,1
            ,N'mieszaniec'
-           ,N'Angus'
+           ,N'Kajtek'
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,5
+           ,9
            ,10
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
@@ -314,14 +314,14 @@ INSERT INTO [dbo].[animals]
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
-           ,N'bulldog'
+           ,2
+           ,N'europejska'
            ,N'Łajka'
            ,1
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,8
-           ,12.5
+           ,6
            ,N'samica'
            ,SYSDATETIMEOFFSET()
            ,N'8UJN8UENDJD83'
@@ -332,47 +332,64 @@ INSERT INTO [dbo].[animals]
            ,NULL
            ,NULL
            ,1
-           ,N'mieszaniec'
-           ,N'Mruczek'
+           ,N'owczarek niemiecki'
+           ,N'Yanus'
            ,2
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,3
-           ,8.25
+           ,30
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
            ,N'NHN73E8EFU8N'
            ,0
            ,1
            ,0),
-           (SYSDATETIMEOFFSET()
+            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
            ,3
-           ,N'gekon'
-           ,N'Marcin'
-           ,1
+           ,N'królik'
+           ,N'Puchata'
            ,0
+           ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,4
-           ,2.45
+           ,1
+           ,1
+           ,N'samica'
+           ,SYSDATETIMEOFFSET()
+           ,N'D92IDUNED2E'
+           ,1
+           ,1
+           ,0),
+            (SYSDATETIMEOFFSET()
+           ,NULL
+           ,NULL
+           ,3 
+           ,N'gekon'
+           ,N'Albert'
+           ,0
+           ,1
+           ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+           ,2
+           ,1
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
-           ,N'SN29NSU29DK9'
+           ,N'D92IDUNED2E'
            ,1
-           ,0
+           ,1
            ,0),
            (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,0
-           ,N'jamnik'
-           ,N'Radosław'
+           ,1
+           ,N'labrador'
+           ,N'Lucy'
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,7
-           ,10.5
+           ,1
+           ,18
            ,N'samica'
            ,SYSDATETIMEOFFSET()
            ,N'D92IDUNED2E'
