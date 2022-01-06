@@ -61,7 +61,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
           <StatusDataRow status={{ adoptable, recently_found }} />
           <DataRow label={"Waga"} data={weight} />
           <DataRow label={"Wiek"} data={age} />
-          <DataRow label={"Lokalizacja"} data={city} />
+          <DataRow label={"Lokalizacja"} data={animal.shelter_city} />
           <DataRow label={"Data przyjęcia"} data={admission_date} />
           <DataRow label={"Chip"} data={chip_number}></DataRow>
           <DataRow label={"Szczepienia"} data={is_vaccinated}></DataRow>
