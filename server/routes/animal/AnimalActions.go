@@ -259,6 +259,7 @@ func Filter(c echo.Context) error {
 	var animals_db []models.Animal
 	var animals []AnimalSend
 
+	search := c.QueryParam("search")
 	user_id := c.QueryParam("user-id")
 	animalType := c.QueryParam("animal-type")
 	sex := c.QueryParam("sex")
@@ -272,7 +273,7 @@ func Filter(c echo.Context) error {
 	page := c.QueryParam("page")
 	pageInt, _ := strconv.Atoi(page)
 
-	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(
+	result := db.Connection().Limit(pageSize).Offset(pageSize*pageInt).Scopes(AnimalSearch(search),
 		Sex(sex), City(strings.Split(city, ",")), AgeRange([][]string{strings.Split(ageFrom, ","), strings.Split(ageTo, ",")}), Favourite(favourite),
 		WeightRange([][]string{strings.Split(weightFrom, ","), strings.Split(weightTo, ",")}), Breed(strings.Split(breed, ",")), AnimalType(strings.Split(animalType, ",")),
 	).Find(&animals_db)

@@ -4,6 +4,16 @@ import (
 	"gorm.io/gorm"
 )
 
+func AnimalSearch(search string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if search == "" {
+			return db
+		} else {
+			return db.Where("name = ? OR chip_number = ?", search, search)
+		}
+	}
+}
+
 func AnimalType(animalType []string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if len(animalType) > 1 || animalType[0] != "" {

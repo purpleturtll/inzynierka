@@ -20,6 +20,7 @@ const HomeScreen = ({ navigation }) => {
   var userId = userCtx.userData.userId;
   var token = userCtx.userData.token;
   const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState("");
 
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -28,6 +29,16 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     animalCtx.updateAnimals(token, new URLSearchParams());
   }, [])
+
+  const onChangeSearch = (value) => {
+    setSearch(value);
+  }
+
+  const onSubmit = () => {
+    var params = new URLSearchParams();
+    params.append("search", search);
+    animalCtx.updateAnimals(token, params);
+  }
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -79,6 +90,10 @@ const HomeScreen = ({ navigation }) => {
               style={styles.searchIcon}
             />
             <TextInput
+              value={search}
+              onChangeText={onChangeSearch}
+              returnKeyType="search"
+              onSubmitEditing={onSubmit}
               style={styles.input}
               placeholder="Wyszukaj imię lub numer CHIP"
             />
