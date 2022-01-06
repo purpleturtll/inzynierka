@@ -21,22 +21,28 @@ const pageSize = 100
 
 // Struktura z danymi do wysłania
 type AnimalSend struct {
-	ID            uint      `json:"id"`
-	AnimalType    string    `json:"type"`
-	Breed         string    `json:"breed"`
-	Name          string    `json:"name"`
-	ShelterCity   string    `json:"city"`
-	Adoptable     bool      `json:"adoptable"`
-	Description   string    `json:"description"`
-	Age           uint      `json:"age"`
-	Weight        float32   `json:"weight"`
-	Sex           string    `json:"sex"`
-	AdmissionDate time.Time `json:"admission_date"`
-	ChipNumber    string    `json:"chip_number"`
-	RecentlyFound bool      `json:"recently_found"`
-	IsSterilized  bool      `json:"is_sterilized"`
-	IsVaccinated  bool      `json:"is_vaccinated"`
-	IsFavourite   bool      `json:"favourite"`
+	ID                  uint      `json:"id"`
+	AnimalType          string    `json:"type"`
+	Breed               string    `json:"breed"`
+	Name                string    `json:"name"`
+	ShelterName         string    `json:"shelter_name"`
+	ShelterCity         string    `json:"shelter_city"`
+	ShelterPhone        string    `json:"shelter_phone"`
+	ShelterEmail        string    `json:"shelter_email"`
+	ShelterStreet       string    `json:"shelter_street"`
+	ShelterPostalCode   string    `json:"shelter_postal_code"`
+	ShelterStreetNumber string    `json:"shelter_street_number"`
+	Adoptable           bool      `json:"adoptable"`
+	Description         string    `json:"description"`
+	Age                 uint      `json:"age"`
+	Weight              float32   `json:"weight"`
+	Sex                 string    `json:"sex"`
+	AdmissionDate       time.Time `json:"admission_date"`
+	ChipNumber          string    `json:"chip_number"`
+	RecentlyFound       bool      `json:"recently_found"`
+	IsSterilized        bool      `json:"is_sterilized"`
+	IsVaccinated        bool      `json:"is_vaccinated"`
+	IsFavourite         bool      `json:"favourite"`
 }
 
 // Przenoszenie danych ze structa Animal do AnimalSend z 'favourite' dla user_id z parametru user-id (domyślnie 'false')
@@ -49,7 +55,7 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 
 	for _, v := range animals_db {
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
-		db.Connection().Select("city").First(&shelter, v.ShelterID)
+		db.Connection().First(&shelter, v.ShelterID)
 		//znajdź rekord z powiązaniem z tabeli fav_animals
 		fav_assoc := db.Connection().Where("animal_id = ? AND user_id = ?", v.ID, user_id).Find(&fav_animal)
 		if user_id == "" {
@@ -63,22 +69,28 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 		}
 
 		animal := AnimalSend{
-			ID:            v.ID,
-			AnimalType:    animalType.Type,
-			Breed:         v.Breed,
-			Name:          v.Name,
-			ShelterCity:   shelter.City,
-			Adoptable:     v.Adoptable,
-			Description:   v.Description,
-			Age:           v.Age,
-			Weight:        v.Weight,
-			Sex:           v.Sex,
-			AdmissionDate: v.AdmissionDate,
-			ChipNumber:    v.ChipNumber,
-			RecentlyFound: v.RecentlyFound,
-			IsSterilized:  v.IsSterilized,
-			IsVaccinated:  v.IsVaccinated,
-			IsFavourite:   IsFav,
+			ID:                  v.ID,
+			AnimalType:          animalType.Type,
+			Breed:               v.Breed,
+			Name:                v.Name,
+			ShelterCity:         shelter.City,
+			ShelterName:         shelter.Username,
+			ShelterPhone:        shelter.PhoneNumber,
+			ShelterEmail:        shelter.Email,
+			ShelterStreet:       shelter.Street,
+			ShelterPostalCode:   shelter.PostalCode,
+			ShelterStreetNumber: shelter.StreetNumber,
+			Adoptable:           v.Adoptable,
+			Description:         v.Description,
+			Age:                 v.Age,
+			Weight:              v.Weight,
+			Sex:                 v.Sex,
+			AdmissionDate:       v.AdmissionDate,
+			ChipNumber:          v.ChipNumber,
+			RecentlyFound:       v.RecentlyFound,
+			IsSterilized:        v.IsSterilized,
+			IsVaccinated:        v.IsVaccinated,
+			IsFavourite:         IsFav,
 		}
 		animals = append(animals, animal)
 	}
@@ -199,11 +211,36 @@ func Read(c echo.Context) error {
 	id := c.Param("id")
 	id_int, _ := strconv.Atoi(id)
 	obj := &models.Animal{}
-	result := db.Connection().First(&obj, id_int)
-	if result.Error == gorm.ErrRecordNotFound {
-		return c.String(http.StatusNotFound, "Not Found")
+	objShelter := &models.Shelter{}
+	type AnimalResponse struct {
+		models.Animal
+		ShelterName         string `json:"shelter_name"`
+		ShelterCity         string `json:"shelter_city"`
+		ShelterPhone        string `json:"shelter_phone"`
+		ShelterEmail        string `json:"shelter_email"`
+		ShelterStreet       string `json:"shelter_street"`
+		ShelterPostalCode   string `json:"shelter_postal_code"`
+		ShelterStreetNumber string `json:"shelter_street_number"`
 	}
-	return c.JSON(http.StatusOK, obj)
+	err := db.Connection().First(obj, id_int).Error
+	if err != nil {
+		c.JSON(http.StatusNotFound, "Not found")
+	}
+	err = db.Connection().First(objShelter, obj.ShelterID).Error
+	if err != nil {
+		c.JSON(http.StatusNotFound, "Not found")
+	}
+	response := &AnimalResponse{
+		*obj,
+		objShelter.Username,
+		objShelter.City,
+		objShelter.PhoneNumber,
+		objShelter.Email,
+		objShelter.Street,
+		objShelter.PostalCode,
+		objShelter.StreetNumber,
+	}
+	return c.JSON(http.StatusOK, response)
 }
 
 // Szukanie według id chipa
