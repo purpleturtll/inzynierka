@@ -51,7 +51,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.groupedRow}>
             <DataRow label={"Typ"} data={type} />
-            {!userCtx.userData.isShelter && (
+            {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
               <View style={styles.heartView}>
                 <HeartIcon favourite={favourite} />
               </View>

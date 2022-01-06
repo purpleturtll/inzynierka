@@ -89,7 +89,7 @@ export default AnimalCard = ({ animalId, navigation }) => {
             animalCtx.updateFavourite(animal.id);
           }}
         >
-          {!userCtx.userData.isShelter && (
+          {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
             <View style={styles.heart}>
               <AntDesign
                 name={hearts.icon[animal.favourite]}

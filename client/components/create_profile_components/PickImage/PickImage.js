@@ -34,8 +34,8 @@ function PickImage(props) {
         <Image
           source={{ uri: props.image }}
           style={{
-            width: 200,
-            height: 200,
+            width: 270,
+            height: 220,
             marginTop: 15,
             alignSelf: "center",
             borderColor: "#c4c4c4",
