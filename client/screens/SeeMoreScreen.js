@@ -6,7 +6,7 @@ import {
   Modal,
   FlatList,
   TouchableOpacity,
-  LogBox,
+  LogBox
 } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { Icon } from "react-native-elements";
@@ -36,6 +36,17 @@ const SeeMoreScreen = ({ navigation }) => {
   const [locationArrow, setLocationArrow] = useState("down");
   const [raceArrow, setRaceArrow] = useState("down");
   const [statusArrow, setStatusArrow] = useState("down");
+  const [search, setSearch] = useState("");
+
+  const onChangeSearch = (value) => {
+    setSearch(value);
+  }
+
+  const onSubmit = () => {
+    var params = new URLSearchParams();
+    params.append("search", search);
+    animalCtx.updateAnimals(token, params);
+  }
 
   {
     /*Globalny kontekst zwierząt*/
@@ -49,6 +60,8 @@ const SeeMoreScreen = ({ navigation }) => {
     /*Globalny kontekst użytkownika*/
   }
   const userCtx = useContext(UserContext);
+
+  var token = userCtx.userData.token;
 
   {
     /*Czyści wszystkie filtry*/
@@ -294,6 +307,10 @@ const SeeMoreScreen = ({ navigation }) => {
               style={styles.searchIcon}
             />
             <TextInput
+              value={search}
+              onChangeText={onChangeSearch}
+              returnKeyType="search"
+              onSubmitEditing={onSubmit}
               style={styles.input}
               placeholder="Wyszukaj imię lub numer CHIP"
             />
