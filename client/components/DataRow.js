@@ -16,40 +16,50 @@ const ROW_TYPE = {
     STERILIZED: 'Sterylizacja'
 };
 
-{/*Wiersz z danymi*/}
+function age2Polish(age) {
+    if (age < 12) {
+        return "mies."
+    } else if (age < 24) {
+        return "rok"
+    } else if (age >= 24 && age < 60) {
+        return "lata"
+    }
+    return "lat"
+}
+
+{/*Wiersz z danymi*/ }
 const DataRow = ({ label, data }) => {
 
-    const B = (props) => <Text style={{fontWeight: 'bold'}}>{props.children}</Text>
+    const B = (props) => <Text style={{ fontWeight: 'bold' }}>{props.children}</Text>
 
-    switch(label)
-    {
+    switch (label) {
         case ROW_TYPE.TYPE:
         case ROW_TYPE.BREED:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <Entypo
                         name='baidu'
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
                     <Text>{label}: <B>{data}</B></Text>
-                </View>  
+                </View>
             )
         case ROW_TYPE.SEX:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <Ionicons
                         name={(data == 'samica') ? 'female' : 'male'}
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
                     <Text>{label}: <B>{data}</B></Text>
                 </View>
             )
         case ROW_TYPE.WEIGHT:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <FontAwesome5
                         name='weight'
@@ -57,59 +67,61 @@ const DataRow = ({ label, data }) => {
                         size={20}
                         style={styles.icon}
                     />
-                    <Text>{label}: <B>{data} kg</B></Text>
+                    {data < 1000 && <Text>{label}: <B>{data} g</B></Text>}
+                    {data >= 1000 && <Text>{label}: <B>{data / 1000} kg</B></Text>}
                 </View>
             )
         case ROW_TYPE.AGE:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <Ionicons
                         name='hourglass-outline'
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
-                    <Text>{label}: <B>{data} mies.</B></Text>
+                    {data < 12 && <Text>{label}: <B>{data} mies.</B></Text>}
+                    {data >= 12 && <Text>{label}: <B>{Math.floor(data / 12)} {age2Polish(data)}</B></Text>}
                 </View>
             )
         case ROW_TYPE.LOCATION:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <Entypo
                         name='location-pin'
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
                     <Text>Miasto: <B>{data}</B></Text>
                 </View>
             )
         case ROW_TYPE.DATE:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <AntDesign
                         name='calendar'
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
                     <Text>{label}: <B>{data}</B></Text>
                 </View>
             )
         case ROW_TYPE.CHIP:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <Ionicons
                         name='hardware-chip'
                         color='black'
-                        size={20} 
+                        size={20}
                         style={styles.icon}
                     />
                     <Text>{label}: <B>{data}</B></Text>
                 </View>
             )
         case ROW_TYPE.VACCINATED:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <FontAwesome5
                         name='syringe'
@@ -121,7 +133,7 @@ const DataRow = ({ label, data }) => {
                 </View>
             )
         case ROW_TYPE.STERILIZED:
-            return(
+            return (
                 <View style={styles.rowView}>
                     <MaterialCommunityIcons
                         name='rabbit'
@@ -134,7 +146,7 @@ const DataRow = ({ label, data }) => {
             )
         case ROW_TYPE.DESCRIPTION:
         default:
-            return(
+            return (
                 <Text style={styles.rowView}>
                     {data}
                 </Text>
@@ -149,8 +161,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: '2%',
-      },
+    },
     icon: {
-      paddingRight: 10
+        paddingRight: 10
     }
 });

@@ -303,8 +303,8 @@ INSERT INTO [dbo].[animals]
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,9
-           ,10
+           ,108
+           ,10000
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
            ,N'1QAZ2WD4TG7YH3WSX'
@@ -320,8 +320,8 @@ INSERT INTO [dbo].[animals]
            ,1
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,8
-           ,6
+           ,96
+           ,6000
            ,N'samica'
            ,SYSDATETIMEOFFSET()
            ,N'8UJN8UENDJD83'
@@ -337,8 +337,8 @@ INSERT INTO [dbo].[animals]
            ,2
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,3
-           ,30
+           ,36
+           ,30000
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
            ,N'NHN73E8EFU8N'
@@ -354,8 +354,8 @@ INSERT INTO [dbo].[animals]
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,1
-           ,1
+           ,8
+           ,1000
            ,N'samica'
            ,SYSDATETIMEOFFSET()
            ,N'D92IDUNED2E'
@@ -371,8 +371,8 @@ INSERT INTO [dbo].[animals]
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,2
-           ,1
+           ,11
+           ,200
            ,N'samiec'
            ,SYSDATETIMEOFFSET()
            ,N'D92IDUNED2E'
@@ -388,8 +388,8 @@ INSERT INTO [dbo].[animals]
            ,0
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,1
-           ,18
+           ,12
+           ,16000
            ,N'samica'
            ,SYSDATETIMEOFFSET()
            ,N'D92IDUNED2E'

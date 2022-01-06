@@ -1,16 +1,19 @@
 import React, { useContext, useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import DataRow from "../components/DataRow";
 import StatusDataRow from "../components/StatusDataRow";
 import { UserContext } from "../contexts/UserContext";
+import { AnimalDataContext } from "../contexts/AnimalContext";
+import Constants from "expo-constants";
+
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 const AnimalDetailsScreen = ({ route, navigation }) => {
-  //TODO: animalCtx.getAnimal(id) zamiast route.params
+  const animalCtx = useContext(AnimalDataContext);
+  const animal = animalCtx.getAnimal(route.params.id);
   const {
-    id,
-    name, // TODO
     type,
     breed,
     sex,
@@ -22,41 +25,36 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
     city,
     admission_date,
     description,
-    imageUrl, // TODO
     chip_number,
     is_sterilized,
     is_vaccinated,
   } = route.params;
 
-  const images = {
-    animalType: {
-      kot: require("../assets/cat_1.jpg"),
-      pies: require("../assets/dog_1.jpg"),
-      gad: require("../assets/dog_2.jpg"),
-    },
-  };
-
   // kontekst user
 
   const userCtx = useContext(UserContext);
 
-  useEffect(() => {}, [userCtx]);
+  useEffect(() => { }, [userCtx]);
 
   return (
     <View>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.imageView}>
-            <Image source={images.animalType[type]} style={styles.image} />
+            <Image
+              source={{ uri: `${apiUrl}/pictures/00${animal.id}.jpg` }}
+              style={styles.image}
+            ></Image>
           </View>
-          <View style={styles.groupedRow}>
-            <DataRow label={"Typ"} data={type} />
+          <View style={styles.nameRow}>
             {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
               <View style={styles.heartView}>
                 <HeartIcon favourite={favourite} />
               </View>
             )}
+            <Text style={styles.name} >{animal.name}</Text>
           </View>
+          <DataRow label={"Typ"} data={type} />
           <DataRow label={"W typie rasy"} data={breed} />
           <DataRow label={"Płeć"} data={sex} />
           {/*TODO - status*/}
@@ -91,6 +89,12 @@ const HeartIcon = ({ favourite }) => {
 //granatowy - #362893
 
 const styles = StyleSheet.create({
+  name: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "left",
+    flex: 5,
+  },
   container: {
     marginHorizontal: "10%",
   },
@@ -113,13 +117,17 @@ const styles = StyleSheet.create({
   },
   heartView: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    paddingRight: "5%",
+    alignItems: "flex-start",
   },
   groupedRow: {
     flex: 1,
     flexDirection: "row",
   },
+  nameRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    marginBottom: 10,
+  }
 });

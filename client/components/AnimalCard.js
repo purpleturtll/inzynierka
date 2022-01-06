@@ -11,7 +11,7 @@ export default AnimalCard = ({ animalId, navigation }) => {
   //  kontekst typ usera
   const userCtx = useContext(UserContext);
 
-  useEffect(() => {}, [userCtx]);
+  useEffect(() => { }, [userCtx]);
 
   {
     /*Kontekst zwierząt*/
@@ -30,16 +30,21 @@ export default AnimalCard = ({ animalId, navigation }) => {
     /*Pomocnicza*/
   }
   function age2Polish(age) {
-    switch (age) {
-      case 1:
-        return "rok";
-      case 2:
-      case 3:
-      case 4:
-        return "lata";
-      default:
-        return "lat";
+    if (age < 12) {
+      return "mies."
+    } else if (age < 24) {
+      return "rok"
+    } else if (age >= 24 && age < 60) {
+      return "lata"
     }
+    return "lat"
+  }
+
+  function getWeightUnit(weight) {
+    if (weight < 1000) {
+      return "g"
+    }
+    return "kg"
   }
 
   {
@@ -75,21 +80,21 @@ export default AnimalCard = ({ animalId, navigation }) => {
           {/*TODO: wyświetlanie wieku w miesiącach*/}
           <Text>{animal.breed}</Text>
           <Text>
-            {animal.sex}, {animal.age} {age2Polish(animal.age)}, {animal.weight}{" "}
-            kg
+            {animal.sex}, {animal.age < 12 && animal.age}{animal.age >= 12 && Math.floor(animal.age / 12)} {age2Polish(animal.age)}, {animal.weight < 1000 && animal.weight}{animal.weight >= 1000 && Math.floor(animal.weight / 1000)}{" "}{getWeightUnit(animal.weight)}
           </Text>
         </View>
 
         {/*kolor serduszka #ff4242*/}
-        <TouchableOpacity
-          onPress={() => {
-            {
-              /*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/
-            }
-            animalCtx.updateFavourite(animal.id);
-          }}
-        >
-          {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
+        {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
+          <TouchableOpacity
+            onPress={() => {
+              {
+                /*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/
+              }
+              animalCtx.updateFavourite(animal.id);
+            }}
+          >
+
             <View style={styles.heart}>
               <AntDesign
                 name={hearts.icon[animal.favourite]}
@@ -97,8 +102,9 @@ export default AnimalCard = ({ animalId, navigation }) => {
                 color="#d12115"
               />
             </View>
-          )}
-        </TouchableOpacity>
+
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
