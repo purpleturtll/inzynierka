@@ -317,9 +317,9 @@ const SeeMoreScreen = ({ navigation }) => {
               return (
                 <View key={item.id}>
                   <AnimalCard
-                    animal={item}
+                    animalId={item.id}
                     navigation={navigation}
-                    onFavChange={() => {}}
+                    onFavChange={() => { }}
                   />
                 </View>
               );
