@@ -48,12 +48,12 @@ type AnimalSend struct {
 // Przenoszenie danych ze structa Animal do AnimalSend z 'favourite' dla user_id z parametru user-id (domyślnie 'false')
 func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 	var animals []AnimalSend
-	var animalType models.AnimalType
-	var shelter models.Shelter
 	var fav_animal []models.FavAnimal
-	var IsFav bool
 
 	for _, v := range animals_db {
+		var IsFav bool
+		var animalType models.AnimalType
+		var shelter models.Shelter
 		db.Connection().Select("type").First(&animalType, v.AnimalTypeID)
 		db.Connection().First(&shelter, v.ShelterID)
 		//znajdź rekord z powiązaniem z tabeli fav_animals
