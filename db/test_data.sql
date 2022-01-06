@@ -300,7 +300,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'mieszaniec'
            ,N'Kajtek'
-           ,0
+           ,1
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,108
@@ -317,7 +317,7 @@ INSERT INTO [dbo].[animals]
            ,2
            ,N'europejska'
            ,N'Łajka'
-           ,1
+           ,2
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,96
@@ -334,7 +334,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'owczarek niemiecki'
            ,N'Yanus'
-           ,2
+           ,3
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,36
@@ -351,7 +351,7 @@ INSERT INTO [dbo].[animals]
            ,3
            ,N'królik'
            ,N'Puchata'
-           ,0
+           ,1
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,8
@@ -368,7 +368,7 @@ INSERT INTO [dbo].[animals]
            ,3 
            ,N'gekon'
            ,N'Albert'
-           ,0
+           ,1
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,11
@@ -385,7 +385,7 @@ INSERT INTO [dbo].[animals]
            ,1
            ,N'labrador'
            ,N'Lucy'
-           ,0
+           ,2
            ,1
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
            ,12
