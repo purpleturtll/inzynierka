@@ -34,7 +34,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
 
   const userCtx = useContext(UserContext);
 
-  useEffect(() => { }, [userCtx]);
+  useEffect(() => {}, [userCtx]);
 
   return (
     <View>
@@ -52,7 +52,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
                 <HeartIcon favourite={favourite} />
               </View>
             )}
-            <Text style={styles.name} >{animal.name}</Text>
+            <Text style={styles.name}>{animal.name}</Text>
           </View>
           <DataRow label={"Typ"} data={type} />
           <DataRow label={"W typie rasy"} data={breed} />
@@ -129,5 +129,5 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     marginBottom: 10,
-  }
+  },
 });
