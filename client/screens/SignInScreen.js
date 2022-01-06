@@ -153,7 +153,8 @@ const SignInScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} >
+      <View style={{ height: 30 }}></View>
       <View style={styles.header}>
         <Image source={require("../assets/login.png")} style={styles.logo} />
         <Text style={{ marginVertical: 18, color: "red", fontSize: 15 }}>
@@ -212,6 +213,7 @@ const SignInScreen = ({ navigation }) => {
           <Text style={{ color: "#fff", fontWeight: "900" }}>Utwórz konto</Text>
         </TouchableOpacity>
       </View>
+      <View style={{ height: 30 }}></View>
     </ScrollView>
   );
 };
@@ -224,9 +226,7 @@ const height_logo = height * 0.25;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 55,
   },
   header: {
     flex: 2,

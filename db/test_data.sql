@@ -387,7 +387,9 @@ INSERT INTO [dbo].[animals]
            ,N'Lucy'
            ,2
            ,1
-           ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+           ,N'Lucy to młoda i aktywna suczka w typie labradora.
+Zawsze chętna na spacery, zabawę i kontakt z człowiekiem. Kocha zabawy piłką, jak większość labradorów uwielbia się kąpać - nawet w kałuży! Jak na razie nie zauważyliśmy, by miał negatywne podejście do innych psiaków, ale w przypadku innych zwierząt w domu konieczna będzie wizyta przedadopcyjna.
+Szukamy dla niej cierpliwego, aktywnego domu, nastawionego na pracę z psem. Zapraszamy na spacery z Lucy 🙂'
            ,12
            ,16000
            ,N'samica'
