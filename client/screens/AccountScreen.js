@@ -12,8 +12,8 @@ import { UserContext } from "../contexts/UserContext";
 
 const AccountScreen = ({ navigation }) => {
   const userCtx = useContext(UserContext);
-
-  useEffect(() => {}, [userCtx]);
+  var username = userCtx.userData.username;
+  useEffect(() => { }, [userCtx]);
 
   return (
     <View style={styles.container}>
@@ -22,14 +22,14 @@ const AccountScreen = ({ navigation }) => {
 
         {userCtx.userData.isShelter ? (
           <Text style={styles.welcomeShelter}>
-            Schronisko dla Zwierząt w Poznaniu
+            {username}
           </Text>
         ) : (
-          <Text style={styles.welcome}>Witaj, Jan Kowalski!</Text>
+          <Text style={styles.welcome}>Witaj, {username}!</Text>
         )}
       </View>
       <View style={styles.body}>
-        <View>
+        {/* <View>
           <TouchableOpacity
             style={styles.option}
             onPress={() => navigation.navigate("ChangeEmailScreen")}
@@ -42,7 +42,7 @@ const AccountScreen = ({ navigation }) => {
               style={{ textAlignVertical: "center", paddingRight: 13 }}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View>
           <TouchableOpacity
             style={styles.option}
