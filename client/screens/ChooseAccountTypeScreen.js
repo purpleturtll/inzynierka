@@ -12,7 +12,7 @@ import {
 
 const SignInScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Image source={require("../assets/cat.png")} style={styles.logo} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -39,7 +39,8 @@ const SignInScreen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <View style={{ height: 50 }}></View>
+    </ScrollView>
   );
 };
 
