@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   View, Image, Text, StyleSheet, TouchableOpacity, Dimensions
 } from 'react-native';
 
+
 const DoneRegistrationScreen = ({ navigation }) => {
+
   return (
     <View style={styles.container}>
       <Image style={styles.check}
@@ -11,8 +13,11 @@ const DoneRegistrationScreen = ({ navigation }) => {
         tintColor="#362893"
       />
       <Text style={styles.title}>Zrobione!</Text>
-      <Text style={styles.subtitle}>Link został wysłany {"\n"}na adres e-mail.</Text>
-      <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('AccountScreen')}>
+      {/* <Text style={styles.subtitle}>Link został wysłany {"\n"}na adres e-mail.</Text> */}
+      <TouchableOpacity style={styles.registerButton} onPress={() => {
+        navigation.navigate('SignInScreen')
+      }
+      }>
         <Text style={{ color: '#fff', fontSize: 17 }}>Powrót</Text>
       </TouchableOpacity>
     </View>
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
   },
   check: {
     width: 230,
-    height: 230, 
+    height: 230,
   },
   title: {
     marginTop: height * 0.04,

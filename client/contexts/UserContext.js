@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Constants from 'expo-constants';
 
 export const UserContext = React.createContext();
 
+import Constants from 'expo-constants';
 const apiUrl = Constants.manifest.extra.apiUrl;
 
 export const UserDataProvider = ({ children }) => {

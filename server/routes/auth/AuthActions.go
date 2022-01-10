@@ -90,6 +90,28 @@ func Register(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
+func Unregister(c echo.Context) error {
+	type Req struct {
+		ID uint `json:"user_id"`
+	}
+	obj := new(Req)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	result := db.Connection().Where("id = ?", obj.ID).Delete(&models.User{})
+	if result.Error != gorm.ErrRecordNotFound {
+		result = db.Connection().Where("id = ?", obj.ID).Delete(&models.Shelter{})
+		if result.Error != gorm.ErrRecordNotFound {
+			return c.NoContent(http.StatusForbidden)
+		}
+	}
+
+	db.Connection().Create(obj)
+	c.Logger().Info("Unregistered:", obj.ID)
+	return c.NoContent(http.StatusOK)
+}
+
 func RegisterShelter(c echo.Context) error {
 	obj := new(models.Shelter)
 	if err := c.Bind(obj); err != nil {

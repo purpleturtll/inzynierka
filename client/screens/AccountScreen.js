@@ -74,7 +74,18 @@ const AccountScreen = ({ navigation }) => {
         {/*TODO: prawdziwe wylogowanie (appCtx, unieważnienie jwt))*/}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("SignInScreen")}
+          onPress={() => {
+            userCtx.setUserData({
+              loggedIn: false,
+              token: '',
+              userId: null,
+              isShelter: false,
+              email: '',
+              password: '',
+              username: '',
+            });
+            navigation.navigate("SignInScreen")
+          }}
         >
           <Text style={styles.buttonText}>Wyloguj</Text>
         </TouchableOpacity>

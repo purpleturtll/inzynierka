@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   ScrollView,
@@ -8,8 +8,13 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import { UserContext } from '../contexts/UserContext';
+import Constants from 'expo-constants';
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 const ChangeEmailScreen = ({ navigation }) => {
+  const userCtx = useContext(UserContext);
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -26,17 +31,35 @@ const ChangeEmailScreen = ({ navigation }) => {
               Usunięcie konta jest {"\n"}nieodwracalne i spowoduje, {"\n"}że
               wszystkie Twoje dane {"\n"}zostaną usunięte.
             </Text>
-            <Text style={styles.text}>
+            {/* <Text style={styles.text}>
               Potwierdź decyzję poprzez {"\n"}kliknięcie w link przesłany {"\n"}
               przez e-mail.
-            </Text>
+            </Text> */}
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.registerButton}
-              onPress={() => navigation.navigate("DeletedAccountScreen")}
+              onPress={() => {
+                userCtx.setUserData({
+                  loggedIn: false,
+                  token: '',
+                  userId: null,
+                  isShelter: false,
+                  email: '',
+                  password: '',
+                  username: '',
+                });
+                fetch(`${apiUrl}/auth/unregister`, {
+                  body: JSON.stringify({
+                    "user_id": userCtx.userData.userId,
+                  }),
+                  headers: { "Content-Type": "application/json" },
+                  method: 'DELETE'
+                })
+                navigation.navigate("DeletedAccountScreen")
+              }}
             >
-              <Text style={{ color: "#fff", fontSize: 17 }}>Wyślij e-mail</Text>
+              <Text style={{ color: "#fff", fontSize: 17 }}>Usuń</Text>
             </TouchableOpacity>
           </View>
         </View>
