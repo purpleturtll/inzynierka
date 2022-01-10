@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
+import Constants from 'expo-constants';
+const apiUrl = Constants.manifest.extra.apiUrl;
 const marginLeftText = "5%";
 const marginBottomText = 5;
 const RegistrationScreen = ({ navigation }) => {
