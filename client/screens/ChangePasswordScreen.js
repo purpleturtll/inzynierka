@@ -68,6 +68,7 @@ const ChangePasswordScreen = ({ navigation }) => {
           <View>
             <Text style={styles.inputTitle}>Nowe hasło</Text>
             <TextInput
+              secureTextEntry={true}
               placeholderTextColor="#000"
               placeholderStyle={{}}
               style={styles.textInput}
@@ -78,6 +79,7 @@ const ChangePasswordScreen = ({ navigation }) => {
           <View>
             <Text style={styles.inputTitle}>Potwierdź nowe hasło</Text>
             <TextInput
+              secureTextEntry={true}
               placeholderTextColor="#000"
               placeholderStyle={{}}
               style={styles.textInput}
