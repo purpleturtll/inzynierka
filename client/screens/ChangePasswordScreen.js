@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   ScrollView,
@@ -9,11 +9,51 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import { UserContext } from "../contexts/UserContext";
+import Constants from 'expo-constants';
+const apiUrl = Constants.manifest.extra.apiUrl;
 
 const marginLeftText = "5%";
 const marginBottomText = 5;
 
 const ChangePasswordScreen = ({ navigation }) => {
+  const userCtx = useContext(UserContext);
+
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [error, setError] = useState(false);
+
+  const onChangeNewPassword = (value) => {
+    setError(false);
+    setNewPassword(value);
+  }
+
+  const onChangeConfirmNewPassword = (value) => {
+    setError(false);
+    setConfirmNewPassword(value);
+  }
+
+  const onSubmit = () => {
+    if (newPassword !== confirmNewPassword) {
+      setError(true);
+    } else {
+      fetch(`${apiUrl}/auth/passwd`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userCtx.userData.userId,
+          new_password: newPassword,
+        }),
+      }).then(_ => {
+        navigation.navigate("AccountScreen");
+      }).catch(error => {
+        console.error(error);
+      });
+    }
+  }
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -25,18 +65,14 @@ const ChangePasswordScreen = ({ navigation }) => {
         </View>
         <View style={styles.body}>
           <Text style={styles.title}>Zmiana hasła</Text>
-          <Text style={styles.inputTitle}>Obecne hasło</Text>
-          <TextInput
-            placeholderTextColor="#000"
-            placeholderStyle={{}}
-            style={styles.textInput}
-          />
           <View>
             <Text style={styles.inputTitle}>Nowe hasło</Text>
             <TextInput
               placeholderTextColor="#000"
               placeholderStyle={{}}
               style={styles.textInput}
+              value={newPassword}
+              onChangeText={onChangeNewPassword}
             />
           </View>
           <View>
@@ -45,19 +81,22 @@ const ChangePasswordScreen = ({ navigation }) => {
               placeholderTextColor="#000"
               placeholderStyle={{}}
               style={styles.textInput}
+              value={confirmNewPassword}
+              onChangeText={onChangeConfirmNewPassword}
             />
           </View>
+          {error && <Text style={styles.error}>Hasła nie są takie same</Text>}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.registerButton}
-              onPress={() => navigation.navigate("ChangedEmailScreen")}
+              onPress={onSubmit}
             >
               <Text style={{ color: "#fff", fontSize: 17 }}>Zapisz</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 };
 export default ChangePasswordScreen;
@@ -66,6 +105,12 @@ const { height } = Dimensions.get("screen");
 const height_logo = height * 0.19;
 
 const styles = StyleSheet.create({
+  error: {
+    marginLeft: marginLeftText,
+    color: "red",
+    fontSize: 15,
+    marginBottom: 10,
+  },
   container: {
     width: "85%",
     marginLeft: "7.5%",

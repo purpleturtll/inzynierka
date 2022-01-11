@@ -81,7 +81,7 @@ func Register(c echo.Context) error {
 
 	found := new(models.User)
 	result := db.Connection().First(&found, "email = ?", obj.Email)
-	if result.Error != gorm.ErrRecordNotFound {
+	if result.Error == gorm.ErrRecordNotFound {
 		return c.NoContent(http.StatusForbidden)
 	}
 
@@ -100,9 +100,9 @@ func Unregister(c echo.Context) error {
 	}
 
 	result := db.Connection().Where("id = ?", obj.ID).Delete(&models.User{})
-	if result.Error != gorm.ErrRecordNotFound {
+	if result.Error == gorm.ErrRecordNotFound {
 		result = db.Connection().Where("id = ?", obj.ID).Delete(&models.Shelter{})
-		if result.Error != gorm.ErrRecordNotFound {
+		if result.Error == gorm.ErrRecordNotFound {
 			return c.NoContent(http.StatusForbidden)
 		}
 	}
@@ -110,6 +110,29 @@ func Unregister(c echo.Context) error {
 	db.Connection().Create(obj)
 	c.Logger().Info("Unregistered:", obj.ID)
 	return c.NoContent(http.StatusOK)
+}
+
+func Passwd(c echo.Context) error {
+	type Req struct {
+		ID          uint   `json:"user_id"`
+		NewPassword string `json:"new_password"`
+	}
+	obj := new(Req)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	result := db.Connection().Model(&models.User{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
+	if result.Error == gorm.ErrRecordNotFound {
+		result = db.Connection().Model(&models.Shelter{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
+		c.Logger().Print(result.Error)
+		if result.Error == gorm.ErrRecordNotFound {
+			return c.NoContent(http.StatusForbidden)
+		}
+	}
+
+	c.Logger().Info("Updated password:", obj.ID, " to ", obj.NewPassword)
+	return c.JSON(http.StatusOK, "Password updated")
 }
 
 func RegisterShelter(c echo.Context) error {
@@ -120,7 +143,7 @@ func RegisterShelter(c echo.Context) error {
 
 	found := new(models.Shelter)
 	result := db.Connection().First(&found, "username = ?", obj.Username)
-	if result.Error != gorm.ErrRecordNotFound {
+	if result.Error == gorm.ErrRecordNotFound {
 		return c.NoContent(http.StatusForbidden)
 	}
 
