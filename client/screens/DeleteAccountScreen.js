@@ -40,6 +40,14 @@ const ChangeEmailScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.registerButton}
               onPress={() => {
+                fetch(`${apiUrl}/auth/unregister`, {
+                  body: JSON.stringify({
+                    user_id: userCtx.userData.userId,
+                    is_shelter: userCtx.userData.isShelter,
+                  }),
+                  headers: { "Content-Type": "application/json" },
+                  method: 'DELETE'
+                })
                 userCtx.setUserData({
                   loggedIn: false,
                   token: '',
@@ -49,13 +57,6 @@ const ChangeEmailScreen = ({ navigation }) => {
                   password: '',
                   username: '',
                 });
-                fetch(`${apiUrl}/auth/unregister`, {
-                  body: JSON.stringify({
-                    "user_id": userCtx.userData.userId,
-                  }),
-                  headers: { "Content-Type": "application/json" },
-                  method: 'DELETE'
-                })
                 navigation.navigate("DeletedAccountScreen")
               }}
             >
@@ -64,7 +65,7 @@ const ChangeEmailScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 };
 export default ChangeEmailScreen;

@@ -26,7 +26,7 @@ func Login(c echo.Context) error {
 	foundShelter := new(models.Shelter)
 	resultShelter := db.Connection().First(&foundShelter, "email = ? AND password = ?", obj.Email, obj.Password)
 	if resultUser.Error == gorm.ErrRecordNotFound && resultShelter.Error == gorm.ErrRecordNotFound {
-		fmt.Println("AAAAAAAAAAAAAAA nie ma nigdzie")
+		fmt.Println("User or shelter not found")
 		return echo.ErrUnauthorized
 	}
 
@@ -81,7 +81,7 @@ func Register(c echo.Context) error {
 
 	found := new(models.User)
 	result := db.Connection().First(&found, "email = ?", obj.Email)
-	if result.Error == gorm.ErrRecordNotFound {
+	if result.Error != gorm.ErrRecordNotFound {
 		return c.NoContent(http.StatusForbidden)
 	}
 
@@ -92,28 +92,39 @@ func Register(c echo.Context) error {
 
 func Unregister(c echo.Context) error {
 	type Req struct {
-		ID uint `json:"user_id"`
+		ID        uint `json:"user_id"`
+		IsShelter bool `json:"is_shelter"`
 	}
 	obj := new(Req)
 	if err := c.Bind(obj); err != nil {
 		return echo.ErrInternalServerError
 	}
 
-	result := db.Connection().Where("id = ?", obj.ID).Delete(&models.User{})
-	if result.Error == gorm.ErrRecordNotFound {
-		result = db.Connection().Where("id = ?", obj.ID).Delete(&models.Shelter{})
+	c.Logger().Print(obj)
+
+	if obj.IsShelter {
+		temp := &models.Shelter{}
+		temp.ID = obj.ID
+		result := db.Connection().Delete(temp)
+		if result.Error == gorm.ErrRecordNotFound {
+			return c.NoContent(http.StatusForbidden)
+		}
+	} else {
+		temp := &models.User{}
+		temp.ID = obj.ID
+		result := db.Connection().Delete(temp)
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.NoContent(http.StatusForbidden)
 		}
 	}
 
-	db.Connection().Create(obj)
-	c.Logger().Info("Unregistered:", obj.ID)
+	c.Logger().Print("Unregistered:", obj.ID)
 	return c.NoContent(http.StatusOK)
 }
 
 func Passwd(c echo.Context) error {
 	type Req struct {
+		IsShelter   bool   `json:"is_shelter"`
 		ID          uint   `json:"user_id"`
 		NewPassword string `json:"new_password"`
 	}
@@ -122,10 +133,13 @@ func Passwd(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
-	result := db.Connection().Model(&models.User{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
-	if result.Error == gorm.ErrRecordNotFound {
-		result = db.Connection().Model(&models.Shelter{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
-		c.Logger().Print(result.Error)
+	if obj.IsShelter {
+		result := db.Connection().Model(&models.Shelter{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
+		if result.Error == gorm.ErrRecordNotFound {
+			return c.NoContent(http.StatusForbidden)
+		}
+	} else {
+		result := db.Connection().Model(&models.User{}).Where("id = ?", obj.ID).Update("password", obj.NewPassword)
 		if result.Error == gorm.ErrRecordNotFound {
 			return c.NoContent(http.StatusForbidden)
 		}
@@ -143,7 +157,7 @@ func RegisterShelter(c echo.Context) error {
 
 	found := new(models.Shelter)
 	result := db.Connection().First(&found, "username = ?", obj.Username)
-	if result.Error == gorm.ErrRecordNotFound {
+	if result.Error != gorm.ErrRecordNotFound {
 		return c.NoContent(http.StatusForbidden)
 	}
 

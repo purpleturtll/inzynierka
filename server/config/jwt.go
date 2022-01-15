@@ -10,7 +10,7 @@ var Secret = []byte("secret")
 type Claims struct {
 	Username  string `json:"username"`
 	Email     string `json:"email"`
-	IsShelter bool   `json:"isShelter"`
+	IsShelter bool   `json:"is_shelter"`
 	jwt.StandardClaims
 }
 

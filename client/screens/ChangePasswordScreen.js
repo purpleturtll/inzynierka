@@ -45,6 +45,7 @@ const ChangePasswordScreen = ({ navigation }) => {
         body: JSON.stringify({
           user_id: userCtx.userData.userId,
           new_password: newPassword,
+          is_shelter: userCtx.userData.isShelter,
         }),
       }).then(_ => {
         navigation.navigate("AccountScreen");
