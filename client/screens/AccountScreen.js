@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   welcomeShelter: {
+    textAlign: "center",
     marginTop: height * 0.04,
     marginHorizontal: 40,
     fontSize: 27,
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   body: {
     flex: 2,
     alignItems: "center",
-    marginTop: height * 0.03,
+    marginTop: height * 0.15,
   },
   button: {
     width: "30%",
