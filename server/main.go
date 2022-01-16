@@ -19,5 +19,5 @@ func main() {
 	g := e.Group("")
 	routes.Init(g)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.StartTLS(":8443", "cert.pem", "key.pem"))
 }
