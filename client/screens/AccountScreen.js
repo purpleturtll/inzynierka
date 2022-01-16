@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  BackHandler,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { UserContext } from "../contexts/UserContext";
@@ -14,6 +15,10 @@ const AccountScreen = ({ navigation }) => {
   const userCtx = useContext(UserContext);
   var username = userCtx.userData.username;
   useEffect(() => { }, [userCtx]);
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+    return () => backHandler.remove()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -60,7 +65,7 @@ const AccountScreen = ({ navigation }) => {
         <View>
           <TouchableOpacity
             style={styles.option}
-            onPress={() => navigation.navigate("DeleteAccountScreen")}
+            onPress={() => navigation.replace("DeleteAccountScreen")}
           >
             <Text style={styles.optionText}>Usuń konto</Text>
             <Feather
@@ -84,7 +89,7 @@ const AccountScreen = ({ navigation }) => {
               password: '',
               username: '',
             });
-            navigation.navigate("SignInScreen")
+            navigation.replace("SignInScreen")
           }}
         >
           <Text style={styles.buttonText}>Wyloguj</Text>

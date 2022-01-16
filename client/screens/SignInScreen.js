@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  BackHandler,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { UserContext } from "../contexts/UserContext";
@@ -43,6 +44,11 @@ const SignInScreen = ({ navigation }) => {
   const error = "Niepoprawny e-mail lub hasło";
   var userCtx = useContext(UserContext);
   var animalCtx = useContext(AnimalDataContext);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+    return () => backHandler.remove()
+  }, [])
 
   const [data, setData] = useState({
     email: "",
@@ -138,7 +144,7 @@ const SignInScreen = ({ navigation }) => {
             "Received auth token: \n" + tokenStr + " for user " + user_id
           );
           //ReloadNavigation(navigation, isShelter);
-          navigation.navigate("AccountScreen");
+          navigation.replace("AccountScreen");
         } else if (status == 401) {
           setSignInError(error);
         }

@@ -35,7 +35,7 @@ const MainStackNavigator = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        // options={{ headerTitleAlign: "center" }}
+      // options={{ headerTitleAlign: "center" }}
       ></Stack.Screen>
       <Stack.Screen
         name="SeeMoreScreen"
@@ -140,7 +140,7 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="SignInScreen"
-        screenOptions={{ title: "PetFinder", headerTitleAlign: "center" }}
+        screenOptions={{ headerTitle: "PetFinder", headerTitleAlign: "center" }}
       >
         <Stack.Screen name="SignInScreen" component={SignInScreen} />
         <Stack.Screen
