@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   const userCtx = useContext(UserContext);
 
-  useEffect(() => {}, [userCtx]);
+  useEffect(() => { }, [userCtx]);
 
   return (
     <Tab.Navigator

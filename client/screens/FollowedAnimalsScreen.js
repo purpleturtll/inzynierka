@@ -14,31 +14,37 @@ const FollowedAnimalsScreen = ({ navigation }) => {
   const [favs, setFavs] = useState([]);
 
   // Wywołanie na każdy follow/unfollow (TODO) i filtrowanie
-  useEffect(() => {
-    console.log("useEffect called on FollowedAnimalsScreen, updating list...");
+  useEffect(async () => {
+    console.log("useEffect called on chuj, updating list...");
+    var params = new URLSearchParams({ favourite: userCtx.userData.userId });
+    await animalCtx.updateAnimals(userCtx.userData.token, params);
     updateFavourites();
+  }, []);
+
+  useEffect(async () => {
+    console.log("useEffect called on FollowedAnimalsScreen, updating list...");
+    await updateFavourites();
   }, [animalCtx]);
 
   async function updateFavourites() {
     var params = new URLSearchParams({ favourite: userCtx.userData.userId });
-    params = filterCtx.toParams(filterCtx.filters, params);
-    var { newJwt, favs } = await getFavourites(userCtx.userData.token, params);
+    var { newJwt, _favs } = await getFavourites(userCtx.userData.token, params);
     // Powtórne wywołanie z nowym jwt w przypadku utraty ważności
-    if (newJwt) var { newJwt, favs } = await getFavourites(newJwt, params);
+    if (newJwt) var { newJwt, _favs } = await getFavourites(newJwt, params);
     //Serwer nie znalazł wyników
-    if (favs == null) favs = [];
-    console.log("Favourites object update:\n" + JSON.stringify(favs));
+    if (_favs == null) _favs = [];
+    console.log("Favourites object update:\n" + JSON.stringify(_favs));
     //TODO: obrazki z bazy, temp solution
-    favs.forEach((animal) => {
+    _favs.forEach((animal) => {
       //wycięcie daty
       animal.admission_date = animal.admission_date.substring(0, 10);
     });
-    setFavs(favs);
+    setFavs(_favs);
   }
 
   //GET /animal/read?favourite=userId
   async function getFavourites(tokenStr, params) {
-    var favs = [],
+    var _favs = [],
       status = null,
       newJwt = null;
     var res = await fetch(`${apiUrl}/animal/read?` + params, {
@@ -57,13 +63,13 @@ const FollowedAnimalsScreen = ({ navigation }) => {
           case 200:
             // OK
             var jsonStr = JSON.stringify(data);
-            favs = JSON.parse(jsonStr);
+            _favs = JSON.parse(jsonStr);
             break;
           case 401:
             // jwt expired
             if (userCtx.userData.email) {
               var { newToken, userId } = await userCtx.relogin();
-              favs = [];
+              _favs = [];
               newJwt = newToken;
               console.log(
                 "Refreshed jwt token for user " + userId + ":\n" + newToken
@@ -74,9 +80,11 @@ const FollowedAnimalsScreen = ({ navigation }) => {
             console.log("Unhandled getFavourites response status: " + status);
             break;
         }
+      }).catch((reason) => {
+        console.log("getFavourites error:" + reason);
       });
 
-    return { newJwt, favs };
+    return { newJwt, _favs };
   }
 
   function CountToPolish(count) {
@@ -95,14 +103,16 @@ const FollowedAnimalsScreen = ({ navigation }) => {
       <View style={styles.header}>
         {/*Lista zwierzaków*/}
         <View style={styles.list}>
-          <Text style={styles.infoText}>{CountToPolish(favs.length)}</Text>
+          <Text style={styles.infoText}>{CountToPolish(animalCtx.animals.filter(a => a.favourite).length)}</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
-            data={favs}
-            renderItem={({ item }) => (
-              <AnimalCard animalId={item.id} navigation={navigation} />
-            )}
+            data={animalCtx.animals}
+            renderItem={({ item }) => {
+              if (item.favourite) {
+                <AnimalCard animalId={item.id} navigation={navigation} />
+              }
+            }}
           />
         </View>
       </View>

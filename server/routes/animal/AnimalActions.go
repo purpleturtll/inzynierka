@@ -288,6 +288,8 @@ func Filter(c echo.Context) error {
 		animals = AnimalConvert(animals_db, user_id)
 	}
 
+	c.Logger().Print(animals)
+
 	return c.JSON(http.StatusOK, animals)
 }
 

@@ -26,54 +26,57 @@ const HomeScreen = ({ navigation }) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
-  useEffect(() => {
-    animalCtx.updateAnimals(token, new URLSearchParams());
+  useEffect(async () => {
+    await animalCtx.updateAnimals(token, new URLSearchParams());
   }, [])
 
   const onChangeSearch = (value) => {
     setSearch(value);
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     var params = new URLSearchParams();
     params.append("search", search);
-    animalCtx.updateAnimals(token, params);
+    params.append("user-id", userId);
+    await animalCtx.updateAnimals(token, params);
   }
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    animalCtx.updateAnimals(token, new URLSearchParams());
-    wait(2000).then(() => setRefreshing(false));
+    var params = new URLSearchParams();
+    params.append("search", search);
+    params.append("user-id", userId);
+    await animalCtx.updateAnimals(token, params).then(() => setRefreshing(false));
   }, []);
 
-  function onFilterDogsPress(userId, token) {
+  async function onFilterDogsPress(userId, token) {
     var params = new URLSearchParams({
       "animal-type": "pies",
       "user-id": userId,
     });
 
     // if (userId && token) animalCtx.updateAnimals(token, params);
-    animalCtx.updateAnimals(token, params);
+    await animalCtx.updateAnimals(token, params);
   }
 
-  function onFilterCatsPress() {
+  async function onFilterCatsPress() {
     var params = new URLSearchParams({
       "animal-type": "kot",
       "user-id": userId,
     });
 
     // if (userId && token) animalCtx.updateAnimals(token, params);
-    animalCtx.updateAnimals(token, params);
+    await animalCtx.updateAnimals(token, params);
   }
 
-  function onFilterOtherPress() {
+  async function onFilterOtherPress() {
     var params = new URLSearchParams({
       "animal-type": "gryzoń,gad,ptak,królik,inne",
       "user-id": userId,
     });
 
     // if (userId && token) animalCtx.updateAnimals(token, params);
-    animalCtx.updateAnimals(token, params);
+    await animalCtx.updateAnimals(token, params);
   }
 
   return (
