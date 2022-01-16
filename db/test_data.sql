@@ -316,17 +316,17 @@ INSERT INTO [dbo].[animals]
            ,NULL
            ,2
            ,N'europejska'
-           ,N'Łajka'
+           ,N'Sernik'
            ,2
            ,0
            ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-           ,96
-           ,6000
-           ,N'samica'
+           ,7
+           ,3000
+           ,N'samiec'
            ,SYSDATETIMEOFFSET()
-           ,N'8UJN8UENDJD83'
+           ,N'616096700086198'
            ,1
-           ,0
+           ,1
            ,1),
            (SYSDATETIMEOFFSET()
            ,NULL
@@ -397,7 +397,41 @@ Szukamy dla niej cierpliwego, aktywnego domu, nastawionego na pracę z psem. Zap
            ,N'D92IDUNED2E'
            ,1
            ,1
-           ,0)
+           ,0),
+           (SYSDATETIMEOFFSET()
+           ,NULL
+           ,NULL
+           ,2
+           ,N'europejska'
+           ,N'Racuch'
+           ,2
+           ,0
+           ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+           ,7
+           ,3000
+           ,N'samiec'
+           ,SYSDATETIMEOFFSET()
+           ,N'616096700086154'
+           ,1
+           ,1
+           ,1),
+           (SYSDATETIMEOFFSET()
+           ,NULL
+           ,NULL
+           ,2
+           ,N'europejska'
+           ,N'Łajka'
+           ,2
+           ,0
+           ,N'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+           ,96
+           ,6000
+           ,N'samica'
+           ,SYSDATETIMEOFFSET()
+           ,N'8UJN8UENDJD83'
+           ,1
+           ,0
+           ,1)
 GO
 
 USE [INZ_DB]
