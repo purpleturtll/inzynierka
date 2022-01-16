@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import DataRow from "../components/DataRow";
 import StatusDataRow from "../components/StatusDataRow";
@@ -30,6 +30,9 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
     is_vaccinated,
   } = route.params;
 
+  const [showShelter, setShowShelter] = useState(false);
+  const scrollViewRef = useRef();
+
   // kontekst user
 
   const userCtx = useContext(UserContext);
@@ -38,7 +41,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView ref={scrollViewRef}>
         <View style={styles.container}>
           <View style={styles.imageView}>
             <Image
@@ -67,6 +70,47 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
           <DataRow label={"Szczepienia"} data={is_vaccinated}></DataRow>
           <DataRow label={"Sterylizacja"} data={is_sterilized}></DataRow>
           <DataRow label={"Opis"} data={description}></DataRow>
+          <TouchableOpacity
+            onPress={() => {
+              setShowShelter(!showShelter);
+              scrollViewRef.current?.scrollToEnd({ animated: true });
+            }}
+            style={styles.buttonShow}
+          >
+            <Text style={{ color: "white" }}>Skontaktuj się</Text>
+          </TouchableOpacity>
+          {showShelter && (
+            <View style={styles.shelterInfoContainer}>
+              <Text
+                style={
+                  ([styles.shelterText],
+                  { fontSize: 16, marginBottom: 10, fontWeight: "bold" })
+                }
+              >
+                {animal.shelter_name}
+              </Text>
+              <Text style={styles.shelterText}>
+                tel.: {animal.shelter_phone}
+              </Text>
+              <Text style={styles.shelterText}>
+                e-mail: {animal.shelter_email}
+              </Text>
+              <View style={[styles.shelterRow]}>
+                <Text style={styles.shelterText}>
+                  {animal.shelter_postal_code}
+                </Text>
+                <Text style={styles.shelterText}> {animal.shelter_city} </Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.shelterText}>
+                  ul. {animal.shelter_street}{" "}
+                </Text>
+                <Text style={styles.shelterText}>
+                  {animal.shelter_street_number}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -129,5 +173,27 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     marginBottom: 10,
+  },
+  buttonShow: {
+    height: 70,
+    marginTop: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#362893",
+    borderRadius: 20,
+    padding: 10,
+    marginBottom: 20,
+  },
+  shelterInfoContainer: {
+    marginBottom: 15,
+    marginHorizontal: 20,
+  },
+  shelterRow: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  shelterText: {
+    fontSize: 15,
+    marginBottom: 3,
   },
 });
