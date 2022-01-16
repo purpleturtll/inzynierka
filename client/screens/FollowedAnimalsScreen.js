@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, ScrollView } from "react-native";
 import Constants from "expo-constants";
 import AnimalCard from "../components/AnimalCard";
 import { AnimalDataContext } from "../contexts/AnimalContext";
@@ -91,7 +91,7 @@ const FollowedAnimalsScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView>
       <View style={styles.header}>
         {/*Lista zwierzaków*/}
         <View style={styles.list}>
@@ -106,7 +106,7 @@ const FollowedAnimalsScreen = ({ navigation }) => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default FollowedAnimalsScreen;
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   list: {
     alignItems: "center",
-    marginBottom: 100,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: "#E2E1E1",

@@ -1,15 +1,20 @@
 import React, { useContext, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import { AnimalDataContext } from "../contexts/AnimalContext";
 import Constants from "expo-constants";
 import { UserContext } from "../contexts/UserContext";
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const apiUrl = Constants.manifest.extra.apiUrl;
 export default AnimalCard = ({ animalId, navigation }) => {
   //  kontekst typ usera
   const userCtx = useContext(UserContext);
+
+
 
   useEffect(() => { }, [userCtx]);
 
@@ -86,27 +91,29 @@ export default AnimalCard = ({ animalId, navigation }) => {
 
         {/*kolor serduszka #ff4242*/}
         {userCtx.userData.loggedIn && !userCtx.userData.isShelter && (
-          <TouchableOpacity
-            onPress={() => {
-              {
-                /*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/
-              }
-              animalCtx.updateFavourite(animal.id);
-            }}
-          >
+          <View style={styles.heart}>
+            <TouchableOpacity
+              onPress={() => {
+                {
+                  /*stan globalny w AnimalDataContext, TODO: animalCtx.getAnimal(id)*/
+                }
+                animalCtx.updateFavourite(animal.id);
+              }}
+            >
 
-            <View style={styles.heart}>
-              <AntDesign
-                name={hearts.icon[animal.favourite]}
-                size={30}
-                color="#d12115"
-              />
-            </View>
+              <View>
+                <AntDesign
+                  name={hearts.icon[animal.favourite]}
+                  size={30}
+                  color="#d12115"
+                />
+              </View>
 
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
-    </View>
+    </View >
   );
 };
 
@@ -121,6 +128,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     overflow: "hidden",
+    alignItems: "flex-start",
+  },
+  cardUser: {
+    marginVertical: 20,
+    backgroundColor: "white",
+    borderRadius: 15,
+    elevation: 6,
+    shadowColor: "#fff",
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    overflow: "hidden",
+    alignItems: "center",
   },
   headline: {
     flexDirection: "row",
@@ -136,13 +156,13 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: "cover",
-    width: 300,
+    width: windowWidth * 0.8,
     height: 200,
   },
   heart: {
-    alignItems: "center",
+    flex: 1,
+    alignItems: "flex-end",
     justifyContent: "center",
-    marginLeft: "35%",
-    marginTop: 18,
+    paddingLeft: 10,
   },
 });
