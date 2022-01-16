@@ -7,12 +7,14 @@ import {
   AccountStackNavigator,
 } from "./StackNavigation";
 import { UserContext } from "../contexts/UserContext";
+import { AnimalDataContext } from "../contexts/AnimalContext";
 import { Feather } from "@expo/vector-icons";
 import CreateAnimalProfileScreen from "../screens/CreateAnimalProfileScreen";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   const userCtx = useContext(UserContext);
+  const animalCtx = useContext(AnimalDataContext);
 
   useEffect(() => { }, [userCtx]);
 
@@ -26,6 +28,11 @@ const BottomTabNavigator = () => {
       }}
     >
       <Tab.Screen
+        listeners={{
+          tabPress: async (e) => {
+            await animalCtx.updateAnimals(userCtx.userData.token, new URLSearchParams({ "user-id": userCtx.userData.userId }));
+          }
+        }}
         name="HomeScreen"
         component={MainStackNavigator}
         options={{
@@ -39,6 +46,11 @@ const BottomTabNavigator = () => {
       {userCtx.userData.loggedIn &&
         (userCtx.userData.isShelter ? (
           <Tab.Screen
+            listeners={{
+              tabPress: async (e) => {
+                await animalCtx.updateAnimals(userCtx.userData.token, new URLSearchParams({ "user-id": userCtx.userData.userId }));
+              }
+            }}
             name="add"
             component={CreateAnimalProfileScreen}
             options={{
@@ -50,6 +62,11 @@ const BottomTabNavigator = () => {
           />
         ) : (
           <Tab.Screen
+            listeners={{
+              tabPress: async (e) => {
+                await animalCtx.updateAnimals(userCtx.userData.token, new URLSearchParams({ "user-id": userCtx.userData.userId }));
+              }
+            }}
             name="followed"
             component={FollowedStackNavigator}
             options={{
@@ -61,6 +78,11 @@ const BottomTabNavigator = () => {
           />
         ))}
       <Tab.Screen
+        listeners={{
+          tabPress: async (e) => {
+            await animalCtx.updateAnimals(userCtx.userData.token, new URLSearchParams({ "user-id": userCtx.userData.userId }));
+          }
+        }}
         name="account"
         component={AccountStackNavigator}
         options={{
