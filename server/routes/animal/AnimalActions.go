@@ -25,6 +25,7 @@ type AnimalSend struct {
 	AnimalType          string    `json:"type"`
 	Breed               string    `json:"breed"`
 	Name                string    `json:"name"`
+	ShelterID           uint      `json:"shelter_id"`
 	ShelterName         string    `json:"shelter_name"`
 	ShelterCity         string    `json:"shelter_city"`
 	ShelterPhone        string    `json:"shelter_phone"`
@@ -73,6 +74,7 @@ func AnimalConvert(animals_db []models.Animal, user_id string) []AnimalSend {
 			AnimalType:          animalType.Type,
 			Breed:               v.Breed,
 			Name:                v.Name,
+			ShelterID:           shelter.ID,
 			ShelterCity:         shelter.City,
 			ShelterName:         shelter.Username,
 			ShelterPhone:        shelter.PhoneNumber,
@@ -317,5 +319,19 @@ func Update(c echo.Context) error {
 }
 
 func Delete(c echo.Context) error {
-	return nil
+	type Req struct {
+		ID uint `json:"id"`
+	}
+	obj := new(Req)
+	if err := c.Bind(obj); err != nil {
+		return echo.ErrInternalServerError
+	}
+	temp := &models.Animal{}
+	temp.ID = obj.ID
+	result := db.Connection().Delete(temp)
+	if result.Error == gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusForbidden)
+	}
+
+	return c.String(http.StatusOK, "Deleted")
 }

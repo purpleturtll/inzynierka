@@ -171,8 +171,27 @@ export const AnimalDataProvider = ({ children }) => {
     return animals.find(a => a.id == id);
   }
 
+  // Delete animal from database by REST API
+  async function deleteAnimal(id) {
+    var status = null, newJwt = null;
+    var res = await fetch(`${apiUrl}/animal/delete`,
+      {
+        body: JSON.stringify({
+          id: id
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + userCtx.userData.token
+        },
+        method: 'DELETE'
+      })
+      .then(async response => {
+        status = response.status;
+      });
+  }
+
   return (
-    <AnimalDataContext.Provider value={{ animals, setAnimals, updateAnimals, updateFavourite, getAnimal }}>
+    <AnimalDataContext.Provider value={{ animals, setAnimals, updateAnimals, updateFavourite, getAnimal, deleteAnimal }}>
       {children}
     </AnimalDataContext.Provider>
   );

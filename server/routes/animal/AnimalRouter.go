@@ -10,5 +10,5 @@ func (Router) Init(g *echo.Group) {
 	g.GET("/readchip/:cid", ReadChip)
 	g.GET("/read", Filter)
 	g.PATCH("/update", Update)
-	g.DELETE("/delete/:id", Delete)
+	g.DELETE("/delete", Delete)
 }

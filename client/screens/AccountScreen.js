@@ -48,6 +48,22 @@ const AccountScreen = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View> */}
+        {userCtx.userData.loggedIn && userCtx.userData.isShelter && (
+          <View>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => navigation.navigate("MyAnimalsScreen")}
+            >
+              <Text style={styles.optionText}>Moje zwierzęta</Text>
+              <Feather
+                name="chevron-right"
+                color="#4A4A4A"
+                size={22}
+                style={{ textAlignVertical: "center", paddingRight: 13 }}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View>
           <TouchableOpacity
             style={styles.option}

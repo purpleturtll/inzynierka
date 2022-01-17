@@ -24,6 +24,7 @@ import AnimalDetailsScreen from "../screens/AnimalDetailsScreen";
 import CreatedAnimalProfileScreen from "../screens/CreatedAnimalProfileScreen";
 import CreateAnimalProfileScreen from "../screens/CreateAnimalProfileScreen";
 import SeeMoreScreen from "../screens/SeeMoreScreen";
+import MyAnimalsScreen from "../screens/MyAnimalsScreen";
 
 const Stack = createStackNavigator();
 
@@ -130,6 +131,10 @@ const AccountStackNavigator = () => {
       <Stack.Screen
         name="DeletedAccountScreen"
         component={DeletedAccountScreen}
+      />
+      <Stack.Screen
+        name="MyAnimalsScreen"
+        component={MyAnimalsScreen}
       />
     </Stack.Navigator>
   );
