@@ -160,40 +160,42 @@ const SeeMoreScreen = ({ navigation }) => {
     /*Kategorie wagowe, maksymalna waga to tona*/
   }
   const weightCategories = [
-    { id: "1", label: "do 5 kg", weightFrom: 0, weightTo: 4 },
-    { id: "2", label: "5 - 14 kg", weightFrom: 5, weightTo: 14 },
-    { id: "3", label: "15 - 24 kg", weightFrom: 15, weightTo: 24 },
-    { id: "4", label: "25 - 44 kg", weightFrom: 25, weightTo: 44 },
-    { id: "5", label: "45+ kg", weightFrom: 45, weightTo: 1000 },
+    { id: "1", label: "do 5 kg", weightFrom: 0, weightTo: 4999 },
+    { id: "2", label: "5 - 14 kg", weightFrom: 5000, weightTo: 14999 },
+    { id: "3", label: "15 - 24 kg", weightFrom: 15000, weightTo: 24999 },
+    { id: "4", label: "25 - 44 kg", weightFrom: 25000, weightTo: 44999 },
+    { id: "5", label: "45+ kg", weightFrom: 45000, weightTo: 65000 },
   ];
 
   {
     /*TODO: breed API, rasy różnych gatunków*/
   }
-  const breeds = [
-    // Koty
-    { id: "1", value: "mieszaniec", label: "Mieszana" },
-    { id: "2", value: "europejska", label: "Europejska" },
-    { id: "3", value: "syryjska", label: "Syryjska" },
+  const breeds = {
+    cats: [     // Koty
+      { id: "1", value: "europejska", label: "Europejska" },
+      { id: "2", value: "syryjska", label: "Syryjska" }
+    ],
     // Psy
-    { id: "101", value: "amstaff/pitbull", label: "Amstaff/Pitbull" },
-    { id: "102", value: "bernardyn", label: "Bernardyn" },
-    { id: "103", value: "cocker spaniel", label: "Cocker spaniel" },
-    { id: "104", value: "foksterier", label: "Foksterier" },
-    { id: "105", value: "husky", label: "Husky" },
-    { id: "106", value: "jamnik", label: "Jamnik" },
-    { id: "107", value: "labrador", label: "Labrador" },
-    { id: "108", value: "owczarek kaukaski", label: "Owczarek\nkaukaski" },
-    { id: "109", value: "owczarek niemiecki", label: "Owczarek\nniemiecki" },
-    {
-      id: "110",
-      value: "owczarek podhalański",
-      label: "Owczarek\npodhalański",
-    },
-    { id: "111", value: "sznaucer", label: "Sznaucer" },
-    { id: "112", value: "terier", label: "Terier" },
-    { id: "113", value: "inne", label: "Inne" },
-  ];
+    dogs: [
+      { id: "100", value: "mieszaniec", label: "Mieszaniec" },
+      { id: "101", value: "amstaff/pitbull", label: "Amstaff/Pitbull" },
+      { id: "102", value: "bernardyn", label: "Bernardyn" },
+      { id: "103", value: "cocker spaniel", label: "Cocker spaniel" },
+      { id: "104", value: "foksterier", label: "Foksterier" },
+      { id: "105", value: "husky", label: "Husky" },
+      { id: "106", value: "jamnik", label: "Jamnik" },
+      { id: "107", value: "labrador", label: "Labrador" },
+      { id: "108", value: "owczarek kaukaski", label: "Owczarek\nkaukaski" },
+      { id: "109", value: "owczarek niemiecki", label: "Owczarek\nniemiecki" },
+      {
+        id: "110",
+        value: "owczarek podhalański",
+        label: "Owczarek\npodhalański",
+      },
+      { id: "111", value: "sznaucer", label: "Sznaucer" },
+      { id: "112", value: "terier", label: "Terier" },
+    ]
+  };
 
   {
     /*Dostępne statusy*/
@@ -236,7 +238,7 @@ const SeeMoreScreen = ({ navigation }) => {
     var category;
     switch (fieldName) {
       case FILTER_FIELD.TYPE:
-        filterCtx.setFilters({ ...filterCtx.filters, type: value });
+        filterCtx.setFilters({ ...filterCtx.filters, type: value, breed: null });
         break;
       case FILTER_FIELD.SEX:
         filterCtx.setFilters({ ...filterCtx.filters, sex: value });
@@ -265,7 +267,8 @@ const SeeMoreScreen = ({ navigation }) => {
         break;
       case FILTER_FIELD.BREED:
         // temp solution, potrzebne rasy zwracane dynamicznie przez serwer
-        category = breeds.find((c) => c.id == value);
+        category = breeds.dogs.find((c) => c.id == value);
+        if (category == undefined) category = breeds.cats.find((c) => c.id == value);
         filterCtx.setFilters({ ...filterCtx.filters, breed: category.value });
         break;
       default:
@@ -380,6 +383,7 @@ const SeeMoreScreen = ({ navigation }) => {
             </CollapseHeader>
             <CollapseBody style={styles.collapseBody}>
               <FlatList
+                contentContainerStyle={{ alignItems: "center" }}
                 numColumns={3}
                 keyExtractor={(item) => item.id}
                 data={animalTypes}
@@ -389,7 +393,7 @@ const SeeMoreScreen = ({ navigation }) => {
                       setFilterValue(FILTER_FIELD.TYPE, item.value)
                     }
                   >
-                    <Label name={item.label} />
+                    <Label name={item.label} selected={item.value == filterCtx.filters.type} />
                   </TouchableOpacity>
                 )}
               />
@@ -419,7 +423,7 @@ const SeeMoreScreen = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => setFilterValue(FILTER_FIELD.SEX, item.label)}
                   >
-                    <Label name={item.label} />
+                    <Label name={item.label} selected={item.label == filterCtx.filters.sex} />
                   </TouchableOpacity>
                 )}
               />
@@ -451,7 +455,7 @@ const SeeMoreScreen = ({ navigation }) => {
                       setFilterValue(FILTER_FIELD.CITY, item.value)
                     }
                   >
-                    <Label name={item.label} />
+                    <Label name={item.label} selected={item.value == filterCtx.filters.city} />
                   </TouchableOpacity>
                 )}
               />
@@ -481,7 +485,18 @@ const SeeMoreScreen = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => setFilterValue(FILTER_FIELD.STATUS, item.id)}
                   >
-                    <Label name={item.label} />
+                    {item.id == "1" && filterCtx.filters.urgent &&
+                      <Label name={item.label} selected={true} />
+                    }
+                    {item.id == "1" && !filterCtx.filters.urgent &&
+                      <Label name={item.label} selected={false} />
+                    }
+                    {item.id == "2" && filterCtx.filters.adoptable &&
+                      <Label name={item.label} selected={true} />
+                    }
+                    {item.id == "2" && !filterCtx.filters.adoptable &&
+                      <Label name={item.label} selected={false} />
+                    }
                   </TouchableOpacity>
                 )}
               />
@@ -503,7 +518,7 @@ const SeeMoreScreen = ({ navigation }) => {
                 <TouchableOpacity
                   onPress={() => setFilterValue(FILTER_FIELD.AGE, item.id)}
                 >
-                  <Label name={item.label} />
+                  <Label name={item.label} selected={ageCategories.find((c) => c.id == item.id).ageFrom == filterCtx.filters.age_from} />
                 </TouchableOpacity>
               )}
             />
@@ -524,51 +539,49 @@ const SeeMoreScreen = ({ navigation }) => {
                 <TouchableOpacity
                   onPress={() => setFilterValue(FILTER_FIELD.WEIGHT, item.id)}
                 >
-                  <Label name={item.label} />
+                  <Label name={item.label} selected={filterCtx.filters.weight_from == weightCategories.find((c) => c.id == item.id).weightFrom} />
                 </TouchableOpacity>
               )}
             />
           </View>
 
           {/*Rasa*/}
-          <Collapse
-            onToggle={() => {
-              if (raceArrow == "down") setRaceArrow("up");
-              else setRaceArrow("down");
-            }}
-          >
-            <CollapseHeader style={styles.collapseHeader}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.headerTitle}>W typie rasy</Text>
-              </View>
-              <AntDesign name={raceArrow} size={24} />
-            </CollapseHeader>
-            <CollapseBody style={styles.collapseBody}>
-              <View style={styles.raceCategoriesContainer}>
-                <View style={{ flex: 1, alignItems: "center" }}>
+          {(filterCtx.filters.type === "pies" || filterCtx.filters.type == "kot") && (
+            <Collapse
+              onToggle={() => {
+                if (raceArrow == "down") setRaceArrow("up");
+                else setRaceArrow("down");
+              }}
+            >
+              <CollapseHeader style={styles.collapseHeader}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.headerTitle}>W typie rasy</Text>
+                </View>
+                <AntDesign name={raceArrow} size={24} />
+              </CollapseHeader>
+              <CollapseBody style={styles.collapseBody}>
+                <View style={styles.raceCategoriesContainer}>
                   <FlatList
                     contentContainerStyle={{
                       alignItems: "center",
-                      marginLeft: 30,
                     }}
                     numColumns={2}
                     keyExtractor={(item) => item.id}
-                    data={breeds}
+                    data={filterCtx.filters.type === "pies" ? breeds.dogs : breeds.cats}
                     renderItem={({ item }) => (
                       <TouchableOpacity
                         onPress={() =>
                           setFilterValue(FILTER_FIELD.BREED, item.id)
                         }
                       >
-                        <AlignedLabel name={item.label} />
+                        <AlignedLabel name={item.label} selected={item.value == filterCtx.filters.breed} />
                       </TouchableOpacity>
                     )}
                   />
                 </View>
-              </View>
-            </CollapseBody>
-          </Collapse>
-
+              </CollapseBody>
+            </Collapse>
+          )}
           {/*Pokaż wyniki*/}
           <TouchableOpacity
             onPress={() => {
@@ -598,7 +611,7 @@ const SeeMoreScreen = ({ navigation }) => {
             </Text>
             <Text>Rasa: {filterCtx.filters.breed}</Text>
             <Text>
-              Status pilne: {debugBool2String(filterCtx.filters.recently_found)}
+              Status pilne: {debugBool2String(filterCtx.filters.urgent)}
             </Text>
             <Text>
               Status do adopcji: {debugBool2String(filterCtx.filters.adoptable)}
@@ -612,48 +625,42 @@ const SeeMoreScreen = ({ navigation }) => {
 
 export default SeeMoreScreen;
 
-const Label = ({ name }) => {
-  return (
-    <View style={styles.label}>
-      <Text style={{ textAlign: "center" }}>{name}</Text>
-    </View>
-  );
-};
-
-const AlignedLabel = ({ name }) => {
-  return (
-    <View style={styles.alignedLabel}>
-      <Text style={{ textAlign: "center" }}>{name}</Text>
-    </View>
-  );
-};
-
-const RaceLists = ({ cats, dogs }) => {
-  return (
-    <View style={styles.raceCategoriesContainer}>
-      <Text style={{ fontWeight: "bold" }}>Kot</Text>
-      <FlatList
-        contentContainerStyle={{ alignItems: "center", marginLeft: 30 }}
-        numColumns={2}
-        keyExtractor={(item) => item.id}
-        data={cats}
-        renderItem={({ item }) => <AlignedLabel name={item.label} />}
-      />
-      <Text style={{ fontWeight: "bold" }}>Pies</Text>
-      <View style={{ flex: 1, alignItems: "center" }}>
-        <FlatList
-          contentContainerStyle={{ alignItems: "center", marginLeft: 30 }}
-          numColumns={2}
-          keyExtractor={(item) => item.id}
-          data={dogs}
-          renderItem={({ item }) => <AlignedLabel name={item.label} />}
-        />
+const Label = ({ name, selected = false }) => {
+  if (selected) {
+    return (
+      <View style={[styles.label, styles.selected]}>
+        <Text style={{ textAlign: "center", color: "#ccc" }}>{name}</Text>
       </View>
-    </View>
-  );
+    );
+  } else {
+    return (
+      <View style={styles.label}>
+        <Text style={{ textAlign: "center", color: "#222" }}>{name}</Text>
+      </View>
+    );
+  }
+};
+
+const AlignedLabel = ({ name, selected = false }) => {
+  if (selected) {
+    return (
+      <View style={[styles.alignedLabel, styles.selected]}>
+        <Text style={{ textAlign: "center", color: "#ccc" }}>{name}</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.alignedLabel}>
+        <Text style={{ textAlign: "center", color: "#222" }}>{name}</Text>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
+  selected: {
+    backgroundColor: "#444",
+  },
   container: {
     marginHorizontal: "5%",
     marginVertical: "2%",
@@ -765,7 +772,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   raceCategoriesContainer: {
-    marginLeft: 10,
+    flex: 1,
   },
   showResultsButton: {
     padding: 30,

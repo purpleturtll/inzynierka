@@ -348,7 +348,7 @@ INSERT INTO [dbo].[animals]
             (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,3
+           ,6
            ,N'królik'
            ,N'Puchata'
            ,1
@@ -365,7 +365,7 @@ INSERT INTO [dbo].[animals]
             (SYSDATETIMEOFFSET()
            ,NULL
            ,NULL
-           ,3 
+           ,4 
            ,N'gekon'
            ,N'Albert'
            ,1
