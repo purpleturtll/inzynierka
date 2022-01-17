@@ -583,43 +583,22 @@ const SeeMoreScreen = ({ navigation }) => {
             </Collapse>
           )}
           {/*Pokaż wyniki*/}
-          <TouchableOpacity
-            onPress={() => {
-              filterAnimals(filterCtx.filters);
-              setModalOpen("false");
-            }}
-          >
-            <View style={styles.showResultsButton}>
-              <Text style={{ color: "white", textAlign: "center" }}>
-                Pokaż wyniki
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          {/*Testy stanu*/}
-          <View>
-            <Text style={{ fontWeight: "bold" }}>Debug</Text>
-            <Text>Typ: {filterCtx.filters.type}</Text>
-            <Text>Płeć: {filterCtx.filters.sex}</Text>
-            <Text>Lokalizacja: {filterCtx.filters.city}</Text>
-            <Text>
-              Wiek: {filterCtx.filters.age_from}-{filterCtx.filters.age_to}
-            </Text>
-            <Text>
-              Waga: {filterCtx.filters.weight_from}-
-              {filterCtx.filters.weight_to}
-            </Text>
-            <Text>Rasa: {filterCtx.filters.breed}</Text>
-            <Text>
-              Status pilne: {debugBool2String(filterCtx.filters.urgent)}
-            </Text>
-            <Text>
-              Status do adopcji: {debugBool2String(filterCtx.filters.adoptable)}
+        </ScrollView>
+        <TouchableOpacity
+          style={{ bottom: 0 }}
+          onPress={() => {
+            filterAnimals(filterCtx.filters);
+            setModalOpen("false");
+          }}
+        >
+          <View style={styles.showResultsButton}>
+            <Text style={{ color: "white", textAlign: "center" }}>
+              Pokaż wyniki
             </Text>
           </View>
-        </ScrollView>
+        </TouchableOpacity>
       </Modal>
-    </View>
+    </View >
   );
 };
 
@@ -775,6 +754,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showResultsButton: {
+
     padding: 30,
     backgroundColor: "#362893",
   },
