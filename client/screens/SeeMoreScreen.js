@@ -754,7 +754,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showResultsButton: {
-
     padding: 30,
     backgroundColor: "#362893",
   },

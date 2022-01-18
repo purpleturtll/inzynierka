@@ -5,6 +5,7 @@ import {
   MainStackNavigator,
   FollowedStackNavigator,
   AccountStackNavigator,
+  CreateAnimalStackNavigator,
 } from "./StackNavigation";
 import { UserContext } from "../contexts/UserContext";
 import { AnimalDataContext } from "../contexts/AnimalContext";
@@ -52,7 +53,7 @@ const BottomTabNavigator = () => {
               }
             }}
             name="add"
-            component={CreateAnimalProfileScreen}
+            component={CreateAnimalStackNavigator}
             options={{
               tabBarLabel: "Dodaj",
               tabBarIcon: ({ color, size }) => (

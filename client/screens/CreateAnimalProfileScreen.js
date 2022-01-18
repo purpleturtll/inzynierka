@@ -483,8 +483,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     }
 
     let t = animalTypes.find((animalType) => animalType.id == data.animal_type);
-    console.log("MONTHS", data.months)
-
+    console.log(`\n\n\n\n\n${data.breed}\n\n\n\n`)
     FileSystem.uploadAsync(`${apiUrl}/animal/create`, image, {
       uploadType: FileSystemUploadType.MULTIPART,
       fieldName: "file",
@@ -507,7 +506,59 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
     })
       .then((response) => {
         if (response.status == 201) {
-          navigation.navigate("CreatedAnimalProfileScreen");
+          setCreateProfileError({
+            invalidName: false,
+            invalidCHIP: false,
+            invalidDescription: false,
+            unselectedAnimalType: false,
+            unselectedSex: false,
+            unselectedStatus: false,
+            emptyAge: false,
+            emptyWeight: false,
+            invalidWeight: false,
+            wrongDateFormat: false,
+            wrongCHIPFormat: false,
+          })
+
+          setFilters({
+            type: null,
+            sex: null,
+            status: null,
+            location: null,
+            age: null,
+            weight: null,
+            race: null,
+          });
+
+          setAnimalTypeFilter(null);
+          setSexFilter(null);
+          setStatusFilter([]);
+          setBreedFilter(null);
+          setIsVaccinated(false);
+          setIsSterilized(false);
+
+          setData({
+            animal_type: "",
+            breed: "",
+            name: "",
+            shelterName: "",
+            CHIP: "",
+            years: "",
+            months: "",
+            kg: "",
+            g: "",
+            description: "",
+            date: "",
+            isSterilized: false,
+            isVaccinated: false,
+            sex: "",
+            check_textInputChange: false,
+          });
+
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'CreatedAnimalProfileScreen' }],
+          });
         } else {
           //navigation.navigate("CreateAnimalProfileScreen");
         }
@@ -673,7 +724,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               onPress={() => {
-                                setData((data) => { return { ...data, breed: item.name } });
+                                setData((data) => { return { ...data, breed: item.label.toLowerCase() } });
                                 setFilterValue("race", item.id);
                                 setBreedFilter(item.id);
                               }}
@@ -701,7 +752,7 @@ const CreateAnimalProfileScreen = ({ navigation }) => {
                         renderItem={({ item }) => (
                           <TouchableOpacity
                             onPress={() => {
-                              setData((data) => { return { ...data, breed: item.name } });
+                              setData((data) => { return { ...data, breed: item.label.toLowerCase() } });
                               setFilterValue("race", item.id);
                               setBreedFilter(item.id);
                             }}

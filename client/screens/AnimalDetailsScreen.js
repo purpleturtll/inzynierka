@@ -37,7 +37,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
 
   const userCtx = useContext(UserContext);
 
-  useEffect(() => {}, [userCtx]);
+  useEffect(() => { }, [userCtx]);
 
   return (
     <View>
@@ -45,7 +45,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
         <View style={styles.container}>
           <View style={styles.imageView}>
             <Image
-              source={{ uri: `${apiUrl}/pictures/00${animal.id}.jpg` }}
+              source={{ uri: `${apiUrl}/pictures/${String(animal.id).padStart(3, "0")}.jpg` }}
               style={styles.image}
             ></Image>
           </View>
@@ -84,7 +84,7 @@ const AnimalDetailsScreen = ({ route, navigation }) => {
               <Text
                 style={
                   ([styles.shelterText],
-                  { fontSize: 16, marginBottom: 10, fontWeight: "bold" })
+                    { fontSize: 16, marginBottom: 10, fontWeight: "bold" })
                 }
               >
                 {animal.shelter_name}

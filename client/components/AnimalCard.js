@@ -69,7 +69,7 @@ export default AnimalCard = ({ animalId, navigation }) => {
     <View style={styles.card}>
       <TouchableOpacity onPress={() => onAnimalPress(animal)}>
         <Image
-          source={{ uri: `${apiUrl}/pictures/00${animalId}.jpg` }}
+          source={{ uri: `${apiUrl}/pictures/${String(animalId).padStart(3, "0")}.jpg` }}
           style={styles.image}
         />
       </TouchableOpacity>

@@ -105,18 +105,18 @@ func Create(c echo.Context) error {
 	var animal models.Animal
 
 	type AnimalRcv struct {
-		AnimalType    string
-		Breed         string
-		Name          string
-		ShelterId     uint
-		ChipNumber    string
-		Years         string
-		Months        string
-		Kg            string
-		G             string
-		Description   string
-		AdmissionDate string
-		Sex           string
+		AnimalType    string `json:"AnimalType"`
+		Breed         string `json:"Breed"`
+		Name          string `json:"Name"`
+		ShelterId     uint   `json:"ShelterId"`
+		ChipNumber    string `json:"ChipNumber"`
+		Years         string `json:"Years"`
+		Months        string `json:"Months"`
+		Kg            string `json:"Kg"`
+		G             string `json:"G"`
+		Description   string `json:"Description"`
+		AdmissionDate string `json:"AdmissionDate"`
+		Sex           string `json:"Sex"`
 	}
 
 	incomingAnimalData := c.FormValue("doc")
@@ -145,6 +145,8 @@ func Create(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Error while converting months")
 	}
 	animal.Age = uint(_y + _m)
+
+	c.Logger().Print("0000000000000000000000\n000000000000000000000", rcv.Breed)
 
 	animal.Breed = rcv.Breed
 	animal.AdmissionDate = time.Now()

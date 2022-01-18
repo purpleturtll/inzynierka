@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { CommonActions } from '@react-navigation/native';
 
 const CreatedAnimalProfileScreen = ({ navigation }) => {
   return (
@@ -19,7 +20,16 @@ const CreatedAnimalProfileScreen = ({ navigation }) => {
       <Text style={styles.title}>Ogłoszenie zostało dodane!</Text>
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("CreateAnimalProfileScreen")}
+        onPress={() => {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                { name: 'CreateAnimalProfileScreen' },
+              ],
+            })
+          );
+        }}
       >
         <Ionicons
           name="md-add-circle"

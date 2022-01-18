@@ -81,6 +81,23 @@ const FollowedStackNavigator = () => {
   );
 };
 
+const CreateAnimalStackNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{ title: "PetFinder", headerTitleAlign: "center" }}
+    >
+      <Stack.Screen
+        name="CreateAnimalProfileScreen"
+        component={CreateAnimalProfileScreen}
+      />
+      <Stack.Screen
+        name="CreatedAnimalProfileScreen"
+        component={CreatedAnimalProfileScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const AccountStackNavigator = () => {
   return (
     <Stack.Navigator
@@ -109,10 +126,6 @@ const AccountStackNavigator = () => {
       <Stack.Screen
         name="ChooseAccountTypeScreen"
         component={ChooseAccountTypeScreen}
-      />
-      <Stack.Screen
-        name="CreatedAnimalProfileScreen"
-        component={CreatedAnimalProfileScreen}
       />
       <Stack.Screen name="ChangeEmailScreen" component={ChangeEmailScreen} />
       <Stack.Screen name="ChangedEmailScreen" component={ChangedEmailScreen} />
@@ -189,5 +202,6 @@ export {
   MessageStackNavigator,
   FollowedStackNavigator,
   AccountStackNavigator,
+  CreateAnimalStackNavigator,
   MyStack,
 };
